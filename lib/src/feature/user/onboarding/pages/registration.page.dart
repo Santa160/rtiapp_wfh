@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/utils/filepicker.helper.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
@@ -7,10 +8,12 @@ import 'package:rtiapp/src/common/widget/hint_text.dart';
 
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/core/logger.dart';
+import 'package:rtiapp/src/feature/user/onboarding/service/onboarding.service.dart';
 import 'package:rtiapp/src/feature/user/onboarding/widgets/forms/bpl_detail.form.dart';
 import 'package:rtiapp/src/feature/user/onboarding/widgets/forms/education_details.form.dart';
 
 import 'package:rtiapp/src/feature/user/onboarding/widgets/forms/rti_person_detail.form.dart';
+import 'package:rtiapp/src/routers/route_names.dart';
 
 class ResgistrationPage extends StatefulWidget {
   const ResgistrationPage({super.key});
@@ -119,13 +122,17 @@ class _ResgistrationPageState extends State<ResgistrationPage> {
                                   WidgetStatePropertyAll(Colors.white),
                               backgroundColor:
                                   WidgetStatePropertyAll(KCOLOR.brand)),
-                          onPressed: () {
-                            logger.e(citizenDto);
-                            logger.e(_file);
-                            // if (!validate()) {
-                            //   var service = OnboardingServices();
-                            //   service.createCitizen(citizenDto, _file);
-                            // }
+                          onPressed: () async {
+                          
+                            if (validate()) {
+                              var service = OnboardingServices();
+                             var res = await service.createCitizen(citizenDto, _file);
+                             if (res["success"]) {
+                             context.replaceNamed(KRoutes.home);  
+                             }
+                            }else{
+                              logger.e("check please");
+                            }
                           },
                           child: const Text("Submit"))
                     ],

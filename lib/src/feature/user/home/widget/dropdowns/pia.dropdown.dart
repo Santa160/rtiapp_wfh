@@ -4,9 +4,10 @@ import 'package:rtiapp/src/feature/user/onboarding/widgets/upload/upload_file.da
 
 class PiaDropdownForm extends StatefulWidget {
   const PiaDropdownForm(
-      {super.key, required this.questions, required this.file});
-  final Function(List<String>?) questions;
+      {super.key, required this.file, required this.pia});
+ 
   final Function(FilePickerModel?) file;
+  final Function(Map<String,dynamic>?) pia;
 
   @override
   State<PiaDropdownForm> createState() => _PiaDropdownFormState();
@@ -27,6 +28,7 @@ class _PiaDropdownFormState extends State<PiaDropdownForm> {
     _listOfPia.add({'id': '2', "name": "asgas"});
   }
 
+  
   @override
   Widget build(BuildContext context) {
     var mw = MediaQuery.of(context).size.width;
@@ -65,6 +67,7 @@ class _PiaDropdownFormState extends State<PiaDropdownForm> {
                     setState(() {
                       _selectedPia = newValue;
                     });
+                    widget.pia(newValue);
                   },
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -79,7 +82,9 @@ class _PiaDropdownFormState extends State<PiaDropdownForm> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
                 child: UploadFileWidget(
-                  onFilePicked: (value) {},
+                  onFilePicked: (value) {
+                    widget.file(value);
+                  },
                 ),
               ))
         ],

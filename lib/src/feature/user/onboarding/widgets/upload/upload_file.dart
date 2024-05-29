@@ -15,6 +15,8 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
   String _fileName = '';
 
   late FilePickerModel filePickerModel;
+
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -68,7 +70,8 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
 
                       var fileModel =
                           FilePickerModel(fileName: name, bytes: byte);
-                      widget.onFilePicked(fileModel);
+
+                      widget.onFilePicked(fileModel); // return the file to parent class
                       setState(() {});
                     },
                     child: Center(

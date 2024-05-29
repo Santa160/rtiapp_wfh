@@ -18,6 +18,13 @@ abstract class CitizenOnboardingInterface extends ServiceIterface {
   Future<dynamic> fetchEduQ();
   Future<dynamic> createCitizen(
       Map<String, dynamic> citizenDto, FilePickerModel? file);
+  //RTI Resquest submit
+
+}
+
+abstract class RTIInterface extends ServiceIterface{
+  Future<dynamic> createRTI(List<String> questions,FilePickerModel file,String piaId);
+
 }
 
 abstract class StaffAuthentication extends ServiceIterface {

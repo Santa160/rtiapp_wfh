@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
+import 'package:rtiapp/src/common/utils/filepicker.helper.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
 import 'package:rtiapp/src/common/widget/title_style.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/core/logger.dart';
+import 'package:rtiapp/src/core/shared_pref.dart';
+import 'package:rtiapp/src/feature/user/home/service/home.service.dart';
 import 'package:rtiapp/src/feature/user/home/widget/dropdowns/pia.dropdown.dart';
+import 'package:rtiapp/src/routers/route_names.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,6 +34,9 @@ class _HomePageState extends State<HomePage> {
     addField();
     addField();
   }
+
+  Map<String, dynamic>? _selectedPia;
+  FilePickerModel? _file;
 
   // Method to create a new TextFormField
   Widget createTextFormField(TextEditingController controller, int count) {
@@ -67,10 +75,19 @@ class _HomePageState extends State<HomePage> {
 
   // Method to handle form submission
   void handleSubmit() {
+
+    
     if (_formKey.currentState?.validate() ?? false) {
-      for (var controller in controllers) {
-        logger.e(controller.text);
-      }
+      var loQ = controllers.map((e) => e.text,).toList();
+
+      var service = HomeService();
+
+     var res = service.createRTI(loQ, _file!,_selectedPia!["id"]);
+
+     logger.d(res);
+
+      
+      
     }
   }
 
@@ -133,13 +150,19 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 ).addPadding(left: 150, right: 150, bottom: 20),
-                Text(
-                  "Logout",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: Colors.white),
-                ).addPadding(left: 150, right: 150, bottom: 20),
+                InkWell(
+                  onTap: () async{
+                   await SharedPrefHelper.removeToken("token");
+                   context.replaceNamed(KRoutes.stafflogin);
+                  },
+                  child: Text(
+                    "Logout",
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium!
+                        .copyWith(color: Colors.white),
+                  ).addPadding(left: 150, right: 150, bottom: 20),
+                ),
               ],
             ),
           ),
@@ -158,8 +181,21 @@ class _HomePageState extends State<HomePage> {
                             style: style,
                           ),
                           PiaDropdownForm(
-                            questions: (qests) {},
-                            file: (file) {},
+                           pia: (pia) {
+                             
+                              logger.d(pia);
+                              setState(() {
+                                _selectedPia = pia;
+                              });
+                           },
+                            file: (file) {
+                              logger.d(file!.fileName);
+                              setState(() {
+                              _file = file;
+                                
+                              });
+
+                            },
                           ),
                           const Gap(5),
                           ListView.builder(
