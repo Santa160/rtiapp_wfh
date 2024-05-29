@@ -98,6 +98,4 @@ class OnboardingServices extends CitizenOnboardingInterface {
       logger.e('Unexpected error: $e');
     }
   }
-
-
 }
