@@ -8,6 +8,7 @@ import 'package:rtiapp/src/common/widget/title_style.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/core/shared_pref.dart';
+import 'package:rtiapp/src/feature/user/home/pages/term_and_conditions.dart';
 import 'package:rtiapp/src/feature/user/home/service/home.service.dart';
 import 'package:rtiapp/src/feature/user/home/widget/dropdowns/pia.dropdown.dart';
 import 'package:rtiapp/src/routers/route_names.dart';
@@ -75,19 +76,18 @@ class _HomePageState extends State<HomePage> {
 
   // Method to handle form submission
   void handleSubmit() {
-
-    
     if (_formKey.currentState?.validate() ?? false) {
-      var loQ = controllers.map((e) => e.text,).toList();
+      var loQ = controllers
+          .map(
+            (e) => e.text,
+          )
+          .toList();
 
       var service = HomeService();
 
-     var res = service.createRTI(loQ, _file!,_selectedPia!["id"]);
+      var res = service.createRTI(loQ, _file!, _selectedPia!["id"]);
 
-     logger.d(res);
-
-      
-      
+      logger.d(res);
     }
   }
 
@@ -131,6 +131,20 @@ class _HomePageState extends State<HomePage> {
                     InkWell(
                       onTap: () {
                         activeTab = "Submit RTI";
+                        showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return TermAndConditions(
+                              onCancel: () {
+                                setState(() {
+
+                                activeTab = "Home";
+                                });
+                              },
+                            );
+                          },
+                        );
                         setState(() {});
                       },
                       child: Container(
@@ -151,9 +165,9 @@ class _HomePageState extends State<HomePage> {
                   ],
                 ).addPadding(left: 150, right: 150, bottom: 20),
                 InkWell(
-                  onTap: () async{
-                   await SharedPrefHelper.removeToken("token");
-                   context.replaceNamed(KRoutes.stafflogin);
+                  onTap: () async {
+                    await SharedPrefHelper.removeToken("token");
+                    context.replaceNamed(KRoutes.stafflogin);
                   },
                   child: Text(
                     "Logout",
@@ -181,20 +195,17 @@ class _HomePageState extends State<HomePage> {
                             style: style,
                           ),
                           PiaDropdownForm(
-                           pia: (pia) {
-                             
+                            pia: (pia) {
                               logger.d(pia);
                               setState(() {
                                 _selectedPia = pia;
                               });
-                           },
+                            },
                             file: (file) {
                               logger.d(file!.fileName);
                               setState(() {
-                              _file = file;
-                                
+                                _file = file;
                               });
-
                             },
                           ),
                           const Gap(5),

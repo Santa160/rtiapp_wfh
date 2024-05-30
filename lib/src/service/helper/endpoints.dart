@@ -10,4 +10,6 @@ class EndPoint {
   static const eduQ = "/api/education-qualifications";
   static const citizen = "/api/citizens";
   static const rti = "/api/rtis";
+  static const termAndCondition = "/api/term-and-conditions";
+
 }

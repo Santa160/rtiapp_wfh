@@ -24,6 +24,7 @@ abstract class CitizenOnboardingInterface extends ServiceIterface {
 
 abstract class RTIInterface extends ServiceIterface{
   Future<dynamic> createRTI(List<String> questions,FilePickerModel file,String piaId);
+  Future<dynamic> fetchTermAndConditions();
 
 }
 

@@ -32,4 +32,17 @@ class HomeService extends RTIInterface{
       logger.e('Unexpected error: $e');
     }
   }
+  
+  @override
+  Future fetchTermAndConditions() async{
+     try {
+      var res = await dio.get(EndPoint.termAndCondition);
+
+      return res.data;
+    } on DioException catch (e) {
+      handleDioException(e);
+    } catch (e) {
+      logger.e('Unexpected error: $e');
+    }
+  }
 }
