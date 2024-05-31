@@ -14,12 +14,16 @@ class TabCubit extends Cubit<TabState> {
         emit(const TabState(KRoutes.application));
       case KRoutes.setting:
         emit(const TabState(KRoutes.setting));
-      // case Routes.complete:
-      //   emit(const TabState(Routes.complete));
-      // case Routes.reports:
-      //   emit(const TabState(Routes.reports));
-      // case Routes.archive:
-      //   emit(const TabState(Routes.archive));
+      case KRoutes.querystatus:
+        emit(const TabState(KRoutes.querystatus));
+      case KRoutes.rtiStatus:
+        emit(const TabState(KRoutes.rtiStatus));
+      case KRoutes.qualification:
+        emit(const TabState(KRoutes.qualification));
+      case KRoutes.state:
+        emit(const TabState(KRoutes.state));
+      case KRoutes.district:
+        emit(const TabState(KRoutes.district));
     }
   }
 }

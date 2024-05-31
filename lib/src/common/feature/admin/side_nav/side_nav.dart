@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:rtiapp/src/core/kcolors.dart';
 
@@ -50,6 +51,7 @@ class SideNavPage extends StatelessWidget {
                                 context
                                     .read<TabCubit>()
                                     .activeTab(KRoutes.routeNames[index]);
+                             context.goNamed(KRoutes.routeNames[index]);
                               },
                               title: Text(
                                 KRoutes.routeNames[index],

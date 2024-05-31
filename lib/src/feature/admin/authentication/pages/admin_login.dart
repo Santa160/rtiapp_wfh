@@ -18,8 +18,8 @@ class AdminLoginPage extends StatefulWidget {
 }
 
 class _AdminLoginPageState extends State<AdminLoginPage> {
-  String? _username;
-  String? _password;
+  String? _username = 'mspcl_admin';
+  String? _password = "12345678";
   int otpStatus = 0;
 
   @override
@@ -64,6 +64,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                         SizedBox(
                           width: 350,
                           child: TextFormField(
+                            initialValue: "mspcl_admin",
                             onChanged: (value) {
                               setState(() {
                                 _username = value;
@@ -77,6 +78,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                         SizedBox(
                             width: 350,
                             child: TextFormField(
+                              initialValue: "12345678",
                                 onChanged: (value) {
                                   setState(() {
                                     _password = value;

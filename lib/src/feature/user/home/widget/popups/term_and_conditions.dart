@@ -6,7 +6,7 @@ import 'package:rtiapp/src/common/utils/html_to_json.helper.dart';
 import 'package:rtiapp/src/common/widget/title_style.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 
-import 'package:rtiapp/src/feature/user/home/service/home.service.dart';
+import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/routers/route_names.dart';
 
 class TermAndConditions extends StatefulWidget {
@@ -24,7 +24,7 @@ class _TermAndConditionsState extends State<TermAndConditions> {
   var paymentModes = [];
   bool isAgreed = false;
 
-  var service = HomeService();
+  var service = RTIService();
 
   @override
   void initState() {

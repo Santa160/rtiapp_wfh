@@ -20,7 +20,14 @@ final GoRouter routerConfig = GoRouter(
           builder: (context, state) {
             return const ApplicationPage();
           },
-        )
+        ),
+        GoRoute(
+          name: KRoutes.state,
+          path: KRoutes.statePath,
+          builder: (context, state) {
+            return const StatePage();
+          },
+        ),
       ],
     ),
 
@@ -81,7 +88,11 @@ final GoRouter routerConfig = GoRouter(
     await SharedPrefHelper.init();
     var token = SharedPrefHelper.getToken("token");
 
-    if (token == null) {
+    logger.f(state.uri.path);
+
+    if (state.uri.path == KRoutes.adminloginPath) {
+      return KRoutes.adminloginPath;
+    } else if (token == null) {
       return KRoutes.staffloginPath;
     }
     return null;

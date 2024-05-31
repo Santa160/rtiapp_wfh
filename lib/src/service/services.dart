@@ -25,9 +25,20 @@ abstract class CitizenOnboardingInterface extends ServiceIterface {
 abstract class RTIInterface extends ServiceIterface{
   Future<dynamic> createRTI(List<String> questions,FilePickerModel file,String piaId);
   Future<dynamic> fetchTermAndConditions();
+  Future<dynamic> fetchRTIs();
+  Future<dynamic> fetchRTIDetails(String id);
+  Future<dynamic> fetchRTIStatus();
 
 }
 
 abstract class StaffAuthentication extends ServiceIterface {
   Future<dynamic> login(String username, String password);
+}
+
+abstract class StateInterface extends ServiceIterface{
+  Future<dynamic> fetchState();
+  Future<dynamic> createState(String data);
+  Future<dynamic> deleteState(int stateId);
+  Future<dynamic> updateState(int stateId,String newData);
+
 }

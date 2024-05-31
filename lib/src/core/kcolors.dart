@@ -8,7 +8,7 @@ class KCOLOR {
   static const warning = Color(0xffaaa300);
 
   //Shades
-  static const shade1 = Color(0xffcecece);
+  static const shade1 = Color.fromARGB(255, 185, 185, 185);
   static const shade2 = Color(0xffdcdcdc);
   static const shade3 = Color(0xffe4e4e4);
 }
