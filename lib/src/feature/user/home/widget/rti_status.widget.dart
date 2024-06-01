@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/core/shared_pref.dart';
+import 'package:rtiapp/src/feature/admin/rti-status/models/res_models/rti.model.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 
 class RTIStatusWidget extends StatefulWidget {
@@ -15,24 +16,11 @@ class _RTIStatusWidgetState extends State<RTIStatusWidget> {
   List<RTIStatusModel> _status = [];
   @override
   void initState() {
-    getStatus();
+    fetchRTIStatus();
     super.initState();
   }
 
-  getStatus() async {
-    var status = await SharedPrefHelper.loadListFromSharedPreferences();
-    if (status.isEmpty) {
 
-      logger.e("empty");
-      fetchRTIStatus();
-    }else{
-
-   
-    setState(() {
-      _status = status;
-    });
-    }
-  }
 
   fetchRTIStatus() async {
     var res = await RTIService().fetchRTIStatus();
@@ -43,7 +31,10 @@ class _RTIStatusWidgetState extends State<RTIStatusWidget> {
           (e) => RTIStatusModel.fromJson(e),
         )
         .toList();
-    await SharedPrefHelper.saveListToSharedPreferences(obj);
+   setState(() {
+   _status =obj;
+     
+   });
   }
 
   @override

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:rtiapp/src/core/logger.dart';
+import 'package:rtiapp/src/feature/admin/rti-status/models/res_models/rti.model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefHelper {
@@ -115,43 +116,8 @@ class SharedPrefHelper {
     }
   }
 
-    // Load list of RTIStatus instances from SharedPreferences
-  static Future<List<RTIStatusModel>> loadListFromSharedPreferences() async {
-    List<String> statusList = _prefs.getStringList("rti_status") ?? [];
-    return statusList.map((jsonString) {
-      Map<String, dynamic> json = jsonDecode(jsonString);
-      return RTIStatusModel(json['name'], json['id']);
-    }).toList();
-  }
 
-  // Save list of RTIStatusModel instances to SharedPreferences
-  static Future<void> saveListToSharedPreferences(List<RTIStatusModel> statusList) async {
-    List<String> jsonList = statusList.map((status) => jsonEncode(status.toJson())).toList();
-    await _prefs.setStringList("rti_status", jsonList);
-  }
 
  
 }
 
-class RTIStatusModel {
-  final String name;
-  final int id;
-
-  RTIStatusModel(this.name, this.id);
-
-  // Convert RTIStatus instance to a JSON string
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'id': id,
-    };
-  }
-
- 
-  // Factory method to create an RTIStatusModel instance from a JSON map
-  factory RTIStatusModel.fromJson(Map<String, dynamic> json) {
-    return RTIStatusModel(json['name'], json['id']);
-  }
-
-
-}

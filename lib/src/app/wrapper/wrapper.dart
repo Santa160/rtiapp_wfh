@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rtiapp/src/common/feature/admin/side_nav/logic/cubit/tab_cubit.dart';
 import 'package:rtiapp/src/common/feature/citizen/side_nav/logic/cubit/citizen_tab_cubit.dart';
+import 'package:rtiapp/src/feature/admin/district/logic/cubit/district_cubit.dart';
+import 'package:rtiapp/src/feature/admin/qualification/logic/cubit/qualification_cubit.dart';
+import 'package:rtiapp/src/feature/admin/query-status/logic/cubit/query_cubit.dart';
+import 'package:rtiapp/src/feature/admin/rti-status/logic/cubit/rti-status_cubit.dart';
 import 'package:rtiapp/src/feature/admin/state/logic/cubit/state_cubit.dart';
 import 'package:rtiapp/src/feature/user/onboarding/logic/cubit/dependent_drop_down_cubit.dart';
 
@@ -18,8 +22,21 @@ class MultiBlocWrapper extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => CitizenTabCubit(),
-        ),BlocProvider(
+        ),
+        BlocProvider(
           create: (context) => StateCubit(),
+        ),
+        BlocProvider(
+          create: (context) => QualificationCubit(),
+        ),
+        BlocProvider(
+          create: (context) => DistrictCubit(),
+        ),
+        BlocProvider(
+          create: (context) => QueryCubit(),
+        ),
+        BlocProvider(
+          create: (context) => RTIStatusCubit(),
         ),
         BlocProvider(
           create: (context) => DependentDropDownCubit(),

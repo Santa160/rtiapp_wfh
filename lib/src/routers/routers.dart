@@ -28,6 +28,34 @@ final GoRouter routerConfig = GoRouter(
             return const StatePage();
           },
         ),
+        GoRoute(
+          name: KRoutes.qualification,
+          path: KRoutes.qualificationPath,
+          builder: (context, state) {
+            return const QualificationPage();
+          },
+        ),
+        GoRoute(
+          name: KRoutes.district,
+          path: KRoutes.districtPath,
+          builder: (context, state) {
+            return const DistrictPage();
+          },
+        ),
+        GoRoute(
+          name: KRoutes.querystatus,
+          path: KRoutes.querystatusPath,
+          builder: (context, state) {
+            return const QueryPage();
+          },
+        ),
+        GoRoute(
+          name: KRoutes.rtiStatus,
+          path: KRoutes.rtiStatusPath,
+          builder: (context, state) {
+            return const RTIStatusPage();
+          },
+        ),
       ],
     ),
 
