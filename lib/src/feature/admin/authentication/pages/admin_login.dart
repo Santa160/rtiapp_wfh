@@ -78,7 +78,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                         SizedBox(
                             width: 350,
                             child: TextFormField(
-                              initialValue: "12345678",
+                                initialValue: "12345678",
                                 onChanged: (value) {
                                   setState(() {
                                     _password = value;
@@ -99,20 +99,20 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                         _username == null && _password == null
                                             ? Colors.grey
                                             : KCOLOR.brand)),
-                                onPressed: _username == null &&
-                                        _password == null
-                                    ? null
-                                    : () async {
-                                        var auth = Auth();
-                                        var res = await auth.login(
-                                            _username!, _password!);
-                                        await SharedPrefHelper.saveToken(
-                                            "token",
-                                            res["data"]["accessToken"]);
+                                onPressed:
+                                    _username == null && _password == null
+                                        ? null
+                                        : () async {
+                                            var auth = Auth();
+                                            var res = await auth.login(
+                                                _username!, _password!);
+                                            await SharedPrefHelper.saveToken(
+                                                "token",
+                                                res["data"]["accessToken"]);
 
-                                        context
-                                            .replaceNamed(KRoutes.application);
-                                      },
+                                            context.pushReplacementNamed(
+                                                KRoutes.application);
+                                          },
                                 child: const Text("LOGIN"))),
                         const Gap(10),
                       ],

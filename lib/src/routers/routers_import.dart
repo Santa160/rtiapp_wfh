@@ -15,6 +15,7 @@ import 'package:rtiapp/src/feature/user/home/pages/home.page.dart';
 
 import 'package:rtiapp/src/feature/user/onboarding/pages/login.page.dart';
 import 'package:rtiapp/src/feature/user/onboarding/pages/registration.page.dart';
+import 'package:rtiapp/src/initial-setup/initial_setup.dart';
 
 import 'package:rtiapp/src/routers/route_names.dart';
 

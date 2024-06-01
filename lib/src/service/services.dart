@@ -52,7 +52,7 @@ abstract class DistrictInterface extends ServiceIterface {
   Future<dynamic> fetchDistrict();
   Future<dynamic> createDistrict(String stateId, String data);
   Future<dynamic> deleteDistrict(int id);
-  Future<dynamic> updateDistrict(int id, String newData);
+  Future<dynamic> updateDistrict(int id, String newData, int stateId);
 }
 
 abstract class QueryInterface extends ServiceIterface {

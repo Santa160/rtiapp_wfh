@@ -1,5 +1,8 @@
+import 'dart:convert';
 
 import 'package:rtiapp/src/core/logger.dart';
+import 'package:rtiapp/src/initial-setup/models/query_status.dart';
+import 'package:rtiapp/src/initial-setup/models/status.model.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -102,7 +105,6 @@ class SharedPrefHelper {
   }
 
   static bool isAdmin({String? isAdmin}) {
-    
     if (isAdmin != null) {
       // logger.i("saving");
       _prefs.setBool("admin", isAdmin == "admin" ? true : false);
@@ -114,8 +116,37 @@ class SharedPrefHelper {
     }
   }
 
+  static Future<void> saveStatus(List<StatusModel> data) async {
+    List<String> jsonList =
+        data.map((status) => json.encode(status.toJson())).toList();
+    await _prefs.setStringList('status', jsonList);
+    logger.i({"saved": jsonList});
+  }
 
+  static Future<List<StatusModel>?> getStatus() async {
+    List<String>? jsonList = _prefs.getStringList('status');
+    if (jsonList == null) {
+      return null;
+    }
+    return jsonList
+        .map((jsonString) => StatusModel.fromJson(json.decode(jsonString)))
+        .toList();
+  }
 
- 
+  static Future<void> saveQueryStatus(List<QueryStatusModel> data) async {
+    List<String> jsonList =
+        data.map((status) => json.encode(status.toJson())).toList();
+    await _prefs.setStringList('query-status', jsonList);
+    logger.i({"saved": jsonList});
+  }
+
+  static Future<List<QueryStatusModel>?> getQueryStatus() async {
+    List<String>? jsonList = _prefs.getStringList('query-status');
+    if (jsonList == null) {
+      return null;
+    }
+    return jsonList
+        .map((jsonString) => QueryStatusModel.fromJson(json.decode(jsonString)))
+        .toList();
+  }
 }
-

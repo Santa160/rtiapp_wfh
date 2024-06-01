@@ -7,8 +7,6 @@ import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/feature/admin/district/models/res_models/district.model.dart';
 import 'package:rtiapp/src/feature/admin/district/services/district.service.dart';
 
-
-
 part 'district_state.dart';
 
 List<String> listColumn = ["Sl", "Name", "Action"];
@@ -49,9 +47,12 @@ class DistrictCubit extends Cubit<DistrictState> {
   }
 
   //!! ====================== CUBIT CRUD ===========================
-  Future addDistrict({required BuildContext context,required String stateId, required String name}) async {
+  Future addDistrict(
+      {required BuildContext context,
+      required String stateId,
+      required String name}) async {
     try {
-      var res = await DistrictService().createDistrict(stateId,name);
+      var res = await DistrictService().createDistrict(stateId, name);
 
       EasyLoading.showSuccess(res["message"].toString());
       getDistrictTableData(limit: state.limit ?? 10, page: state.page ?? 1);
@@ -68,8 +69,9 @@ class DistrictCubit extends Cubit<DistrictState> {
     EasyLoading.showError(res["message"]);
   }
 
-  Future updatedDistrict({required int id, required String newName}) async {
-    var res = await DistrictService().updateDistrict(id, newName);
+  Future updatedDistrict(
+      {required int id, required String newName, required int stateId}) async {
+    var res = await DistrictService().updateDistrict(id, newName, stateId);
 
     EasyLoading.showSuccess(res["message"]);
     getDistrictTableData(limit: state.limit ?? 10, page: state.page ?? 1);

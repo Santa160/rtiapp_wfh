@@ -51,10 +51,10 @@ class DistrictService extends DistrictInterface {
   }
 
   @override
-  Future updateDistrict(int id, String newData) async {
+  Future updateDistrict(int id, String newData, int stateId) async {
     try {
-      var res = await dio
-          .put("${EndPoint.district}/update?id=$id", data: {"name": newData});
+      var res = await dio.put("${EndPoint.district}/update?id=$id",
+          data: {"name": newData, "state_id": stateId});
 
       return res.data;
     } on DioException catch (e) {

@@ -6,6 +6,7 @@ import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/widget/generic_data_table.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
+import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/feature/admin/district/logic/cubit/district_cubit.dart';
 import 'package:rtiapp/src/feature/admin/district/models/res_models/district.model.dart';
 import 'package:rtiapp/src/feature/user/onboarding/widgets/dropdown/state.dropdown.dart';
@@ -70,7 +71,6 @@ class _DistrictPageState extends State<DistrictPage> {
                             const SizedBox(height: 10),
                             StateDropdownForm(
                               onStateChanged: (stateid) {
-                               
                                 setState(() {
                                   _stateId = stateid!["id"].toString();
                                 });
@@ -107,7 +107,6 @@ class _DistrictPageState extends State<DistrictPage> {
                                       nameController.clear();
                                     });
                                   }
-                                 
                                 },
                                 child: const Row(
                                   children: [
@@ -152,9 +151,8 @@ class _DistrictPageState extends State<DistrictPage> {
                   context: context,
                   data: data,
                   onUpdateTap: (newName) async {
-                    context
-                        .read<DistrictCubit>()
-                        .updatedDistrict(id: data.id, newName: newName);
+                    context.read<DistrictCubit>().updatedDistrict(
+                        id: data.id, newName: newName, stateId: data.stateId);
                   },
                 );
               },

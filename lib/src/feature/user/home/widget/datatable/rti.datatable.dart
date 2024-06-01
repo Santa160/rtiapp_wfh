@@ -15,11 +15,12 @@ class RTIDataTableWidget extends StatelessWidget {
     required this.column,
     required this.fetchData,
     required this.row,
-     this.editAction,
-     this.deleteAction,
+    this.editAction,
+    this.deleteAction,
     this.loading = false,
     required this.initialPage,
-    required this.initialLimit, this.viewAction,
+    required this.initialLimit,
+    this.viewAction,
   });
 
   final List<String> column;
@@ -44,7 +45,6 @@ class RTIDataTableWidget extends StatelessWidget {
         child: DataTable2(
           isVerticalScrollBarVisible: row.length >= 10 ? true : false,
           isHorizontalScrollBarVisible: row.length >= 10 ? true : false,
-          
           headingRowColor: const WidgetStatePropertyAll(KCOLOR.shade1),
           columns: column.map(
             (e) {
@@ -75,18 +75,21 @@ class RTIDataTableWidget extends StatelessWidget {
                         .toString())), // Adjust as per your data model
                     DataCell(
                         Text(e["rti_no"])), // Adjust as per your data model
-                     DataCell(
+                    DataCell(
                         Text(e["created_at"])), // Adjust as per your data model
-                     DataCell(
-                        RTIStatusWidget(id: int.parse(e["status_id"]),)), // Adjust as per your data model
+                    DataCell(RTIStatusWidget(
+                      id: int.parse(e["status_id"]),
+                    )), // Adjust as per your data model
 
-                     DataCell(Row(
+                    DataCell(Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        ElevatedButton(onPressed: () {
-                          viewAction!(e);
-                        }, child: const Text("view")),
-                         
+                        ElevatedButton(
+                            onPressed: () {
+                              viewAction!(e);
+                            },
+                            child: const Text("view")),
+
                         // IconButton(
                         //   icon: Image.asset(KICONS.edit),
                         //   onPressed: () {

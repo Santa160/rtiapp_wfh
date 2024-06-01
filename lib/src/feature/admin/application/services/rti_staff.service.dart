@@ -4,7 +4,7 @@ import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
 import 'package:rtiapp/src/service/part_of_service.dart';
 
-class Application extends RTIStaffInterface {
+class ApplicationService extends RTIStaffInterface {
   @override
   Future fetchRTIApplicationStaff() async {
     try {

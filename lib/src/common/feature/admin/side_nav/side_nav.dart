@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:rtiapp/src/core/kcolors.dart';
+import 'package:rtiapp/src/core/shared_pref.dart';
 
 import 'package:rtiapp/src/routers/route_names.dart';
 
@@ -51,7 +52,7 @@ class SideNavPage extends StatelessWidget {
                                 context
                                     .read<TabCubit>()
                                     .activeTab(KRoutes.routeNames[index]);
-                             context.goNamed(KRoutes.routeNames[index]);
+                                context.goNamed(KRoutes.routeNames[index]);
                               },
                               title: Text(
                                 KRoutes.routeNames[index],
@@ -66,12 +67,18 @@ class SideNavPage extends StatelessWidget {
                         },
                       ),
                     ),
-                    SizedBox(
-                        width: 100,
-                        child: Text(
-                          activeTab,
-                          style: const TextStyle(color: Colors.white),
-                        )),
+                    InkWell(
+                      onTap: () async {
+                        await SharedPrefHelper.removeToken("token");
+                        context.goNamed(KRoutes.adminlogin);
+                      },
+                      child: const SizedBox(
+                          width: 100,
+                          child: Text(
+                            "Logout",
+                            style: TextStyle(color: Colors.white),
+                          )),
+                    ),
                   ],
                 )),
           Expanded(child: child)
@@ -98,9 +105,9 @@ class SideNavPage extends StatelessWidget {
           const SizedBox(
             height: 5,
           ),
-          Text(
-            "MSPCL RTI ${KRoutes.routeNames.length}",
-            style: const TextStyle(color: Color(0xffE6E2C3), fontSize: 12),
+          const Text(
+            "MSPCL RTI",
+            style: TextStyle(color: Color(0xffE6E2C3), fontSize: 12),
           ),
         ],
       ),

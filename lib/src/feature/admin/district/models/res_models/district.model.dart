@@ -5,13 +5,15 @@ class DistrictModel extends HasName {
   final int id;
   @override
   final String name;
+  final int stateId;
 
-  DistrictModel({required this.id, required this.name});
+  DistrictModel({required this.id, required this.name, required this.stateId});
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
+      'state_id': stateId,
     };
   }
 
@@ -19,6 +21,7 @@ class DistrictModel extends HasName {
     return DistrictModel(
       id: json['id'],
       name: json['name'],
+      stateId: json['state_id'],
     );
   }
 }
