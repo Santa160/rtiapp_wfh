@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/widget/generic_data_table.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/feature/admin/qualification/logic/cubit/qualification_cubit.dart';
 import 'package:rtiapp/src/feature/admin/qualification/models/res_models/qualification.model.dart';
-import 'package:rtiapp/src/feature/admin/state/models/res_models/state.model.dart';
 
 class QualificationPage extends StatefulWidget {
   const QualificationPage({super.key});

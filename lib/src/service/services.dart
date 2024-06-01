@@ -61,9 +61,14 @@ abstract class QueryInterface extends ServiceIterface {
   Future<dynamic> deleteQuery(int id);
   Future<dynamic> updateQuery(int id, String newData);
 }
+
 abstract class RTIStatusInterface extends ServiceIterface {
   Future<dynamic> createRTIstatus(String data);
   Future<dynamic> deleteRTIstatus(int id);
   Future<dynamic> fetchRTIstatus();
   Future<dynamic> updateRTIstatus(int id, String newData);
+}
+
+abstract class RTIStaffInterface extends ServiceIterface {
+  Future<dynamic> fetchRTIApplicationStaff();
 }

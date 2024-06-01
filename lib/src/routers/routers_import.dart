@@ -12,7 +12,6 @@ import 'package:rtiapp/src/feature/admin/query-status/pages/query.page.dart';
 import 'package:rtiapp/src/feature/admin/rti-status/pages/rti.page.dart';
 import 'package:rtiapp/src/feature/admin/state/pages/state.page.dart';
 import 'package:rtiapp/src/feature/user/home/pages/home.page.dart';
-import 'package:rtiapp/src/feature/user/home/pages/rti_view.page.dart';
 
 import 'package:rtiapp/src/feature/user/onboarding/pages/login.page.dart';
 import 'package:rtiapp/src/feature/user/onboarding/pages/registration.page.dart';

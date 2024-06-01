@@ -14,4 +14,6 @@ class EndPoint {
   static const rtistatus = "/api/status"; //GET
   static const termAndCondition = "/api/term-and-conditions";
 
+  //https://mspclrtiapi.globizsapp.com/api/rtis/list-staff
+  static const rtiStaff = "/api/rtis/list-staff"; //GET POST
 }

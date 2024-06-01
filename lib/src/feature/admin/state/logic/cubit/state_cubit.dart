@@ -2,12 +2,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:rtiapp/src/common/utils/type.dart';
 import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/feature/admin/state/models/res_models/state.model.dart';
 
 import 'package:rtiapp/src/feature/admin/state/services/state.service.dart';
-import 'package:rtiapp/src/service/helper/endpoints.dart';
 
 part 'state_state.dart';
 

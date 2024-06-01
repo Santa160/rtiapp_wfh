@@ -1,8 +1,6 @@
-import 'dart:convert';
 
-import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:rtiapp/src/core/logger.dart';
-import 'package:rtiapp/src/feature/admin/rti-status/models/res_models/rti.model.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefHelper {

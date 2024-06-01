@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rtiapp/src/core/logger.dart';
-import 'package:rtiapp/src/core/shared_pref.dart';
 import 'package:rtiapp/src/feature/admin/rti-status/models/res_models/rti.model.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 

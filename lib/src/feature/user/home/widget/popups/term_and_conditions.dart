@@ -7,7 +7,6 @@ import 'package:rtiapp/src/common/widget/title_style.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
-import 'package:rtiapp/src/routers/route_names.dart';
 
 class TermAndConditions extends StatefulWidget {
   const TermAndConditions({super.key, required this.onCancel});

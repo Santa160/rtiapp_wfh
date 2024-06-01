@@ -6,9 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/feature/admin/qualification/models/res_models/qualification.model.dart';
 import 'package:rtiapp/src/feature/admin/qualification/services/qualification.service.dart';
-import 'package:rtiapp/src/feature/admin/state/models/res_models/state.model.dart';
 
-import 'package:rtiapp/src/feature/admin/state/services/state.service.dart';
 
 
 part 'qualification_state.dart';

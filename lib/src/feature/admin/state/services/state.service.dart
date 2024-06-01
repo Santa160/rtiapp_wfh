@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:rtiapp/src/common/exception/exception.dart';
 import 'package:rtiapp/src/core/logger.dart';
-import 'package:rtiapp/src/feature/admin/state/models/res_models/state.model.dart';
 
 import 'package:rtiapp/src/service/helper/endpoints.dart';
 import 'package:rtiapp/src/service/part_of_service.dart';
