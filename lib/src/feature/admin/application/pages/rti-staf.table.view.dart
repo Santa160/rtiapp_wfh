@@ -47,7 +47,7 @@ class _RTIStaffTableViewState extends State<RTIStaffTableView> {
         "Application No",
         "Date",
         "Status",
-        "",
+        "Action",
       ],
       viewAction: (data) {
         widget.onViewTab(data);

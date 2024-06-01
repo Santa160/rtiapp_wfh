@@ -99,20 +99,19 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                         _username == null && _password == null
                                             ? Colors.grey
                                             : KCOLOR.brand)),
-                                onPressed:
-                                    _username == null && _password == null
-                                        ? null
-                                        : () async {
-                                            var auth = Auth();
-                                            var res = await auth.login(
-                                                _username!, _password!);
-                                            await SharedPrefHelper.saveToken(
-                                                "token",
-                                                res["data"]["accessToken"]);
+                                onPressed: _username == null &&
+                                        _password == null
+                                    ? null
+                                    : () async {
+                                        var auth = Auth();
+                                        var res = await auth.login(
+                                            _username!, _password!);
+                                        await SharedPrefHelper.saveToken(
+                                            "token",
+                                            res["data"]["accessToken"]);
 
-                                            context.pushReplacementNamed(
-                                                KRoutes.application);
-                                          },
+                                        context.goNamed(KRoutes.application);
+                                      },
                                 child: const Text("LOGIN"))),
                         const Gap(10),
                       ],
