@@ -25,16 +25,16 @@ class AppText extends StatelessWidget {
 class AppBtn extends StatelessWidget {
   const AppBtn(
       {super.key,
-      required this.label,
+      required this.text,
       required this.isOutline,
       required this.onPressed});
-  final String label;
+  final String text;
   final bool isOutline;
   final Function() onPressed;
 
-  const AppBtn.outline(this.label, {super.key, required this.onPressed})
+  const AppBtn.outline(this.text, {super.key, required this.onPressed})
       : isOutline = true;
-  const AppBtn.fill(this.label, {super.key, required this.onPressed})
+  const AppBtn.fill(this.text, {super.key, required this.onPressed})
       : isOutline = false;
 
   @override
@@ -52,13 +52,13 @@ class AppBtn extends StatelessWidget {
               ),
             ),
             onPressed: onPressed,
-            child: Text(label),
+            child: Text(text),
           )
         : ElevatedButton(
             style: const ButtonStyle(
                 foregroundColor: WidgetStatePropertyAll(Colors.white),
                 backgroundColor: WidgetStatePropertyAll(KCOLOR.brand)),
             onPressed: onPressed,
-            child: Text(label));
+            child: Text(text));
   }
 }
