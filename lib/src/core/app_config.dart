@@ -20,7 +20,7 @@ class AppText extends StatelessWidget {
       : style = const TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
 
   const AppText.subheading(this.text, {super.key, this.color})
-      : style = const TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+      : style = const TextStyle(fontSize: 16);
 
   @override
   Widget build(BuildContext context) {

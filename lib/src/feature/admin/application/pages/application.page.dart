@@ -34,7 +34,9 @@ class _ApplicationPageState extends State<ApplicationPage> {
         const HeaderWidget(),
         const Gap(20),
         if (tab == "table") ...[
+          const Gap(10),
           const AppText.heading("RTI Application"),
+          const Gap(10),
           Expanded(
             child: RTIStaffTableView(
               onViewTab: (v) {
@@ -62,5 +64,47 @@ class _ApplicationPageState extends State<ApplicationPage> {
         ),
       ],
     ).addPadding(left: 50, right: 50));
+  }
+}
+
+class UserProfileTable extends StatelessWidget {
+  const UserProfileTable({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('User Profile'),
+        ),
+        body: Center(
+          child: DataTable(
+            columns: const [
+              DataColumn(label: Text('Field')),
+              DataColumn(label: Text('Value')),
+            ],
+            rows: const [
+              DataRow(cells: [
+                DataCell(Text('Name')),
+                DataCell(Text('John Doe')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('Age')),
+                DataCell(Text('30')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('Email')),
+                DataCell(Text('john.doe@example.com')),
+              ]),
+              DataRow(cells: [
+                DataCell(Text('Location')),
+                DataCell(Text('New York, USA')),
+              ]),
+              // Add more rows for additional user profile fields
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

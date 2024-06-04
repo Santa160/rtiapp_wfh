@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/widget/serial_number.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
@@ -51,7 +52,8 @@ class RTIDataTableWidget extends StatelessWidget {
               initialCoun = row.length;
               initialcolumn = column;
               return DataColumn2(
-                numeric: e == "Action",
+                numeric: e == "Action" || e == "Sl no",
+                size: e == "Sl no" ? ColumnSize.S : ColumnSize.M,
                 label: Padding(
                   padding: const EdgeInsets.only(right: 22),
                   child: Text(
@@ -75,8 +77,9 @@ class RTIDataTableWidget extends StatelessWidget {
                         .toString())), // Adjust as per your data model
                     DataCell(
                         Text(e["rti_no"])), // Adjust as per your data model
-                    DataCell(
-                        Text(e["created_at"])), // Adjust as per your data model
+                    DataCell(Text(e["created_at"]
+                        .toString()
+                        .getFormattedDate())), // Adjust as per your data model
                     DataCell(RTIStatusWidget(
                       id: int.parse(e["status_id"]),
                     )), // Adjust as per your data model

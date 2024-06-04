@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:rtiapp/src/common/exception/exception.dart';
 import 'package:rtiapp/src/common/utils/filepicker.helper.dart';
@@ -58,9 +59,9 @@ class RTIService extends RTIInterface {
       logger.e('Unexpected error: $e');
     }
   }
-  
+
   @override
-  Future fetchRTIStatus()async{
+  Future fetchRTIStatus() async {
     try {
       var res = await dio.get(EndPoint.rtistatus);
 
@@ -70,12 +71,19 @@ class RTIService extends RTIInterface {
     } catch (e) {
       logger.e('Unexpected error: $e');
     }
-  }  @override
-  Future fetchRTIDetails(String id)async{
+  }
+
+  @override
+  Future fetchRTIDetails(String id) async {
     try {
       var res = await dio.get("${EndPoint.rti}/$id");
+      var log = await dio.get(EndPoint.rtiStatusLog);
 
-      return res.data;
+      var data = res.data;
+      res.data["data"]["rti_status_log"] = log.data["data"];
+
+
+      return data;
     } on DioException catch (e) {
       handleDioException(e);
     } catch (e) {

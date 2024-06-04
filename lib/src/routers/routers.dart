@@ -104,7 +104,7 @@ final GoRouter routerConfig = GoRouter(
                 : KRoutes.homePath;
           }
         }
-        return KRoutes.staffloginPath;
+        return KRoutes.adminloginPath;
       },
     ),
     GoRoute(

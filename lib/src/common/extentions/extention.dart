@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 extension PaddingExtension on Widget {
   Widget addPadding({
@@ -12,5 +13,13 @@ extension PaddingExtension on Widget {
       child:
           this, // 'this' refers to the widget to which the extension is applied
     );
+  }
+}
+
+extension DateFormatting on String {
+  String getFormattedDate() {
+    DateTime dateTime = DateTime.parse(this);
+    String formattedDate = DateFormat('d MMM yyyy').format(dateTime);
+    return formattedDate; // Output: 23 November 2023
   }
 }
