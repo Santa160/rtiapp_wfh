@@ -14,7 +14,7 @@ import 'package:rtiapp/src/feature/admin/rti-status/services/rti.service.dart';
 
 
 
-part 'rti-status_state.dart';
+part 'rti_status_state.dart';
 
 List<String> listColumn = ["Sl", "Name", "Action"];
 

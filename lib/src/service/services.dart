@@ -71,4 +71,7 @@ abstract class RTIStatusInterface extends ServiceIterface {
 
 abstract class RTIStaffInterface extends ServiceIterface {
   Future<dynamic> fetchRTIApplicationStaff();
+  Future<dynamic> updateRTIApplicationStatus(int rtiId, int statusId);
+  Future<dynamic> createQueryResponse(
+      Map<String, dynamic> data, List<StringUint8ListModel> files);
 }

@@ -6,20 +6,27 @@ import 'package:rtiapp/src/initial-setup/models/status.model.dart';
 
 class InitialSetup {
   static status() async {
-    var res = await RTIStatusService().fetchRTIstatus();
-    if (res != null) {
-      var raw = res["data"] as List;
-      var list = raw.map((e) => StatusModel.fromJson(e)).toList();
-      await SharedPrefHelper.saveStatus(list);
+    var status = await SharedPrefHelper.getStatus();
+    if (status == null) {
+      var res = await RTIStatusService().fetchRTIstatus();
+      if (res != null) {
+        var raw = res["data"] as List;
+        var list = raw.map((e) => StatusModel.fromJson(e)).toList();
+        await SharedPrefHelper.saveStatus(list);
+      }
     }
   }
 
   static queryStatus() async {
+    var queryStatus = await SharedPrefHelper.getQueryStatus();
     var res = await QueryService().fetchQuery();
-    if (res != null) {
-      var raw = res["data"] as List;
-      var list = raw.map((e) => QueryStatusModel.fromJson(e)).toList();
-      await SharedPrefHelper.saveQueryStatus(list);
+
+    if (queryStatus == null) {
+      if (res != null) {
+        var raw = res["data"] as List;
+        var list = raw.map((e) => QueryStatusModel.fromJson(e)).toList();
+        await SharedPrefHelper.saveQueryStatus(list);
+      }
     }
   }
 }

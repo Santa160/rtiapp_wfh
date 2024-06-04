@@ -1,7 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rtiapp/src/core/app_config.dart';
 
 import 'package:rtiapp/src/core/kassets.dart';
 
@@ -39,13 +42,10 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [Image.asset(KASSETS.logo)],
                     ),
-                    Text("RTI Online",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium!
-                            .copyWith(
-                                color: KCOLOR.brand,
-                                fontWeight: FontWeight.bold)),
+                    const AppText.display(
+                      "RTI Online",
+                      color: KCOLOR.brand,
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -53,9 +53,8 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                         const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            AppText.heading(
                               "Admin Login",
-                              style: TextStyle(fontSize: 20),
                             ),
                           ],
                         ),
@@ -64,7 +63,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                         SizedBox(
                           width: 350,
                           child: TextFormField(
-                            initialValue: "mspcl_admin",
+                            initialValue: kReleaseMode ? '' : "mspcl_admin",
                             onChanged: (value) {
                               setState(() {
                                 _username = value;
@@ -78,7 +77,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                         SizedBox(
                             width: 350,
                             child: TextFormField(
-                                initialValue: "12345678",
+                                initialValue: kReleaseMode ? '' : "12345678",
                                 onChanged: (value) {
                                   setState(() {
                                     _password = value;
@@ -103,14 +102,23 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                         _password == null
                                     ? null
                                     : () async {
+                                        EasyLoading.show(status: "Please wait");
                                         var auth = Auth();
                                         var res = await auth.login(
                                             _username!, _password!);
-                                        await SharedPrefHelper.saveToken(
-                                            "token",
-                                            res["data"]["accessToken"]);
-
-                                        context.goNamed(KRoutes.application);
+                                        if (res["success"]) {
+                                          await SharedPrefHelper.saveUserInfo(
+                                              res["data"]["username"],
+                                              res["data"]["email"],
+                                              res["data"]["id"],
+                                              res["data"]["accessToken"]);
+                                          await SharedPrefHelper.saveToken(
+                                              "token",
+                                              res["data"]["accessToken"]);
+                                          EasyLoading.showSuccess(
+                                              "Login Succesfull");
+                                          context.goNamed(KRoutes.application);
+                                        }
                                       },
                                 child: const Text("LOGIN"))),
                         const Gap(10),
@@ -123,14 +131,6 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _bodyView() {
-    return Container(
-      height: 200,
-      width: 200,
-      color: Colors.green,
     );
   }
 }

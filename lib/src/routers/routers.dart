@@ -45,48 +45,12 @@ final GoRouter routerConfig = GoRouter(
           builder: (context, state) {
             return const StatePage();
           },
-          redirect: (context, state) async {
-            await SharedPrefHelper.init();
-            var token = SharedPrefHelper.getToken("token");
-            if (token != null) {
-              var decoded = JwtDecoder.decode(token);
-
-              if (decoded["role"] == "staff") {
-                return JwtDecoder.isExpired(token)
-                    ? KRoutes.adminloginPath
-                    : KRoutes.applicationPath;
-              } else {
-                return JwtDecoder.isExpired(token)
-                    ? KRoutes.staffloginPath
-                    : KRoutes.homePath;
-              }
-            }
-            return null;
-          },
         ),
         GoRoute(
           name: KRoutes.qualification,
           path: KRoutes.qualificationPath,
           builder: (context, state) {
             return const QualificationPage();
-          },
-          redirect: (context, state) async {
-            await SharedPrefHelper.init();
-            var token = SharedPrefHelper.getToken("token");
-            if (token != null) {
-              var decoded = JwtDecoder.decode(token);
-
-              if (decoded["role"] == "staff") {
-                return JwtDecoder.isExpired(token)
-                    ? KRoutes.adminloginPath
-                    : KRoutes.applicationPath;
-              } else {
-                return JwtDecoder.isExpired(token)
-                    ? KRoutes.staffloginPath
-                    : KRoutes.homePath;
-              }
-            }
-            return null;
           },
         ),
         GoRoute(
@@ -95,24 +59,6 @@ final GoRouter routerConfig = GoRouter(
           builder: (context, state) {
             return const DistrictPage();
           },
-          redirect: (context, state) async {
-            await SharedPrefHelper.init();
-            var token = SharedPrefHelper.getToken("token");
-            if (token != null) {
-              var decoded = JwtDecoder.decode(token);
-
-              if (decoded["role"] == "staff") {
-                return JwtDecoder.isExpired(token)
-                    ? KRoutes.adminloginPath
-                    : KRoutes.applicationPath;
-              } else {
-                return JwtDecoder.isExpired(token)
-                    ? KRoutes.staffloginPath
-                    : KRoutes.homePath;
-              }
-            }
-            return null;
-          },
         ),
         GoRoute(
           name: KRoutes.querystatus,
@@ -120,48 +66,12 @@ final GoRouter routerConfig = GoRouter(
           builder: (context, state) {
             return const QueryPage();
           },
-          redirect: (context, state) async {
-            await SharedPrefHelper.init();
-            var token = SharedPrefHelper.getToken("token");
-            if (token != null) {
-              var decoded = JwtDecoder.decode(token);
-
-              if (decoded["role"] == "staff") {
-                return JwtDecoder.isExpired(token)
-                    ? KRoutes.adminloginPath
-                    : KRoutes.applicationPath;
-              } else {
-                return JwtDecoder.isExpired(token)
-                    ? KRoutes.staffloginPath
-                    : KRoutes.homePath;
-              }
-            }
-            return null;
-          },
         ),
         GoRoute(
           name: KRoutes.rtiStatus,
           path: KRoutes.rtiStatusPath,
           builder: (context, state) {
             return const RTIStatusPage();
-          },
-          redirect: (context, state) async {
-            await SharedPrefHelper.init();
-            var token = SharedPrefHelper.getToken("token");
-            if (token != null) {
-              var decoded = JwtDecoder.decode(token);
-
-              if (decoded["role"] == "staff") {
-                return JwtDecoder.isExpired(token)
-                    ? KRoutes.adminloginPath
-                    : KRoutes.applicationPath;
-              } else {
-                return JwtDecoder.isExpired(token)
-                    ? KRoutes.staffloginPath
-                    : KRoutes.homePath;
-              }
-            }
-            return null;
           },
         ),
       ],
@@ -224,10 +134,6 @@ final GoRouter routerConfig = GoRouter(
   redirect: (context, state) async {
     await SharedPrefHelper.init();
     var token = SharedPrefHelper.getToken("token");
-    await InitialSetup.status();
-    await InitialSetup.queryStatus();
-
-    logger.f(state.uri.path);
 
     if (state.uri.path == KRoutes.adminloginPath) {
       return KRoutes.adminloginPath;

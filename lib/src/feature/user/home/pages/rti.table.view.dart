@@ -1,10 +1,8 @@
-
 import 'package:flutter/material.dart';
 
 import 'package:rtiapp/src/feature/user/home/widget/datatable/rti.datatable.dart';
 
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
-
 
 class RTITableView extends StatefulWidget {
   const RTITableView({super.key, required this.onViewTab});
@@ -52,9 +50,8 @@ class _RTITableViewState extends State<RTITableView> {
         "Status",
         "",
       ],
-      
       viewAction: (data) {
-       widget.onViewTab(data);
+        widget.onViewTab(data);
       },
     );
 

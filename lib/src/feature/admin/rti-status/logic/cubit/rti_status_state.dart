@@ -1,4 +1,4 @@
-part of 'rti-status_cubit.dart';
+part of 'rti_status_cubit.dart';
 
 enum Status { initial, loading, loaded, error }
 

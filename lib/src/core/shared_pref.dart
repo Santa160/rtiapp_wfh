@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:rtiapp/src/common/models/user.dart';
 import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
 import 'package:rtiapp/src/initial-setup/models/status.model.dart';
@@ -21,11 +22,6 @@ class SharedPrefHelper {
   // CRUD ✅ SAVE ->  SAVE token
   //------------------------------------
   static Future<bool> saveToken(String key, String value) {
-    logger.i({
-      "class": "SharedPrefHelper",
-      "method": 'saveToken',
-      "Token saved": value
-    });
     return _prefs.setString(key, value);
   }
 
@@ -33,75 +29,41 @@ class SharedPrefHelper {
   // CRUD 🔽 READ ->  READ token
   //------------------------------------
   static String? getToken(String key) {
-    logger.i({
-      "class": "SharedPrefHelper",
-      "method": 'getToken',
-      "key": key,
-      "token": _prefs.getString(key),
-      "username": _prefs.getString('username'),
-      "password": _prefs.getString('password')
-    });
     return _prefs.getString(key);
   }
 
   //------------------------------------
   // CRUD ❌ DELETE ->  DELETE token
   //------------------------------------
-  static Future<bool> removeToken(String key) {
-    logger.i({
-      "class": "SharedPrefHelper",
-      "method": 'removeToken',
-      "key": key,
-      "token": _prefs.remove(key),
-    });
+  static Future<bool> removeToken(String key) async {
+    await deleletUserInfo();
     return _prefs.remove(key);
   }
 
 //------------------------------------
 // CRUD ✅ SAVE ->  SAVE username and password
 //------------------------------------
-  static Future<void> saveUserInfo(String username, String pwd) async {
-    logger.i({
-      "class": "SharedPrefHelper",
-      "method": 'saveUserDataToRemember',
-      "username": username,
-      "password": pwd,
-    });
-    _prefs.setString("username", username);
-    _prefs.setString("password", pwd);
+  static Future<void> saveUserInfo(
+      String username, String email, int userId, String accessToken) async {
+    var obj = UserModel(id: userId, username: username, email: email);
+    await _prefs.setString("userInfo", json.encode(obj.toJson()));
   }
 
 //------------------------------------
 // CRUD 🔽 READ ->  READ username and password and return as Map<String,dynamic>
 //------------------------------------
-  static Map<String, dynamic> readUserInfo(String username, String pwd) {
-    logger.i({
-      "class": "SharedPrefHelper",
-      "method": 'readUserNameAndPassword',
-      "data": {
-        "username": _prefs.getString('username'),
-        "password": _prefs.getString('password')
-      },
-    });
-    return {
-      "username": _prefs.getString('username') ?? '',
-      "password": _prefs.getString('password') ?? ''
-    };
+  static UserModel? getUserInfo() {
+    String? userInfoJson = _prefs.getString("userInfo");
+    if (userInfoJson == null) {
+      return null;
+    }
+
+    Map<String, dynamic> userInfoMap = json.decode(userInfoJson);
+    return UserModel.fromJson(userInfoMap);
   }
 
-  static Map<String, dynamic> deleletUserInfo() {
-    logger.i({
-      "class": "SharedPrefHelper",
-      "method": 'deleletUserInfo',
-      "data": {
-        "username": _prefs.remove('username'),
-        "password": _prefs.remove('password')
-      },
-    });
-    return {
-      "username": _prefs.remove('username'),
-      "password": _prefs.remove('password')
-    };
+  static Future<bool> deleletUserInfo() {
+    return _prefs.remove('userInfo');
   }
 
   static bool isAdmin({String? isAdmin}) {

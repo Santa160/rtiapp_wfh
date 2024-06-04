@@ -5,7 +5,7 @@ import 'package:rtiapp/src/common/feature/citizen/side_nav/logic/cubit/citizen_t
 import 'package:rtiapp/src/feature/admin/district/logic/cubit/district_cubit.dart';
 import 'package:rtiapp/src/feature/admin/qualification/logic/cubit/qualification_cubit.dart';
 import 'package:rtiapp/src/feature/admin/query-status/logic/cubit/query_cubit.dart';
-import 'package:rtiapp/src/feature/admin/rti-status/logic/cubit/rti-status_cubit.dart';
+import 'package:rtiapp/src/feature/admin/rti-status/logic/cubit/rti_status_cubit.dart';
 import 'package:rtiapp/src/feature/admin/state/logic/cubit/state_cubit.dart';
 import 'package:rtiapp/src/feature/user/onboarding/logic/cubit/dependent_drop_down_cubit.dart';
 

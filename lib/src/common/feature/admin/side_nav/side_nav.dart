@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:rtiapp/src/core/kcolors.dart';
+
 import 'package:rtiapp/src/core/shared_pref.dart';
 
 import 'package:rtiapp/src/routers/route_names.dart';
@@ -52,6 +54,8 @@ class SideNavPage extends StatelessWidget {
                                 context
                                     .read<TabCubit>()
                                     .activeTab(KRoutes.routeNames[index]);
+                                EasyLoading.showToast(
+                                    "$activeTab and ${KRoutes.routeNames[index]} is equal ${activeTab == KRoutes.routeNames[index]}");
                                 context.goNamed(KRoutes.routeNames[index]);
                               },
                               title: Text(

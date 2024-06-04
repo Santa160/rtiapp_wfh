@@ -30,118 +30,118 @@ class _StatePageState extends State<StatePage> {
   @override
   Widget build(BuildContext context) {
     var state = context.watch<StateCubit>().state;
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const HeaderWidget(),
-        const Gap(20),
-        Row(
-          children: [
-            const Text("State"),
-            const Gap(10),
-            ElevatedButton(
-                style: const ButtonStyle(
-                    foregroundColor: WidgetStatePropertyAll(Colors.white),
-                    backgroundColor: WidgetStatePropertyAll(KCOLOR.brand)),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                          content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "State Name",
-                            style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: KCOLOR.brand),
-                          ),
-                          const SizedBox(height: 10),
-                          TextFormField(
-                            controller: nameController,
-                          ),
-                          const SizedBox(height: 10),
-                          ElevatedButton(
-                            style: const ButtonStyle(
-                              foregroundColor:
-                                  WidgetStatePropertyAll(Colors.white),
-                              backgroundColor:
-                                  WidgetStatePropertyAll(KCOLOR.brand)),
-                              onPressed: () async {
-                                context
-                                    .read<StateCubit>()
-                                    .addState(
-                                        context: context,
-                                        name: nameController.text)
-                                    .then((value) {
-                                  Navigator.of(context).pop();
+    return Scaffold(
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const HeaderWidget(),
+          const Gap(20),
+          Row(
+            children: [
+              const Text("State"),
+              const Gap(10),
+              ElevatedButton(
+                  style: const ButtonStyle(
+                      foregroundColor: WidgetStatePropertyAll(Colors.white),
+                      backgroundColor: WidgetStatePropertyAll(KCOLOR.brand)),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                            content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "State Name",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: KCOLOR.brand),
+                            ),
+                            const SizedBox(height: 10),
+                            TextFormField(
+                              controller: nameController,
+                            ),
+                            const SizedBox(height: 10),
+                            ElevatedButton(
+                                style: const ButtonStyle(
+                                    foregroundColor:
+                                        WidgetStatePropertyAll(Colors.white),
+                                    backgroundColor:
+                                        WidgetStatePropertyAll(KCOLOR.brand)),
+                                onPressed: () async {
+                                  context
+                                      .read<StateCubit>()
+                                      .addState(
+                                          context: context,
+                                          name: nameController.text)
+                                      .then((value) {
+                                    Navigator.of(context).pop();
 
-                                  nameController.clear();
-                                });
-                              },
-                              child: const Row(
-                                children: [
-                                  Expanded(child: Center(child: Text("Add"))),
-                                ],
-                              ))
-                        ],
-                      ));
+                                    nameController.clear();
+                                  });
+                                },
+                                child: const Row(
+                                  children: [
+                                    Expanded(child: Center(child: Text("Add"))),
+                                  ],
+                                ))
+                          ],
+                        ));
+                      },
+                    );
+                  },
+                  child: const Text("Add"))
+            ],
+          ),
+          const Gap(20),
+          if (state.status == Status.initial || state.status == Status.loading)
+            Expanded(child: buildShimmer(state.dataColumn)),
+          if (state.status == Status.error)
+            const Expanded(
+                child: Center(
+              child: Text("No More Data Available"),
+            )),
+          if (state.status == Status.loaded)
+            Expanded(
+              child: GenericDataTable<StateModel>(
+                initialLimit: limit,
+                initialPage: initialPage,
+                column: state.dataColumn,
+                deleteAction: (data) {
+                  //
+                  showConfirmationDialog(
+                    context: context,
+                    data: data,
+                    onConfirmTap: () {
+                      context.read<StateCubit>().deleteState(id: data.id);
                     },
                   );
                 },
-                child: const Text("Add"))
-          ],
-        ),
-        const Gap(20),
-        if (state.status == Status.initial || state.status == Status.loading)
-          Expanded(child: buildShimmer(state.dataColumn)),
-        if (state.status == Status.error)
-          const Expanded(
-              child: Center(
-            child: Text("No More Data Available"),
-          )),
-        if (state.status == Status.loaded)
-          Expanded(
-            child: GenericDataTable<StateModel>(
-              initialLimit: limit,
-              initialPage: initialPage,
-              column: state.dataColumn,
-              deleteAction: (data) {
-                //
-                showConfirmationDialog(
-                  context: context,
-                  data: data,
-                  onConfirmTap: () {
-                    context
-                        .read<StateCubit>()
-                        .deleteState(id: data.id);
-                   
-                  },
-                );
-              },
-              editAction: (data) {
-                showUpdateFormDialog<StateModel>(
-                  context: context,
-                  data: data,
-                  onUpdateTap: (newName) async {
-                    context.read<StateCubit>().updatedState(
-                        id: data.id, newName: newName);
-                  },
-                );
-              },
-              fetchData: (limit, page) async {
-                //
-              },
-              row: state.dataRaw!,
-              loading: state.dataRaw!.isEmpty ? true : false,
+                editAction: (data) {
+                  showUpdateFormDialog<StateModel>(
+                    context: context,
+                    data: data,
+                    onUpdateTap: (newName) async {
+                      context
+                          .read<StateCubit>()
+                          .updatedState(id: data.id, newName: newName);
+                    },
+                  );
+                },
+                fetchData: (limit, page) async {
+                  //
+                },
+                row: state.dataRaw!,
+                loading: state.dataRaw!.isEmpty ? true : false,
+              ),
             ),
-          ),
-        const Gap(10),
-      ],
-    ).addPadding(left: 50, right: 50);
+          const Gap(10),
+        ],
+      ).addPadding(left: 50, right: 50),
+    );
   }
 }
