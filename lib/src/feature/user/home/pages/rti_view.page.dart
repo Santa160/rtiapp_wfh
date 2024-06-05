@@ -1,24 +1,17 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:image_network/image_network.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 
 import 'package:rtiapp/src/common/widget/serial_number.dart';
-import 'package:rtiapp/src/common/widget/title_style.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/core/logger.dart';
-import 'package:rtiapp/src/feature/admin/application/models/req-models/StringUnit8.model.dart';
-import 'package:rtiapp/src/feature/admin/application/services/rti_staff.service.dart';
-import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/application_status.dropdown.dart';
-import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/query.status.dropdown.dart';
-import 'package:rtiapp/src/feature/admin/application/widgets/image_picker.dart';
+
 import 'package:rtiapp/src/feature/admin/application/widgets/popups/view_responses.popup.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
-import 'package:rtiapp/src/initial-setup/models/query_status.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
 
 class RTIViewPage extends StatefulWidget {
@@ -33,13 +26,13 @@ class RTIViewPage extends StatefulWidget {
 class _RTIViewPageState extends State<RTIViewPage> {
   Map<String, dynamic> data = {"status": " "};
   // List<QueryStatusModel>? _queryStatus;
-  QueryStatusModel? _selectedQueryStatus;
+
   Map<String, dynamic> citizenDetails = {};
   String applicationNo = '';
   Map<String, dynamic> bplDetails = {};
   List<Map<String, dynamic>> tableData = [];
   List queries = [];
-  final List<StringUint8ListModel> _files = [];
+ 
   TextEditingController controller = TextEditingController();
 
   @override
@@ -218,7 +211,7 @@ class _RTIViewPageState extends State<RTIViewPage> {
           shrinkWrap: true,
           itemCount: queries.length,
           itemBuilder: (context, index) {
-            var count = index + 1;
+         
             return ListTile(
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,

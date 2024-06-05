@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocWrapper(
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
+        title: "MSPCL RTI", //TODO Change the web title here
         routerConfig: routerConfig,
         theme: KTHEME.lightTheme(),
         builder: EasyLoading.init(),

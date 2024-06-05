@@ -6,11 +6,9 @@ import 'package:gap/gap.dart';
 import 'package:image_network/image_network.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 
-import 'package:rtiapp/src/common/widget/rich_text.dart';
 import 'package:rtiapp/src/common/widget/serial_number.dart';
 import 'package:rtiapp/src/common/widget/title_style.dart';
 import 'package:rtiapp/src/core/app_config.dart';
-import 'package:rtiapp/src/core/kassets.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/core/logger.dart';
 // import 'package:rtiapp/src/core/shared_pref.dart';

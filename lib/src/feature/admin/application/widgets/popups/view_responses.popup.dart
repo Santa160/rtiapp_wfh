@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_network/image_network.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
@@ -8,15 +6,14 @@ import 'package:rtiapp/src/feature/admin/application/services/rti_staff.service.
 import 'package:rtiapp/src/service/helper/endpoints.dart';
 
 class ViewResponsePopup extends StatefulWidget {
-  const ViewResponsePopup({super.key, this.data});
-  final data;
+  const ViewResponsePopup({super.key, required this.data});
+  final Map<String, dynamic> data;
 
   @override
   State<ViewResponsePopup> createState() => _ViewResponsePopupState();
 }
 
 class _ViewResponsePopupState extends State<ViewResponsePopup> {
-  String? _responseId;
   List<Map<String, dynamic>> response = [];
 
   @override
@@ -26,8 +23,6 @@ class _ViewResponsePopupState extends State<ViewResponsePopup> {
   }
 
   getResponses() async {
-    _responseId = widget.data["id"];
-
     var service = ApplicationService();
     var res = await service.fetchResponseById(widget.data["id"]);
     var list = res["data"] as List;
@@ -49,7 +44,6 @@ class _ViewResponsePopupState extends State<ViewResponsePopup> {
         shrinkWrap: true,
         itemCount: response.length,
         itemBuilder: (context, index) {
-       
           var d = response[index];
           var doc = d["documents"] as List;
           return ListTile(
