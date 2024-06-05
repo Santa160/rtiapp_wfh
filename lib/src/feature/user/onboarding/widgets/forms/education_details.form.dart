@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rtiapp/src/common/widget/title_style.dart';
+import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/feature/user/onboarding/widgets/dropdown/eduq.dropdown.dart';
 
 class EducationForm extends StatefulWidget {
@@ -39,9 +39,8 @@ class _EducationFormState extends State<EducationForm> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const AppText.heading(
                     "Education Status",
-                    style: style,
                   ),
                   EduQDropdownForm(
                     onEduQChanged: (value) {

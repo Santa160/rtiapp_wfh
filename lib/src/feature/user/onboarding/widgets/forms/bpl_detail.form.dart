@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:rtiapp/src/common/utils/filepicker.helper.dart';
-import 'package:rtiapp/src/common/widget/title_style.dart';
+import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 
 import 'package:rtiapp/src/feature/user/onboarding/widgets/upload/upload_file.dart';
@@ -51,9 +51,8 @@ class _BPLFormState extends State<BPLForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const AppText.heading(
               "Is applicant Below Poverty Line?*",
-              style: style,
             ),
             LayoutBuilder(
               builder: (context, constraints) {
@@ -194,13 +193,14 @@ class _BPLFormState extends State<BPLForm> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     RichText(
-                                      text: TextSpan(
+                                      text: const TextSpan(
                                         children: [
                                           TextSpan(
                                             text: "Upload BPL Ration Card",
-                                            style: style,
+                                            style:
+                                                TextStyle(color: KCOLOR.brand),
                                           ),
-                                          const TextSpan(
+                                          TextSpan(
                                             text: " (Only pdf up to 1MB)",
                                             style: TextStyle(
                                               fontStyle: FontStyle

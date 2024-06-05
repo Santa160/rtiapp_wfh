@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 
 import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/utils/html_to_json.helper.dart';
-import 'package:rtiapp/src/common/widget/title_style.dart';
+import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
@@ -60,9 +60,8 @@ class _TermAndConditionsState extends State<TermAndConditions> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            AppText.heading(
               title,
-              style: style,
             ),
             const Gap(10),
             Expanded(
@@ -101,7 +100,6 @@ class _TermAndConditionsState extends State<TermAndConditions> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Checkbox.adaptive(
-                  
                   value: isAgreed,
                   onChanged: (value) {
                     isAgreed = !isAgreed;
@@ -119,26 +117,25 @@ class _TermAndConditionsState extends State<TermAndConditions> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                   style:  ButtonStyle(
-                              foregroundColor:
-                                  const WidgetStatePropertyAll(Colors.white),
-                              backgroundColor:
-                                  WidgetStatePropertyAll(isAgreed ? KCOLOR.brand : Colors.grey)),
-                  onPressed: !isAgreed ? null : () {
-                   Navigator.pop(context);
-                  },
+                  style: ButtonStyle(
+                      foregroundColor:
+                          const WidgetStatePropertyAll(Colors.white),
+                      backgroundColor: WidgetStatePropertyAll(
+                          isAgreed ? KCOLOR.brand : Colors.grey)),
+                  onPressed: !isAgreed
+                      ? null
+                      : () {
+                          Navigator.pop(context);
+                        },
                   child: const Text('Submit'),
                 ),
                 const Gap(20),
                 ElevatedButton(
-                   style:  const ButtonStyle(
-                              foregroundColor:
-                                  WidgetStatePropertyAll(Colors.white),
-                              backgroundColor:
-                                  WidgetStatePropertyAll(Colors.deepOrange)),
-                  onPressed: () {           
-                   
-                    
+                  style: const ButtonStyle(
+                      foregroundColor: WidgetStatePropertyAll(Colors.white),
+                      backgroundColor:
+                          WidgetStatePropertyAll(Colors.deepOrange)),
+                  onPressed: () {
                     Navigator.pop(context);
                     widget.onCancel();
                   },

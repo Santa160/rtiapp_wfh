@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:rtiapp/src/common/widget/title_style.dart';
+import 'package:rtiapp/src/core/app_config.dart';
 
 class QuestionnairesForm extends StatefulWidget {
   const QuestionnairesForm({super.key});
@@ -16,9 +16,8 @@ class _QuestionnairesFormState extends State<QuestionnairesForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const AppText.heading(
             "RTI request application *",
-            style: style,
           ),
           const Gap(10),
           TextFormField(),

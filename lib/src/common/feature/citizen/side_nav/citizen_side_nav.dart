@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
-import 'package:rtiapp/src/common/feature/citizen/side_nav/logic/cubit/citizen_tab_cubit.dart';
+import 'package:rtiapp/src/common/feature/citizen/logic/cubit/citizen_tab_cubit.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
 
 import 'package:rtiapp/src/core/kcolors.dart';

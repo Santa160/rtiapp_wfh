@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rtiapp/src/common/feature/admin/side_nav/logic/cubit/tab_cubit.dart';
-import 'package:rtiapp/src/common/feature/citizen/side_nav/logic/cubit/citizen_tab_cubit.dart';
+import 'package:rtiapp/src/common/feature/admin/logic/cubit/tab_cubit.dart';
+import 'package:rtiapp/src/common/feature/citizen/logic/cubit/citizen_tab_cubit.dart';
 import 'package:rtiapp/src/feature/admin/district/logic/cubit/district_cubit.dart';
 import 'package:rtiapp/src/feature/admin/qualification/logic/cubit/qualification_cubit.dart';
 import 'package:rtiapp/src/feature/admin/query-status/logic/cubit/query_cubit.dart';

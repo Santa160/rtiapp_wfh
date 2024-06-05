@@ -10,7 +10,7 @@ import 'package:rtiapp/src/core/shared_pref.dart';
 import 'package:rtiapp/src/routers/route_names.dart';
 
 import '../../../../core/kassets.dart';
-import 'logic/cubit/tab_cubit.dart';
+import '../logic/cubit/tab_cubit.dart';
 
 class SideNavPage extends StatelessWidget {
   const SideNavPage({super.key, required this.child});

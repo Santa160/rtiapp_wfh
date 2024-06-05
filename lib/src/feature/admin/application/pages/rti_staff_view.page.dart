@@ -7,7 +7,6 @@ import 'package:image_network/image_network.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 
 import 'package:rtiapp/src/common/widget/serial_number.dart';
-import 'package:rtiapp/src/common/widget/title_style.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/core/logger.dart';
@@ -22,7 +21,6 @@ import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
-
 
 class RTIStaffViewPage extends StatefulWidget {
   const RTIStaffViewPage(
@@ -329,10 +327,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                       label: const Text("Response")),
                 ],
               ),
-              title: Text(
-                "Question $count",
-                style: style,
-              ),
+              title: AppText.heading("Question $count", color: KCOLOR.brand),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

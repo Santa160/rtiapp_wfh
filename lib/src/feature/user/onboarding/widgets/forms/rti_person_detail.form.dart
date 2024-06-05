@@ -1,7 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rtiapp/src/common/widget/title_style.dart';
+import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/feature/user/onboarding/logic/cubit/dependent_drop_down_cubit.dart';
 
 import 'package:rtiapp/src/feature/user/onboarding/widgets/dropdown/discrict.dropdown.dart';
@@ -39,9 +39,8 @@ class _PersonalDetailFormState extends State<PersonalDetailForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const AppText.heading(
             "Personal Details for RTI Applicant",
-            style: style,
           ),
           LayoutBuilder(
             builder: (context, constraints) {

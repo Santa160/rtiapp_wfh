@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/utils/filepicker.helper.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
-import 'package:rtiapp/src/common/widget/title_style.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/core/logger.dart';
@@ -295,9 +294,8 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Gap(5),
-                      Text(
+                      const AppText.subheading(
                         'Submit RTI Request',
-                        style: style,
                       ),
                       PiaDropdownForm(
                         pia: (pia) {
