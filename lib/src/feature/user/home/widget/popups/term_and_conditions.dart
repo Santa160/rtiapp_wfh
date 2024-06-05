@@ -49,6 +49,7 @@ class _TermAndConditionsState extends State<TermAndConditions> {
 
   @override
   Widget build(BuildContext context) {
+    var mw = MediaQuery.of(context).size.width;
     return Dialog(
       // insetPadding: const EdgeInsets.all(0),
       backgroundColor: Colors.transparent,
@@ -86,7 +87,11 @@ class _TermAndConditionsState extends State<TermAndConditions> {
                         return Text(
                           "$count.  $d",
                           style: const TextStyle(fontWeight: FontWeight.bold),
-                        ).addPadding(left: 150, right: 150, top: 5);
+                        ).addPadding(
+                          left: mw > 650 ? 150 : 20,
+                          right: mw > 650 ? 150 : 20,
+                          top: 5,
+                        );
                       },
                     ),
                   ],
