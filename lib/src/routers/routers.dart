@@ -21,22 +21,11 @@ final GoRouter routerConfig = GoRouter(
             return const ApplicationPage();
           },
           redirect: (context, state) async {
-            await SharedPrefHelper.init();
-            var token = SharedPrefHelper.getToken("token");
-            if (token != null) {
-              var decoded = JwtDecoder.decode(token);
-
-              if (decoded["role"] == "staff") {
-                return JwtDecoder.isExpired(token)
-                    ? KRoutes.adminloginPath
-                    : KRoutes.applicationPath;
-              } else {
-                return JwtDecoder.isExpired(token)
-                    ? KRoutes.staffloginPath
-                    : KRoutes.homePath;
-              }
+            var isStaff = SharedPrefHelper.isStaff();
+            if (isStaff != null && isStaff) {
+              return null;
             }
-            return null;
+            return KRoutes.homePath;
           },
         ),
         GoRoute(
@@ -45,12 +34,26 @@ final GoRouter routerConfig = GoRouter(
           builder: (context, state) {
             return const StatePage();
           },
+          redirect: (context, state) async {
+            var isStaff = SharedPrefHelper.isStaff();
+            if (isStaff != null && isStaff) {
+              return null;
+            }
+            return KRoutes.homePath;
+          },
         ),
         GoRoute(
           name: KRoutes.qualification,
           path: KRoutes.qualificationPath,
           builder: (context, state) {
             return const QualificationPage();
+          },
+          redirect: (context, state) async {
+            var isStaff = SharedPrefHelper.isStaff();
+            if (isStaff != null && isStaff) {
+              return null;
+            }
+            return KRoutes.homePath;
           },
         ),
         GoRoute(
@@ -59,6 +62,13 @@ final GoRouter routerConfig = GoRouter(
           builder: (context, state) {
             return const DistrictPage();
           },
+          redirect: (context, state) async {
+            var isStaff = SharedPrefHelper.isStaff();
+            if (isStaff != null && isStaff) {
+              return null;
+            }
+            return KRoutes.homePath;
+          },
         ),
         GoRoute(
           name: KRoutes.querystatus,
@@ -66,12 +76,26 @@ final GoRouter routerConfig = GoRouter(
           builder: (context, state) {
             return const QueryPage();
           },
+          redirect: (context, state) async {
+            var isStaff = SharedPrefHelper.isStaff();
+            if (isStaff != null && isStaff) {
+              return null;
+            }
+            return KRoutes.homePath;
+          },
         ),
         GoRoute(
           name: KRoutes.rtiStatus,
           path: KRoutes.rtiStatusPath,
           builder: (context, state) {
             return const RTIStatusPage();
+          },
+          redirect: (context, state) async {
+            var isStaff = SharedPrefHelper.isStaff();
+            if (isStaff != null && isStaff) {
+              return null;
+            }
+            return KRoutes.homePath;
           },
         ),
       ],
@@ -82,6 +106,13 @@ final GoRouter routerConfig = GoRouter(
       path: KRoutes.homePath,
       builder: (context, state) {
         return const HomePage();
+      },
+      redirect: (context, state) async {
+        var isStaff = SharedPrefHelper.isStaff();
+        if (isStaff != null && !isStaff) {
+          return null;
+        }
+        return KRoutes.citizenloginPath;
       },
     ),
 
@@ -100,7 +131,7 @@ final GoRouter routerConfig = GoRouter(
                 : KRoutes.applicationPath;
           } else {
             return JwtDecoder.isExpired(token)
-                ? KRoutes.staffloginPath
+                ? KRoutes.citizenloginPath
                 : KRoutes.homePath;
           }
         }
@@ -109,7 +140,7 @@ final GoRouter routerConfig = GoRouter(
     ),
     GoRoute(
       name: KRoutes.stafflogin,
-      path: KRoutes.staffloginPath,
+      path: KRoutes.citizenloginPath,
       builder: (context, state) {
         return const LoginPage();
       },
@@ -127,6 +158,13 @@ final GoRouter routerConfig = GoRouter(
       builder: (context, state) {
         return const ResgistrationPage();
       },
+      redirect: (context, state) async {
+        var isStaff = SharedPrefHelper.isStaff();
+        if (isStaff != null && !isStaff) {
+          return null;
+        }
+        return KRoutes.adminloginPath;
+      },
     )
 
 //update
@@ -138,7 +176,7 @@ final GoRouter routerConfig = GoRouter(
     if (state.uri.path == KRoutes.adminloginPath) {
       return KRoutes.adminloginPath;
     } else if (token == null) {
-      return KRoutes.staffloginPath;
+      return KRoutes.citizenloginPath;
     }
     return null;
   },

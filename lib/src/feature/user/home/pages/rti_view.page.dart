@@ -64,7 +64,7 @@ class _RTIViewPageState extends State<RTIViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    // var mw = MediaQuery.of(context).size.width;
+    var mw = MediaQuery.of(context).size.width;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -162,13 +162,14 @@ class _RTIViewPageState extends State<RTIViewPage> {
           ),
         ),
       ],
-    ).addPadding(left: 150, right: 150);
+    ).addPadding(left: mw > 650 ? 150 : 50, right: mw > 650 ? 150 : 50);
   }
 
   _tableData() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: DataTable2(
+          minWidth: 900,
           headingRowColor: const WidgetStatePropertyAll(KCOLOR.shade1),
           columns: const [
             DataColumn(label: Text("Sl")),

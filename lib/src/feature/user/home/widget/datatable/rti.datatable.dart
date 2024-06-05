@@ -48,6 +48,7 @@ class RTIDataTableWidget extends StatelessWidget {
           isVerticalScrollBarVisible: row.length >= 10 ? true : false,
           isHorizontalScrollBarVisible: row.length >= 10 ? true : false,
           headingRowColor: const WidgetStatePropertyAll(KCOLOR.shade1),
+          minWidth: 900,
           columns: column.map(
             (e) {
               initialCoun = row.length;

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:rtiapp/src/common/models/user.dart';
 import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
@@ -66,16 +67,17 @@ class SharedPrefHelper {
     return _prefs.remove('userInfo');
   }
 
-  static bool isAdmin({String? isAdmin}) {
-    if (isAdmin != null) {
-      // logger.i("saving");
-      _prefs.setBool("admin", isAdmin == "admin" ? true : false);
-
-      return (_prefs.containsKey("admin")) ? _prefs.getBool("admin")! : false;
-    } else {
-      // logger.i("getting");
-      return (_prefs.containsKey("admin")) ? _prefs.getBool("admin")! : false;
+  static bool? isStaff() {
+    var token = _prefs.getString("token");
+    if (token != null) {
+      var decoded = JwtDecoder.decode(token);
+      if (decoded["role"] == "staff") {
+        return true;
+      } else {
+        return false;
+      }
     }
+    return null;
   }
 
   static Future<void> saveStatus(List<StatusModel> data) async {

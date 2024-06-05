@@ -50,10 +50,10 @@ class _TermAndConditionsState extends State<TermAndConditions> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: const EdgeInsets.all(0),
+      // insetPadding: const EdgeInsets.all(0),
       backgroundColor: Colors.transparent,
       child: Container(
-        padding: const EdgeInsets.all(200),
+        padding: const EdgeInsets.all(10),
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         color: Colors.white,
@@ -62,36 +62,34 @@ class _TermAndConditionsState extends State<TermAndConditions> {
           children: [
             AppText.heading(
               title,
+              color: KCOLOR.brand,
             ),
             const Gap(10),
             Expanded(
                 child: Container(
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Colors.blue, // Set border color
+                  color: Colors.grey, // Set border color
                   width: 2.0, // Set border width
                 ),
               ),
-              child: Scrollbar(
-                controller: scrollController,
-                thumbVisibility: true,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: guidelines.length,
-                        itemBuilder: (context, index) {
-                          var count = index + 1;
-                          var d = guidelines[index];
-                          return Text(
-                            "$count.  $d",
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ).addPadding(left: 150, right: 150, top: 5);
-                        },
-                      ),
-                    ],
-                  ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: guidelines.length,
+                      itemBuilder: (context, index) {
+                        var count = index + 1;
+                        var d = guidelines[index];
+                        return Text(
+                          "$count.  $d",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ).addPadding(left: 150, right: 150, top: 5);
+                      },
+                    ),
+                  ],
                 ),
               ),
             )),

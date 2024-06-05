@@ -141,27 +141,19 @@ class _HomePageState extends State<HomePage> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              AppText.heading(
                 "Success",
-                style: TextStyle(
-                  color: KCOLOR.success,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                ),
               ),
               Gap(10),
-              Text(
+              AppText.smallText(
                 "You have successfully submitted your RTI Application",
-                style: TextStyle(fontSize: 20),
               ),
               Gap(10),
-              Text(
+              AppText.smallText(
                 "Your RTI application number is",
-                style: TextStyle(fontSize: 20),
               ),
-              Text(
+              AppText.heading(
                 "RTI NO",
-                style: TextStyle(fontSize: 30, color: KCOLOR.brand),
               ),
               Gap(10),
             ],
@@ -242,7 +234,11 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ],
-                ).addPadding(left: 150, right: 150, bottom: 8, top: 8),
+                ).addPadding(
+                    left: mw > 650 ? 150 : 50,
+                    right: mw > 650 ? 150 : 50,
+                    top: 8,
+                    bottom: 8),
                 InkWell(
                   onTap: () async {
                     await SharedPrefHelper.removeToken("token");
@@ -254,7 +250,11 @@ class _HomePageState extends State<HomePage> {
                         .textTheme
                         .bodyMedium!
                         .copyWith(color: Colors.white),
-                  ).addPadding(left: 150, right: 150, bottom: 8, top: 8),
+                  ).addPadding(
+                      left: mw > 650 ? 150 : 50,
+                      right: mw > 650 ? 150 : 50,
+                      top: 8,
+                      bottom: 8),
                 ),
               ],
             ),
@@ -286,7 +286,8 @@ class _HomePageState extends State<HomePage> {
                     rtiId = data["id"];
                   });
                 },
-              ).addPadding(left: 150, right: 150))),
+              ).addPadding(
+                      left: mw > 650 ? 150 : 20, right: mw > 650 ? 150 : 20))),
           Visibility(
             visible: activeTab == "Submit RTI",
             child: Expanded(
