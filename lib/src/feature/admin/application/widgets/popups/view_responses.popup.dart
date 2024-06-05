@@ -40,41 +40,45 @@ class _ViewResponsePopupState extends State<ViewResponsePopup> {
     return SizedBox(
       height: 300,
       width: 800,
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: response.length,
-        itemBuilder: (context, index) {
-          var d = response[index];
-          var doc = d["documents"] as List;
-          return ListTile(
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: doc.map(
-                (e) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ImageNetwork(
-                      height: 50,
-                      width: 50,
-                      image: "${EndPoint.baseUrl}/${e["document_url"]}",
-                    ),
-                  );
-                },
-              ).toList(),
+      child: response.isEmpty
+          ? const Center(
+              child: Text("No Response"),
+            )
+          : ListView.builder(
+              shrinkWrap: true,
+              itemCount: response.length,
+              itemBuilder: (context, index) {
+                var d = response[index];
+                var doc = d["documents"] as List;
+                return ListTile(
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: doc.map(
+                      (e) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ImageNetwork(
+                            height: 50,
+                            width: 50,
+                            image: "${EndPoint.baseUrl}/${e["document_url"]}",
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(d["response"].toString()),
+                      AppText.smallText(
+                        "Responded by : ${d["responded_by"].toString()}",
+                        color: KCOLOR.brand,
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(d["response"].toString()),
-                AppText.smallText(
-                  "Responded by : ${d["responded_by"].toString()}",
-                  color: KCOLOR.brand,
-                ),
-              ],
-            ),
-          );
-        },
-      ),
     );
   }
 }

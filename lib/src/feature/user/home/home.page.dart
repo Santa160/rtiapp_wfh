@@ -13,6 +13,7 @@ import 'package:rtiapp/src/feature/user/home/widget/popups/term_and_conditions.d
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/pages/rti.table.view.dart';
 import 'package:rtiapp/src/feature/user/home/widget/dropdowns/pia.dropdown.dart';
+import 'package:rtiapp/src/initial-setup/initial_setup.dart';
 import 'package:rtiapp/src/routers/route_names.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,6 +37,8 @@ class _HomePageState extends State<HomePage> {
     // Initialize with two TextFormFields
     addField();
     addField();
+    InitialSetup.queryStatus();
+    InitialSetup.status();
   }
 
   Map<String, dynamic>? _selectedPia;

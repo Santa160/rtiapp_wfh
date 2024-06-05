@@ -32,7 +32,7 @@ class _RTIViewPageState extends State<RTIViewPage> {
   Map<String, dynamic> bplDetails = {};
   List<Map<String, dynamic>> tableData = [];
   List queries = [];
- 
+
   TextEditingController controller = TextEditingController();
 
   @override
@@ -211,7 +211,6 @@ class _RTIViewPageState extends State<RTIViewPage> {
           shrinkWrap: true,
           itemCount: queries.length,
           itemBuilder: (context, index) {
-         
             return ListTile(
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
@@ -246,7 +245,15 @@ class _RTIViewPageState extends State<RTIViewPage> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: const Text("Responses"),
+                            actions: [
+                              AppBtn.fill(
+                                "Close",
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              )
+                            ],
+                            title: const AppText.heading("Responses"),
                             content: ViewResponsePopup(
                               data: queries[index],
                             ),

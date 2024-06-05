@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rtiapp/src/core/app_config.dart';
 
 import 'package:rtiapp/src/core/kassets.dart';
 
@@ -58,9 +60,8 @@ class _LoginPageState extends State<LoginPage> {
                         const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            AppText.subheading(
                               "Login",
-                              style: TextStyle(fontSize: 20),
                             ),
                           ],
                         ),
@@ -91,16 +92,18 @@ class _LoginPageState extends State<LoginPage> {
                                       onTap: () async {
                                         //check if the mobile nummber has 10 digit
                                         if (number!.length == 10) {
+                                          EasyLoading.show(
+                                              status: "Please wait");
                                           //send to OTP
                                           var res = await auth.sendOtp(number!);
 
                                           // save the otp status
-                                          isOTPSent = res["success"];
-                                          setState(() {});
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(SnackBar(
-                                                  content: Text(res["message"]
-                                                      .toString())));
+                                          if (res["success"]) {
+                                            isOTPSent = res["success"];
+                                            EasyLoading.showSuccess(
+                                                res["message"]);
+                                            setState(() {});
+                                          }
                                         }
                                       },
                                       child: Text(
@@ -142,21 +145,24 @@ class _LoginPageState extends State<LoginPage> {
                                 onPressed: isOTPSent
                                     ? () async {
                                         // Verify OTP logic here
+                                        EasyLoading.show(
+                                            status: "Verifing OTP");
 
                                         var res = await auth.verifyOtp(
                                             number!, code!);
-                                        await SharedPrefHelper.saveToken(
-                                            "token", res["data"]["token"]);
-                                        if (res["data"]
-                                            ["registrationCompleted"]) {
-                                          context.replaceNamed(KRoutes.home);
-                                        } else {
-                                          context.goNamed(KRoutes.registration);
+                                        if (res["success"]) {
+                                          await SharedPrefHelper.saveToken(
+                                              "token", res["data"]["token"]);
+                                          if (res["data"]
+                                              ["registrationCompleted"]) {
+                                            context.replaceNamed(KRoutes.home);
+                                          } else {
+                                            context
+                                                .goNamed(KRoutes.registration);
+                                          }
+                                          EasyLoading.showSuccess(
+                                              res["message"]);
                                         }
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text(res["message"]
-                                                    .toString())));
                                       }
                                     : null,
                                 child: const Text("Verify OTP"))),
