@@ -21,6 +21,8 @@ class AppText extends StatelessWidget {
 
   const AppText.subheading(this.text, {super.key, this.color})
       : style = const TextStyle(fontSize: 16);
+  const AppText.smallText(this.text, {super.key, this.color})
+      : style = const TextStyle(fontSize: 13);
 
   @override
   Widget build(BuildContext context) {
@@ -37,23 +39,31 @@ class AppBtn extends StatelessWidget {
       {super.key,
       required this.text,
       required this.isOutline,
-      required this.onPressed});
+      required this.onPressed,
+      this.outlineColor});
+
   final String text;
   final bool isOutline;
   final Function() onPressed;
+  final Color? outlineColor;
 
-  const AppBtn.outline(this.text, {super.key, required this.onPressed})
+  const AppBtn.outline(this.text,
+      {super.key, required this.onPressed, this.outlineColor})
       : isOutline = true;
   const AppBtn.fill(this.text, {super.key, required this.onPressed})
-      : isOutline = false;
+      : isOutline = false,
+        outlineColor = null;
 
   @override
   Widget build(BuildContext context) {
     return isOutline
         ? OutlinedButton(
             style: OutlinedButton.styleFrom(
-              side: const BorderSide(
-                color: KCOLOR.brand, // Set your desired outline color here
+              foregroundColor: outlineColor ?? KCOLOR.brand,
+              side: BorderSide(
+                color: outlineColor ??
+                    KCOLOR
+                        .brand, // Use the passed outline color or default to KCOLOR.brand
               ),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(
@@ -64,9 +74,9 @@ class AppBtn extends StatelessWidget {
             child: Text(text),
           )
         : ElevatedButton(
-            style: const ButtonStyle(
-                foregroundColor: WidgetStatePropertyAll(Colors.white),
-                backgroundColor: WidgetStatePropertyAll(KCOLOR.brand)),
+            style: ButtonStyle(
+                foregroundColor: WidgetStateProperty.all(Colors.white),
+                backgroundColor: WidgetStateProperty.all(KCOLOR.brand)),
             onPressed: onPressed,
             child: Text(text));
   }

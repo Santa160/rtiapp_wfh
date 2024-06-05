@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/widget/generic_data_table.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
+import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 
 import 'package:rtiapp/src/feature/admin/query-status/logic/cubit/query_cubit.dart';
@@ -41,7 +42,7 @@ class _QueryPageState extends State<QueryPage> {
           const Gap(20),
           Row(
             children: [
-              const Text("Query"),
+              const AppText.heading("Query"),
               const Gap(10),
               ElevatedButton(
                   style: const ButtonStyle(

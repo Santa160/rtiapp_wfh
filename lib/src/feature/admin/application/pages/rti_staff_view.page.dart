@@ -1,5 +1,6 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:gap/gap.dart';
 import 'package:image_network/image_network.dart';
@@ -18,6 +19,7 @@ import 'package:rtiapp/src/feature/admin/application/services/rti_staff.service.
 import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/application_status.dropdown.dart';
 import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/query.status.dropdown.dart';
 import 'package:rtiapp/src/feature/admin/application/widgets/image_picker.dart';
+import 'package:rtiapp/src/feature/admin/application/widgets/popups/view_responses.popup.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
@@ -249,23 +251,31 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                           builder: (context) {
                             return AlertDialog(
                               actions: [
-                                ElevatedButton(
-                                    onPressed: () async {
-                                      var service = ApplicationService();
-                                      var res =
-                                          await service.createQueryResponse({
-                                        'rti_query_id': queries[index]["id"],
-                                        'rti_query_status':
-                                            _selectedQueryStatus!.id,
-                                        'response': controller.text
-                                      }, _files);
-                                      if (res["success"]) {
-                                        controller.clear();
-                                        getRTIDetials();
-                                      }
-                                      Navigator.pop(context);
-                                    },
-                                    child: const Text("Submit"))
+                                AppBtn.outline(
+                                  "Cancel",
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  outlineColor: KCOLOR.danger,
+                                ),
+                                AppBtn.fill(
+                                  "Submit",
+                                  onPressed: () async {
+                                    var service = ApplicationService();
+                                    var res =
+                                        await service.createQueryResponse({
+                                      'rti_query_id': queries[index]["id"],
+                                      'rti_query_status':
+                                          _selectedQueryStatus!.id,
+                                      'response': controller.text
+                                    }, _files);
+                                    if (res["success"]) {
+                                      controller.clear();
+                                      getRTIDetials();
+                                    }
+                                    Navigator.pop(context);
+                                  },
+                                )
                               ],
                               contentPadding: const EdgeInsets.all(30),
                               content: SizedBox(
@@ -325,7 +335,31 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                 "Question $count",
                 style: style,
               ),
-              subtitle: Text(queries[index]["query"]),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppText.subheading(queries[index]["query"]),
+                  InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text("Responses"),
+                            content: ViewResponsePopup(
+                              data: queries[index],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: const AppText.smallText(
+                      "view response",
+                      color: KCOLOR.brand,
+                    ),
+                  ),
+                ],
+              ),
             );
           },
         ),
@@ -529,112 +563,6 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
     );
   }
 
-  Column pageData() {
-    return Column(
-      children: [
-        Row(
-          children: [
-            richText(
-              "Name:",
-              citizenDetails["name"].toString(),
-            ),
-            const Gap(30),
-            richText(
-              "email:",
-              citizenDetails["email"].toString(),
-            ),
-          ],
-        ),
-        const Gap(10),
-        Row(
-          children: [
-            richText(
-              "Phone:",
-              citizenDetails["mobile_no"].toString(),
-            ),
-            const Gap(30),
-            richText(
-              "Gender:",
-              citizenDetails["gender"].toString(),
-            ),
-          ],
-        ),
-        const Gap(30),
-        Row(
-          children: [
-            richText(
-              "State:",
-              citizenDetails["state"].toString(),
-            ),
-            const Gap(30),
-            richText(
-              "Status:",
-              citizenDetails["rural_urban"].toString(),
-            ),
-          ],
-        ),
-        const Gap(10),
-        Row(
-          children: [
-            richText(
-              "Pincode",
-              citizenDetails["pin_code"].toString(),
-            ),
-            const Gap(30),
-            richText(
-              "Address:",
-              citizenDetails["address"].toString(),
-            ),
-          ],
-        ),
-        const Gap(30),
-        Row(
-          children: [
-            richText(
-              "Educational status:",
-              citizenDetails["qualification"].toString(),
-            ),
-          ],
-        ),
-        const Gap(30),
-        Visibility(
-            visible: citizenDetails["bpl"] == "1",
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    richText(
-                      "BPL:",
-                      "YES",
-                    ),
-                    const Gap(30),
-                    richText(
-                      "BPLCard Number:",
-                      bplDetails["bpl_card_no"].toString(),
-                    ),
-                  ],
-                ),
-                const Gap(10),
-                Row(
-                  children: [
-                    richText(
-                      "Issued Year:",
-                      bplDetails["year_of_issue"].toString(),
-                    ),
-                    const Gap(30),
-                    richText(
-                      "Issuing Authority: ",
-                      bplDetails["issuing_authority"].toString(),
-                    ),
-                  ],
-                ),
-              ],
-            )),
-        const Gap(20),
-      ],
-    );
-  }
-
   Row pageHeader(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -658,11 +586,17 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
+                        actions: [
+                          AppBtn.fill(
+                            "Okay",
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                          )
+                        ],
                         contentPadding: const EdgeInsets.all(30),
-                        title: const Text(
-                          "RTI Application Status Update",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
+                        title: const AppText.heading(
+                          "Status Update",
                         ),
                         content: Column(
                           mainAxisSize: MainAxisSize.min,
@@ -674,6 +608,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                                       await service.updateRTIApplicationStatus(
                                           int.parse(data["id"]), status.id);
                                   if (res["success"]) {
+                                    EasyLoading.showSuccess(res["message"]);
                                     getRTIDetials();
                                   }
                                 },

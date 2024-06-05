@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/widget/generic_data_table.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
+import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/feature/admin/state/logic/cubit/state_cubit.dart';
 import 'package:rtiapp/src/feature/admin/state/models/res_models/state.model.dart';
@@ -39,7 +40,7 @@ class _StatePageState extends State<StatePage> {
           const Gap(20),
           Row(
             children: [
-              const Text("State"),
+              const AppText.heading("State"),
               const Gap(10),
               ElevatedButton(
                   style: const ButtonStyle(

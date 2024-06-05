@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/widget/serial_number.dart';
+import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 
@@ -87,11 +88,12 @@ class RTIDataTableWidget extends StatelessWidget {
                     DataCell(Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              viewAction!(e);
-                            },
-                            child: const Text("view")),
+                        AppBtn.fill(
+                          "view",
+                          onPressed: () {
+                            viewAction!(e);
+                          },
+                        ),
 
                         // IconButton(
                         //   icon: Image.asset(KICONS.edit),
