@@ -63,7 +63,7 @@ class OnboardingServices extends CitizenOnboardingInterface {
   @override
   Future fetchDisctrict({String? id}) async {
     try {
-      var res = await dio.get("${EndPoint.district}?state_id=$id");
+      var res = await dio.get("${EndPoint.district}/$id");
 
       return res.data;
     } on DioException catch (e) {

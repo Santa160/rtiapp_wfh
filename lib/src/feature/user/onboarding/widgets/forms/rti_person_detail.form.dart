@@ -1,6 +1,7 @@
 import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/feature/user/onboarding/logic/cubit/dependent_drop_down_cubit.dart';
 
@@ -8,6 +9,7 @@ import 'package:rtiapp/src/feature/user/onboarding/widgets/dropdown/discrict.dro
 import 'package:rtiapp/src/feature/user/onboarding/widgets/dropdown/gender.dropdown.dart';
 import 'package:rtiapp/src/feature/user/onboarding/widgets/dropdown/state.dropdown.dart';
 import 'package:rtiapp/src/feature/user/onboarding/widgets/dropdown/marital_status.dropdown.dart';
+import 'package:rtiapp/src/feature/user/onboarding/widgets/dropdown/urba_rural.dropdown.dart';
 
 class PersonalDetailForm extends StatefulWidget {
   final Function(Map<String, dynamic>?) personalData;
@@ -178,6 +180,7 @@ class _PersonalDetailFormState extends State<PersonalDetailForm> {
                         child: StateDropdownForm(
                           onStateChanged: (v) {
                             dtoPersonalDetials["state_id"] = v!["id"];
+                            EasyLoading.show(status: "Please wait");
                             context
                                 .read<DependentDropDownCubit>()
                                 .getDistrictByStateId(v["id"].toString());
@@ -227,6 +230,19 @@ class _PersonalDetailFormState extends State<PersonalDetailForm> {
                         child: MaritalStatusDropdownForm(
                           onStatusChanged: (v) {
                             dtoPersonalDetials["marital_status"] = v;
+                            _updatePersonalDetails();
+                          },
+                        ),
+                      )),
+                  SizedBox(
+                      width: containerWidth,
+                      child: Padding(
+                        padding:
+                            const EdgeInsets.only(top: 8, bottom: 8, right: 8),
+                        child: UrbanOrRuralDropdownForm(
+                          onStatusChanged: (v) {
+                            dtoPersonalDetials["rural_urban"] =
+                                v!.toLowerCase() == "rural" ? 1 : 2;
                             _updatePersonalDetails();
                           },
                         ),
