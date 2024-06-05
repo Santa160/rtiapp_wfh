@@ -5,6 +5,7 @@ import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/utils/filepicker.helper.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
 import 'package:rtiapp/src/common/widget/title_style.dart';
+import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/core/shared_pref.dart';
@@ -239,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ],
-                ).addPadding(left: 150, right: 150, bottom: 20),
+                ).addPadding(left: 150, right: 150, bottom: 8, top: 8),
                 InkWell(
                   onTap: () async {
                     await SharedPrefHelper.removeToken("token");
@@ -251,7 +252,7 @@ class _HomePageState extends State<HomePage> {
                         .textTheme
                         .bodyMedium!
                         .copyWith(color: Colors.white),
-                  ).addPadding(left: 150, right: 150, bottom: 20),
+                  ).addPadding(left: 150, right: 150, bottom: 8, top: 8),
                 ),
               ],
             ),
@@ -259,20 +260,18 @@ class _HomePageState extends State<HomePage> {
           if (activeTab == "Home")
             const Row(
               children: [
-                Text("RTI Application"),
+                AppText.heading("RTI Application"),
               ],
             ).addPadding(left: 150),
           Visibility(
               visible: activeTab == "View",
-              child:   Expanded(
+              child: Expanded(
                 child: RTIViewPage(
                   onBackTab: () {
                     activeTab = "Home";
-                    setState(() {
-                      
-                    });
+                    setState(() {});
                   },
-               rtiId: rtiId,
+                  rtiId: rtiId,
                 ),
               )),
           Visibility(

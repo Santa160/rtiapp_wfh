@@ -24,7 +24,7 @@ import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
+
 
 class RTIStaffViewPage extends StatefulWidget {
   const RTIStaffViewPage(
