@@ -94,6 +94,7 @@ class _ResgistrationPageState extends State<ResgistrationPage> {
                       citizenDto.addAll({...data!});
                     },
                   ),
+                  const Gap(10),
                   BPLForm(
                     bplDetails: (bplDetails) {
                       citizenDto.addAll({...bplDetails!});
@@ -123,14 +124,14 @@ class _ResgistrationPageState extends State<ResgistrationPage> {
                               backgroundColor:
                                   WidgetStatePropertyAll(KCOLOR.brand)),
                           onPressed: () async {
-                          
                             if (validate()) {
                               var service = OnboardingServices();
-                             var res = await service.createCitizen(citizenDto, _file);
-                             if (res["success"]) {
-                             context.replaceNamed(KRoutes.home);  
-                             }
-                            }else{
+                              var res = await service.createCitizen(
+                                  citizenDto, _file);
+                              if (res["success"]) {
+                                context.replaceNamed(KRoutes.home);
+                              }
+                            } else {
                               logger.e("check please");
                             }
                           },

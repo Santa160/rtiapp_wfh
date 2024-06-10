@@ -21,6 +21,7 @@ import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RTIStaffViewPage extends StatefulWidget {
   const RTIStaffViewPage(
@@ -138,14 +139,20 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                           ),
                           ClipRRect(
                             borderRadius: BorderRadius.circular(15),
-                            child: Container(
-                              color: Colors.black.withOpacity(0.5),
-                              height: 80,
-                              width: 80,
-                              child: const Center(
-                                child: Icon(
-                                  Icons.remove_red_eye,
-                                  color: Colors.white,
+                            child: InkWell(
+                              onTap: () async {
+                                launchUrl(Uri.parse(
+                                    "${EndPoint.baseUrl}/${bplDetails["bpl_card_url"]}"));
+                              },
+                              child: Container(
+                                color: Colors.black.withOpacity(0.5),
+                                height: 80,
+                                width: 80,
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.remove_red_eye,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
@@ -338,7 +345,15 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                         context: context,
                         builder: (context) {
                           return AlertDialog(
-                            title: const Text("Responses"),
+                            actions: [
+                              AppBtn.outline(
+                                "Okay",
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                              )
+                            ],
+                            title: const Text("Response"),
                             content: ViewResponsePopup(
                               data: queries[index],
                             ),

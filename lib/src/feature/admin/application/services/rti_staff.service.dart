@@ -70,7 +70,7 @@ class ApplicationService extends RTIStaffInterface {
   @override
   Future fetchResponseById(String id) async {
     try {
-      var res = await dio.get("${EndPoint.queryResponse}?rti_query_id=$id");
+      var res = await dio.get("${EndPoint.queryResponse}/$id");
       return res.data;
     } on DioException catch (e) {
       handleDioException(e);

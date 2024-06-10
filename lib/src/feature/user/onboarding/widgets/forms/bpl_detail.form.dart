@@ -51,8 +51,9 @@ class _BPLFormState extends State<BPLForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const AppText.heading(
+            const AppText.subheading(
               "Is applicant Below Poverty Line?*",
+              color: KCOLOR.brand,
             ),
             LayoutBuilder(
               builder: (context, constraints) {
