@@ -134,6 +134,8 @@ final GoRouter routerConfig = GoRouter(
       path: "/",
       redirect: (context, state) async {
         await SharedPrefHelper.init();
+
+        //add initial fetch data
         InitialSetup.queryStatus();
         InitialSetup.status();
 
