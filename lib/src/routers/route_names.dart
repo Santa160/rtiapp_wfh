@@ -30,6 +30,8 @@ class KRoutes {
   static const String statePath = "/state";
   static const String district = "District";
   static const String districtPath = "/district";
+  static const String pia = "Pia";
+  static const String piaPath = "/pia";
   static List<String> routeNames = [
     application,
     setting,
@@ -37,6 +39,7 @@ class KRoutes {
     rtiStatus,
     qualification,
     state,
-    district
+    district,
+    pia
   ];
 }

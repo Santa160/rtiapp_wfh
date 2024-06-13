@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtiapp/src/common/exception/exception.dart';
 import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/core/shared_pref.dart';
@@ -73,7 +74,9 @@ class ApplicationService extends RTIStaffInterface {
       var res = await dio.get("${EndPoint.queryResponse}/$id");
       return res.data;
     } on DioException catch (e) {
+      EasyLoading.showInfo("No Response!");
       handleDioException(e);
+      return 'No Response';
     } catch (e) {
       logger.e('Unexpected error: $e');
     }

@@ -88,4 +88,16 @@ class RTIService extends RTIInterface {
       logger.e('Unexpected error: $e');
     }
   }
+    @override
+  Future fetchPia() async {
+    try {
+      var res = await dio.get(EndPoint.pia);
+
+      return res.data;
+    } on DioException catch (e) {
+      handleDioException(e);
+    } catch (e) {
+      logger.e('Unexpected error: $e');
+    }
+  }
 }

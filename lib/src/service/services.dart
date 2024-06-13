@@ -41,6 +41,13 @@ abstract class StateInterface extends ServiceIterface {
   Future<dynamic> updateState(int stateId, String newData);
 }
 
+abstract class PiaInterface extends ServiceIterface {
+  Future<dynamic> fetchPia();
+  Future<dynamic> createPia(String data);
+  Future<dynamic> deletePia(int piaId);
+  Future<dynamic> updatePia(int piaId, String newData);
+}
+
 abstract class QualificationInterface extends ServiceIterface {
   Future<dynamic> fetchQualification();
   Future<dynamic> createQualification(String data);

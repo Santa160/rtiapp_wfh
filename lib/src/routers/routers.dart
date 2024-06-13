@@ -43,6 +43,20 @@ final GoRouter routerConfig = GoRouter(
           },
         ),
         GoRoute(
+          name: KRoutes.pia,
+          path: KRoutes.piaPath,
+          builder: (context, state) {
+            return const PiaPage();
+          },
+          redirect: (context, state) async {
+            var isStaff = SharedPrefHelper.isStaff();
+            if (isStaff != null && isStaff) {
+              return null;
+            }
+            return KRoutes.homePath;
+          },
+        ),
+        GoRoute(
           name: KRoutes.qualification,
           path: KRoutes.qualificationPath,
           builder: (context, state) {

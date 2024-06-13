@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:rtiapp/src/common/utils/filepicker.helper.dart';
+import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/onboarding/widgets/upload/upload_file.dart';
 
 class PiaDropdownForm extends StatefulWidget {
-  const PiaDropdownForm(
-      {super.key, required this.file, required this.pia});
- 
+  const PiaDropdownForm({super.key, required this.file, required this.pia});
+
   final Function(FilePickerModel?) file;
-  final Function(Map<String,dynamic>?) pia;
+  final Function(Map<String, dynamic>?) pia;
 
   @override
   State<PiaDropdownForm> createState() => _PiaDropdownFormState();
@@ -17,6 +17,8 @@ class _PiaDropdownFormState extends State<PiaDropdownForm> {
   Map<String, dynamic>? _selectedPia;
   final List<Map<String, dynamic>> _listOfPia = [];
 
+  final _serivce = RTIService();
+
   @override
   void initState() {
     getPia();
@@ -24,11 +26,20 @@ class _PiaDropdownFormState extends State<PiaDropdownForm> {
   }
 
   getPia() async {
-    _listOfPia.add({'id': '1', "name": "mspcl"});
-    _listOfPia.add({'id': '2', "name": "asgas"});
+    var res = await _serivce.fetchPia();
+
+    var l = res['data'] as List;
+    l.map(
+      (e) {
+        _listOfPia.add(e as Map<String, dynamic>);
+      },
+    ).toList();
+    setState(() {});
+
+    // _listOfPia.add({'id': '1', "name": "mspcl"});
+    // _listOfPia.add({'id': '2', "name": "asgas"});
   }
 
-  
   @override
   Widget build(BuildContext context) {
     var mw = MediaQuery.of(context).size.width;

@@ -24,6 +24,8 @@ class TabCubit extends Cubit<TabState> {
         emit(const TabState(KRoutes.state));
       case KRoutes.district:
         emit(const TabState(KRoutes.district));
+      case KRoutes.pia:
+        emit(const TabState(KRoutes.pia));
     }
   }
 }
