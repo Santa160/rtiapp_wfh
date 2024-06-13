@@ -134,6 +134,8 @@ final GoRouter routerConfig = GoRouter(
       path: "/",
       redirect: (context, state) async {
         await SharedPrefHelper.init();
+        InitialSetup.queryStatus();
+        InitialSetup.status();
 
         var token = SharedPrefHelper.getToken("token");
         if (token != null) {

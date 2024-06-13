@@ -37,8 +37,7 @@ class _HomePageState extends State<HomePage> {
     // Initialize with two TextFormFields
     addField();
     addField();
-    InitialSetup.queryStatus();
-    InitialSetup.status();
+   
   }
 
   Map<String, dynamic>? _selectedPia;
