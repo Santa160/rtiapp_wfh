@@ -35,7 +35,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    // Initialize with two TextFormFields
+    InitialSetup.queryStatus();
+    InitialSetup.status();
     addField();
     addField();
   }

@@ -9,6 +9,7 @@ import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/feature/admin/application/widgets/popups/view_responses.popup.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/widget/datatable/rti_status_log.datatable.dart';
+import 'package:rtiapp/src/feature/user/home/widget/query_status.widget.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
 
@@ -180,7 +181,7 @@ class _RTIViewPageState extends State<RTIViewPage> {
                       ),
                       TextButton.icon(
                           onPressed: () {},
-                          label: RTIStatusWidget(
+                          label: QueryStatusWidget(
                             id: int.parse(queries[index]["query_status_id"]),
                           )),
                     ],
