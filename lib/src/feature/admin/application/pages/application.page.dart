@@ -35,8 +35,6 @@ class _ApplicationPageState extends State<ApplicationPage> {
         const Gap(20),
         if (tab == "table") ...[
           const Gap(10),
-          const AppText.heading("RTI Application"),
-          const Gap(10),
           Expanded(
             child: RTIStaffTableView(
               onViewTab: (v) {

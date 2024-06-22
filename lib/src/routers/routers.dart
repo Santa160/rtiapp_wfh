@@ -18,6 +18,7 @@ final GoRouter routerConfig = GoRouter(
           name: KRoutes.application,
           path: KRoutes.applicationPath,
           builder: (context, state) {
+            context.read<TabCubit>().activeTab(KRoutes.application);
             return const ApplicationPage();
           },
           redirect: (context, state) async {
@@ -32,6 +33,7 @@ final GoRouter routerConfig = GoRouter(
           name: KRoutes.state,
           path: KRoutes.statePath,
           builder: (context, state) {
+            context.read<TabCubit>().activeTab(KRoutes.state);
             return const StatePage();
           },
           redirect: (context, state) async {
@@ -46,6 +48,7 @@ final GoRouter routerConfig = GoRouter(
           name: KRoutes.pia,
           path: KRoutes.piaPath,
           builder: (context, state) {
+            context.read<TabCubit>().activeTab(KRoutes.pia);
             return const PiaPage();
           },
           redirect: (context, state) async {
@@ -60,6 +63,7 @@ final GoRouter routerConfig = GoRouter(
           name: KRoutes.qualification,
           path: KRoutes.qualificationPath,
           builder: (context, state) {
+            context.read<TabCubit>().activeTab(KRoutes.qualification);
             return const QualificationPage();
           },
           redirect: (context, state) async {
@@ -74,6 +78,7 @@ final GoRouter routerConfig = GoRouter(
           name: KRoutes.district,
           path: KRoutes.districtPath,
           builder: (context, state) {
+            context.read<TabCubit>().activeTab(KRoutes.district);
             return const DistrictPage();
           },
           redirect: (context, state) async {
@@ -88,6 +93,7 @@ final GoRouter routerConfig = GoRouter(
           name: KRoutes.querystatus,
           path: KRoutes.querystatusPath,
           builder: (context, state) {
+            context.read<TabCubit>().activeTab(KRoutes.querystatus);
             return const QueryPage();
           },
           redirect: (context, state) async {
@@ -102,6 +108,7 @@ final GoRouter routerConfig = GoRouter(
           name: KRoutes.rtiStatus,
           path: KRoutes.rtiStatusPath,
           builder: (context, state) {
+            context.read<TabCubit>().activeTab(KRoutes.rtiStatus);
             return const RTIStatusPage();
           },
           redirect: (context, state) async {
@@ -119,6 +126,7 @@ final GoRouter routerConfig = GoRouter(
       name: KRoutes.home,
       path: KRoutes.homePath,
       builder: (context, state) {
+        context.read<TabCubit>().activeTab(KRoutes.home);
         return const HomePage();
       },
       redirect: (context, state) async {

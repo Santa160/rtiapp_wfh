@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:rtiapp/src/common/widget/pagination.widget.dart';
+import 'package:rtiapp/src/core/app_config.dart';
+import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/feature/admin/application/services/rti_staff.service.dart';
 
 import 'package:rtiapp/src/feature/user/home/widget/datatable/rti.datatable.dart';
@@ -17,6 +20,7 @@ class _RTIStaffTableViewState extends State<RTIStaffTableView> {
   Map<String, dynamic> pagination = {};
   int initialPage = 1;
   int initialLimit = 10;
+  String msg = '';
   @override
   void initState() {
     getTableData();
@@ -36,29 +40,72 @@ class _RTIStaffTableViewState extends State<RTIStaffTableView> {
         data.add(e);
       },
     ).toList();
+    if (l.isEmpty) {
+      msg = "No Record";
+    } else {
+      msg = '';
+    }
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
-    return RTIDataTableWidget(
-      initialLimit: 1,
-      initialPage: 1,
-      loading: false,
-      row: data,
-      fetchData: (limit, page) async {},
-      editAction: (data) {},
-      column: const [
-        "Sl no",
-        "Application No",
-        "Date",
-        "Status",
-        "Action",
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const AppText.heading("RTI Application"),
+                AppText.smallText(
+                  msg,
+                  color: KCOLOR.danger,
+                )
+              ],
+            ),
+            PaginationBtn(
+              initialPage: initialPage,
+              next: () {
+                if (initialPage < pagination['pageCount']) {
+                  initialPage++;
+                  getTableData();
+                  setState(() {});
+                }
+              },
+              previous: () {
+                if (initialPage > 1) {
+                  initialPage--;
+                  getTableData();
+                  setState(() {});
+                }
+              },
+            ),
+          ],
+        ),
+        Expanded(
+          child: RTIDataTableWidget(
+            initialLimit: initialLimit,
+            initialPage: initialPage,
+            loading: false,
+            row: data,
+            fetchData: (limit, page) async {},
+            editAction: (data) {},
+            column: const [
+              "Sl no",
+              "Application No",
+              "Date",
+              "Status",
+              "Action",
+            ],
+            viewAction: (data) {
+              getTableData();
+              widget.onViewTab(data);
+            },
+          ),
+        ),
       ],
-      viewAction: (data) {
-        getTableData();
-        widget.onViewTab(data);
-      },
     );
 
     // return Text(data.toString());

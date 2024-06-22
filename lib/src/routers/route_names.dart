@@ -34,12 +34,12 @@ class KRoutes {
   static const String piaPath = "/pia";
   static List<String> routeNames = [
     application,
-    setting,
     querystatus,
     rtiStatus,
     qualification,
     state,
     district,
-    pia
+    pia,
+    setting,
   ];
 }
