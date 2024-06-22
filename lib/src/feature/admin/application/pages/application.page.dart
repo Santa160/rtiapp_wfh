@@ -62,6 +62,9 @@ class _ApplicationPageState extends State<ApplicationPage> {
             ),
           ),
         ),
+        const Gap(
+          20,
+        )
       ],
     ).addPadding(left: 50, right: 50));
   }

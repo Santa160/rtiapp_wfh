@@ -1,19 +1,14 @@
-import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:image_network/image_network.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 
-import 'package:rtiapp/src/common/widget/serial_number.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 
-import 'package:rtiapp/src/feature/admin/application/services/rti_staff.service.dart';
-import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/application_status.dropdown.dart';
-
 import 'package:rtiapp/src/feature/admin/application/widgets/popups/view_responses.popup.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
+import 'package:rtiapp/src/feature/user/home/widget/datatable/rti_status_log.datatable.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
 
@@ -36,18 +31,12 @@ class _RTIViewPageState extends State<RTIViewPage> {
   List<Map<String, dynamic>> tableData = [];
   List queries = [];
 
-//rti logs
-  Map<String, dynamic> pagination = {};
-
-  int initialPage = 1;
-  int initialLimit = 10;
-
   TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
     getRTIDetials();
-    getRtiStatusLogs();
+
     super.initState();
   }
 
@@ -60,21 +49,11 @@ class _RTIViewPageState extends State<RTIViewPage> {
       citizenDetails = res["data"]["citizen_details"];
       applicationNo = res["data"]["rti_no"];
       queries = res["data"]["queries"];
-      tableData.clear();
+
       if (citizenDetails["bpl"] == "1") {
         bplDetails = res["data"]["bpl_details"];
       }
     });
-  }
-
-  getRtiStatusLogs() async {
-    var res = await RTIService()
-        .fetchRTIStatusLogsByRTIID(widget.rtiId, initialPage, initialLimit);
-    var list = res["data"]["rti_status_log"] as List;
-    for (var element in list) {
-      tableData.add(element as Map<String, dynamic>);
-    }
-    setState(() {});
   }
 
   @override
@@ -164,12 +143,10 @@ class _RTIViewPageState extends State<RTIViewPage> {
                 const Gap(20),
                 _queries(),
                 const Gap(10),
-                Container(
-                  color: KCOLOR.shade3,
-                  height: (55 * tableData.length).toDouble(),
-                  child: _tableData(),
+                RTIStatusLogsTableWidget(
+                  rtiId: widget.rtiId,
                 ),
-                const Gap(10),
+
                 // _tableData()
                 //BPL
               ],
@@ -178,42 +155,6 @@ class _RTIViewPageState extends State<RTIViewPage> {
         ),
       ],
     ).addPadding(left: mw > 650 ? 150 : 50, right: mw > 650 ? 150 : 50);
-  }
-
-  _tableData() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: DataTable2(
-          minWidth: 900,
-          headingRowColor: const WidgetStatePropertyAll(KCOLOR.shade1),
-          columns: const [
-            DataColumn(label: Text("Sl")),
-            DataColumn(label: Text("Status")),
-            DataColumn(label: Text("Date")),
-            DataColumn(label: Text("Action By")),
-          ],
-          rows: tableData.map(
-            (e) {
-              return DataRow(
-                cells: [
-                  DataCell(
-                    Text(getSerialNumber(page: 1, index: tableData.indexOf(e))
-                        .toString()),
-                  ),
-                  DataCell(RTIStatusWidget(
-                    id: e["status_id"],
-                  )),
-                  DataCell(
-                    Text(e["created_at"].toString().getFormattedDate()),
-                  ),
-                  DataCell(
-                    Text(e["username"]),
-                  ),
-                ],
-              );
-            },
-          ).toList()),
-    );
   }
 
   Column _queries() {
@@ -506,43 +447,43 @@ class _RTIViewPageState extends State<RTIViewPage> {
             TextButton.icon(
                 icon: const Icon(Icons.schedule),
                 onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        actions: [
-                          AppBtn.fill(
-                            "Okay",
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          )
-                        ],
-                        contentPadding: const EdgeInsets.all(30),
-                        title: const AppText.heading(
-                          "Status Update",
-                        ),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ApplicationStatusDropdown(
-                                onChanged: (status) async {
-                                  var service = ApplicationService();
-                                  var res =
-                                      await service.updateRTIApplicationStatus(
-                                          int.parse(data["id"]), status.id);
-                                  if (res["success"]) {
-                                    EasyLoading.showSuccess(res["message"]);
-                                    getRTIDetials();
-                                  }
-                                },
-                                initialId: data["status"]),
-                            const Gap(20)
-                          ],
-                        ),
-                      );
-                    },
-                  );
+                  // showDialog(
+                  //   context: context,
+                  //   builder: (context) {
+                  //     return AlertDialog(
+                  //       actions: [
+                  //         AppBtn.fill(
+                  //           "Okay",
+                  //           onPressed: () {
+                  //             Navigator.pop(context);
+                  //           },
+                  //         )
+                  //       ],
+                  //       contentPadding: const EdgeInsets.all(30),
+                  //       title: const AppText.heading(
+                  //         "Status Update",
+                  //       ),
+                  //       content: Column(
+                  //         mainAxisSize: MainAxisSize.min,
+                  //         children: [
+                  //           ApplicationStatusDropdown(
+                  //               onChanged: (status) async {
+                  //                 var service = ApplicationService();
+                  //                 var res =
+                  //                     await service.updateRTIApplicationStatus(
+                  //                         int.parse(data["id"]), status.id);
+                  //                 if (res["success"]) {
+                  //                   EasyLoading.showSuccess(res["message"]);
+                  //                   getRTIDetials();
+                  //                 }
+                  //               },
+                  //               initialId: data["status"]),
+                  //           const Gap(20)
+                  //         ],
+                  //       ),
+                  //     );
+                  //   },
+                  // );
                 },
                 label: Text(
                   data["status"],

@@ -18,6 +18,7 @@ import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/query.sta
 import 'package:rtiapp/src/feature/admin/application/widgets/image_picker.dart';
 import 'package:rtiapp/src/feature/admin/application/widgets/popups/view_responses.popup.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
+import 'package:rtiapp/src/feature/user/home/widget/datatable/rti_status_log.datatable.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
@@ -61,11 +62,11 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
       citizenDetails = res["data"]["citizen_details"];
       applicationNo = res["data"]["rti_no"];
       queries = res["data"]["queries"];
-      tableData.clear();
-      var list = res["data"]["rti_status_log"] as List;
-      for (var element in list) {
-        tableData.add(element as Map<String, dynamic>);
-      }
+      // tableData.clear();
+      // var list = res["data"]["rti_status_log"] as List;
+      // for (var element in list) {
+      //   tableData.add(element as Map<String, dynamic>);
+      // }
       if (citizenDetails["bpl"] == "1") {
         bplDetails = res["data"]["bpl_details"];
       }
@@ -165,12 +166,15 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                 const Gap(20),
                 _queries(),
                 const Gap(10),
-                Container(
-                  color: KCOLOR.shade3,
-                  height: (55 * tableData.length).toDouble(),
-                  child: _tableData(),
+                RTIStatusLogsTableWidget(
+                  rtiId: widget.rtiId,
                 ),
-                const Gap(10),
+                // Container(
+                //   color: KCOLOR.shade3,
+                //   height: (55 * tableData.length).toDouble(),
+                //   child: _tableData(),
+                // ),
+                // const Gap(10),
                 // _tableData()
                 //BPL
               ],
@@ -349,6 +353,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                               AppBtn.outline(
                                 "Okay",
                                 onPressed: () {
+                                  getRTIDetials();
                                   Navigator.pop(context);
                                 },
                               )

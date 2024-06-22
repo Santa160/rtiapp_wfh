@@ -24,6 +24,8 @@ class _RTIStaffTableViewState extends State<RTIStaffTableView> {
   }
 
   getTableData() async {
+    data.clear();
+    pagination.clear();
     var service = ApplicationService();
     var res = await service.fetchRTIApplicationStaff(initialPage, initialLimit);
     pagination = res['pagination'] as Map<String, dynamic>;
@@ -54,6 +56,7 @@ class _RTIStaffTableViewState extends State<RTIStaffTableView> {
         "Action",
       ],
       viewAction: (data) {
+        getTableData();
         widget.onViewTab(data);
       },
     );
