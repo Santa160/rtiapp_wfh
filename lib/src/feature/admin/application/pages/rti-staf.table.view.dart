@@ -14,6 +14,9 @@ class RTIStaffTableView extends StatefulWidget {
 
 class _RTIStaffTableViewState extends State<RTIStaffTableView> {
   List<Map<String, dynamic>> data = [];
+  Map<String, dynamic> pagination = {};
+  int initialPage = 1;
+  int initialLimit = 10;
   @override
   void initState() {
     getTableData();
@@ -22,7 +25,8 @@ class _RTIStaffTableViewState extends State<RTIStaffTableView> {
 
   getTableData() async {
     var service = ApplicationService();
-    var res = await service.fetchRTIApplicationStaff();
+    var res = await service.fetchRTIApplicationStaff(initialPage, initialLimit);
+    pagination = res['pagination'] as Map<String, dynamic>;
     var l = res["data"] as List;
 
     l.map(

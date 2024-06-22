@@ -229,7 +229,6 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
           itemBuilder: (context, index) {
             var count = index + 1;
             return ListTile(
-              
               trailing: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [

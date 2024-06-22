@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
@@ -37,7 +38,6 @@ class _HomePageState extends State<HomePage> {
     // Initialize with two TextFormFields
     addField();
     addField();
-   
   }
 
   Map<String, dynamic>? _selectedPia;
@@ -82,7 +82,10 @@ class _HomePageState extends State<HomePage> {
 
   // Method to handle form submission
   void handleSubmit(context) async {
-    if (_formKey.currentState?.validate() ?? false) {
+    if (_selectedPia == null || _file == null) {
+      EasyLoading.showInfo("Please complete the form fields");
+    }
+    if (_formKey.currentState!.validate()) {
       var loQ = controllers
           .map(
             (e) => e.text,
@@ -91,12 +94,26 @@ class _HomePageState extends State<HomePage> {
 
       var service = RTIService();
 
-      var res = await service.createRTI(loQ, _file!, _selectedPia!["id"]);
+      EasyLoading.show(status: "Please wait");
+
+      var res =
+          await service.createRTI(loQ, _file!, _selectedPia!["id"].toString());
       if (res["success"]) {
+        EasyLoading.dismiss();
+        activeTab = 'Home';
+        setState(() {});
         showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
+              actions: [
+                AppBtn.outline(
+                  "Okay",
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                )
+              ],
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -258,12 +275,6 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
-          if (activeTab == "Home")
-            const Row(
-              children: [
-                AppText.heading("RTI Application"),
-              ],
-            ).addPadding(left: 150),
           Visibility(
               visible: activeTab == "View",
               child: Expanded(
@@ -338,6 +349,7 @@ class _HomePageState extends State<HomePage> {
                                   backgroundColor:
                                       WidgetStatePropertyAll(KCOLOR.brand)),
                               onPressed: () {
+                                // EasyLoading.showToast("pressed");
                                 handleSubmit(context);
                               },
                               child: const Text("Submit")),

@@ -16,7 +16,7 @@ class RTIService extends RTIInterface {
         filename: file.fileName,
         contentType: MediaType(
           "jpg",
-          "jpeg",
+          "png",
         ),
       ),
       "pia_id": piaId,
@@ -47,9 +47,9 @@ class RTIService extends RTIInterface {
   }
 
   @override
-  Future fetchRTIs() async {
+  Future fetchRTIs(int page, int limit) async {
     try {
-      var res = await dio.get(EndPoint.rti);
+      var res = await dio.get("${EndPoint.rti}?page=$page&limit=$limit");
 
       return res.data;
     } on DioException catch (e) {
@@ -76,10 +76,8 @@ class RTIService extends RTIInterface {
   Future fetchRTIDetails(String id) async {
     try {
       var res = await dio.get("${EndPoint.rti}/$id");
-      var log = await dio.get(EndPoint.rtiStatusLog);
 
       var data = res.data;
-      res.data["data"]["rti_status_log"] = log.data["data"];
 
       return data;
     } on DioException catch (e) {
@@ -88,12 +86,29 @@ class RTIService extends RTIInterface {
       logger.e('Unexpected error: $e');
     }
   }
-    @override
+
+  @override
   Future fetchPia() async {
     try {
       var res = await dio.get(EndPoint.pia);
 
       return res.data;
+    } on DioException catch (e) {
+      handleDioException(e);
+    } catch (e) {
+      logger.e('Unexpected error: $e');
+    }
+  }
+
+  @override
+  Future fetchRTIStatusLogsByRTIID(String rtiId, int page, int limit) async {
+    try {
+      var res = await dio
+          .get("${EndPoint.rtiStatusLog}/$rtiId?page=$page&limit=$limit");
+
+      var data = res.data;
+
+      return data;
     } on DioException catch (e) {
       handleDioException(e);
     } catch (e) {
