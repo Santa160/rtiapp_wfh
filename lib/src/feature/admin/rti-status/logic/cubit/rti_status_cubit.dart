@@ -4,15 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:rtiapp/src/core/logger.dart';
+import 'package:rtiapp/src/core/shared_pref.dart';
 import 'package:rtiapp/src/feature/admin/rti-status/models/res_models/rti.model.dart';
 
 import 'package:rtiapp/src/feature/admin/rti-status/services/rti.service.dart';
-
-
-
-
-
-
+import 'package:rtiapp/src/initial-setup/initial_setup.dart';
 
 part 'rti_status_state.dart';
 
@@ -54,7 +50,8 @@ class RTIStatusCubit extends Cubit<RTIStatusState> {
   }
 
   //!! ====================== CUBIT CRUD ===========================
-  Future addRTIStatus({required BuildContext context, required String name}) async {
+  Future addRTIStatus(
+      {required BuildContext context, required String name}) async {
     try {
       var res = await RTIStatusService().createRTIstatus(name);
 

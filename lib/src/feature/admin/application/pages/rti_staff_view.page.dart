@@ -19,6 +19,7 @@ import 'package:rtiapp/src/feature/admin/application/widgets/image_picker.dart';
 import 'package:rtiapp/src/feature/admin/application/widgets/popups/view_responses.popup.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/widget/datatable/rti_status_log.datatable.dart';
+import 'package:rtiapp/src/feature/user/home/widget/query_status.widget.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
@@ -200,8 +201,10 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
             (e) {
               return DataRow(
                 cells: [
+                  //TODO Change page: 1,limit: 10, here
                   DataCell(
-                    Text(getSerialNumber(page: 1, index: tableData.indexOf(e))
+                    Text(getSerialNumber(
+                            page: 1, limit: 10, index: tableData.indexOf(e))
                         .toString()),
                   ),
                   DataCell(RTIStatusWidget(
@@ -244,7 +247,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                       ),
                       TextButton.icon(
                           onPressed: () {},
-                          label: RTIStatusWidget(
+                          label: QueryStatusWidget(
                             id: int.parse(queries[index]["query_status_id"]),
                           )),
                     ],
@@ -599,14 +602,6 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        actions: [
-                          AppBtn.fill(
-                            "Okay",
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                          )
-                        ],
                         contentPadding: const EdgeInsets.all(30),
                         title: const AppText.heading(
                           "Status Update",
@@ -622,6 +617,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                                           int.parse(data["id"]), status.id);
                                   if (res["success"]) {
                                     EasyLoading.showSuccess(res["message"]);
+                                    Navigator.pop(context);
                                     getRTIDetials();
                                   }
                                 },

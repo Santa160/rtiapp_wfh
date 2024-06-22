@@ -75,7 +75,9 @@ class RTIDataTableWidget extends StatelessWidget {
                   }),
                   cells: [
                     DataCell(Text(getSerialNumber(
-                            page: initialPage, index: row.indexOf(e))
+                            limit: initialLimit,
+                            page: initialPage,
+                            index: row.indexOf(e))
                         .toString())), // Adjust as per your data model
                     DataCell(
                         Text(e["rti_no"])), // Adjust as per your data model

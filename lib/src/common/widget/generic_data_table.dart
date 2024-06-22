@@ -7,8 +7,6 @@ import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:data_table_2/data_table_2.dart';
 
-
-
 List<String> initialcolumn = ["id"];
 int initialCoun = 0;
 
@@ -69,7 +67,9 @@ class GenericDataTable<T extends HasName> extends StatelessWidget {
                 .map(
                   (e) => DataRow(cells: [
                     DataCell(Text(getSerialNumber(
-                            page: initialPage, index: row.indexOf(e))
+                            limit: initialLimit,
+                            page: initialPage,
+                            index: row.indexOf(e))
                         .toString())), // Adjust as per your data model
                     DataCell(Text(e.name)), // Adjust as per your data model
 

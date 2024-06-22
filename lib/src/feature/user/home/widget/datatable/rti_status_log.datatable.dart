@@ -12,7 +12,6 @@ import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 class RTIStatusLogsTableWidget extends StatefulWidget {
   const RTIStatusLogsTableWidget({super.key, required this.rtiId});
   final String rtiId;
-  
 
   @override
   State<RTIStatusLogsTableWidget> createState() =>
@@ -95,7 +94,9 @@ class _RTIStatusLogsTableWidgetState extends State<RTIStatusLogsTableWidget> {
                       cells: [
                         DataCell(
                           Text(getSerialNumber(
-                                  page: 1, index: tableData.indexOf(e))
+                                  page: initialPage,
+                                  limit: initialLimit,
+                                  index: tableData.indexOf(e))
                               .toString()),
                         ),
                         DataCell(RTIStatusWidget(
