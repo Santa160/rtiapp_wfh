@@ -10,8 +10,6 @@ import 'package:rtiapp/src/common/widget/pagination.widget.dart';
 import 'package:rtiapp/src/common/widget/serial_number.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
-import 'package:rtiapp/src/core/logger.dart';
-// import 'package:rtiapp/src/core/shared_pref.dart';
 import 'package:rtiapp/src/feature/admin/application/models/req-models/StringUnit8.model.dart';
 import 'package:rtiapp/src/feature/admin/application/services/rti_staff.service.dart';
 import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/application_status.dropdown.dart';
@@ -19,7 +17,6 @@ import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/query.sta
 import 'package:rtiapp/src/feature/admin/application/widgets/image_picker.dart';
 import 'package:rtiapp/src/feature/admin/application/widgets/popups/view_responses.popup.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
-import 'package:rtiapp/src/feature/user/home/widget/datatable/rti_status_log.datatable.dart';
 import 'package:rtiapp/src/feature/user/home/widget/query_status.widget.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
@@ -217,7 +214,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                 Container(
                   color: KCOLOR.shade3,
                   height: 200,
-                  child: _tableData(),
+                  child: _logsTableData(),
                 ),
                 const Gap(10),
                 // _tableData()
@@ -230,7 +227,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
     );
   }
 
-  _tableData() {
+  _logsTableData() {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: DataTable2(
@@ -245,7 +242,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
             (e) {
               return DataRow(
                 cells: [
-                  //TODO Change page: 1,limit: 10, here
+                 
                   DataCell(
                     Text(getSerialNumber(
                             page: initialPage,

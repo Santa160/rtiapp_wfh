@@ -1,14 +1,16 @@
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:image_network/image_network.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
+import 'package:rtiapp/src/common/widget/pagination.widget.dart';
+import 'package:rtiapp/src/common/widget/serial_number.dart';
 
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 
 import 'package:rtiapp/src/feature/admin/application/widgets/popups/view_responses.popup.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
-import 'package:rtiapp/src/feature/user/home/widget/datatable/rti_status_log.datatable.dart';
 import 'package:rtiapp/src/feature/user/home/widget/query_status.widget.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
@@ -62,6 +64,7 @@ class _RTIViewPageState extends State<RTIViewPage> {
       queries = res["data"]["queries"];
       tableData.clear();
       var list = res["data"]["rti_status_log"] as List;
+      pagination = res["data"]["pagination"];
       for (var element in list) {
         tableData.add(element as Map<String, dynamic>);
       }
@@ -157,10 +160,41 @@ class _RTIViewPageState extends State<RTIViewPage> {
                 ],
                 const Gap(20),
                 _queries(),
-                const Gap(10),
-                RTIStatusLogsTableWidget(
-                  rtiId: widget.rtiId,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const AppText.heading(
+                      "RTI Status logs",
+                      color: KCOLOR.brand,
+                    ),
+                    PaginationBtn(
+                      initialPage: initialPage,
+                      next: () {
+                        if (initialPage < pagination['pageCount']) {
+                          initialPage++;
+                          setState(() {
+                            getRTIDetials();
+                          });
+                        }
+                      },
+                      previous: () {
+                        if (initialPage > 1) {
+                          initialPage--;
+                          setState(() {
+                            getRTIDetials();
+                          });
+                        }
+                      },
+                    ),
+                  ],
                 ),
+                const Gap(10),
+                Container(
+                  color: KCOLOR.shade3,
+                  height: 200,
+                  child: _logsTableData(),
+                ),
+                const Gap(10),
 
                 // _tableData()
                 //BPL
@@ -170,6 +204,44 @@ class _RTIViewPageState extends State<RTIViewPage> {
         ),
       ],
     ).addPadding(left: mw > 650 ? 150 : 50, right: mw > 650 ? 150 : 50);
+  }
+
+  _logsTableData() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(20),
+      child: DataTable2(
+          headingRowColor: const WidgetStatePropertyAll(KCOLOR.shade1),
+          columns: const [
+            DataColumn(label: Text("Sl")),
+            DataColumn(label: Text("Status")),
+            DataColumn(label: Text("Date")),
+            DataColumn(label: Text("Action By")),
+          ],
+          rows: tableData.map(
+            (e) {
+              return DataRow(
+                cells: [
+                  DataCell(
+                    Text(getSerialNumber(
+                            page: initialPage,
+                            limit: initialLimit,
+                            index: tableData.indexOf(e))
+                        .toString()),
+                  ),
+                  DataCell(RTIStatusWidget(
+                    id: e["status_id"],
+                  )),
+                  DataCell(
+                    Text(e["created_at"].toString().getFormattedDate()),
+                  ),
+                  DataCell(
+                    Text(e["username"]),
+                  ),
+                ],
+              );
+            },
+          ).toList()),
+    );
   }
 
   Column _queries() {
