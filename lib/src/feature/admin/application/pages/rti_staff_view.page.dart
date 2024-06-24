@@ -94,7 +94,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(initialPage.toString()),
+        // Text(initialPage.toString()),
         pageHeader(context),
         const Gap(20),
         Expanded(
@@ -242,7 +242,6 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
             (e) {
               return DataRow(
                 cells: [
-                 
                   DataCell(
                     Text(getSerialNumber(
                             page: initialPage,
