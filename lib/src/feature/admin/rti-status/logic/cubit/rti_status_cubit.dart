@@ -9,6 +9,7 @@ import 'package:rtiapp/src/feature/admin/rti-status/models/res_models/rti.model.
 
 import 'package:rtiapp/src/feature/admin/rti-status/services/rti.service.dart';
 import 'package:rtiapp/src/initial-setup/initial_setup.dart';
+import 'package:rtiapp/src/initial-setup/models/status.model.dart';
 
 part 'rti_status_state.dart';
 
@@ -73,7 +74,16 @@ class RTIStatusCubit extends Cubit<RTIStatusState> {
   Future updatedRTIStatus({required int id, required String newName}) async {
     var res = await RTIStatusService().updateRTIstatus(id, newName);
 
-    EasyLoading.showSuccess(res["message"]);
-    getRTIStatusTableData(limit: state.limit ?? 10, page: state.page ?? 1);
+    if (res['success']) {
+      EasyLoading.showSuccess(res["message"].toString());
+      var ress = await RTIStatusService().fetchRTIstatus();
+      if (ress['success']) {
+        var raw = ress["data"] as List;
+        var list = raw.map((e) => StatusModel.fromJson(e)).toList();
+        await SharedPrefHelper.saveStatus(list);
+      }
+
+      getRTIStatusTableData(limit: state.limit ?? 10, page: state.page ?? 1);
+    }
   }
 }

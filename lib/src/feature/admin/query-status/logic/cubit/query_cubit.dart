@@ -4,13 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:rtiapp/src/core/logger.dart';
-
+import 'package:rtiapp/src/core/shared_pref.dart';
 
 import 'package:rtiapp/src/feature/admin/query-status/models/res_models/query.model.dart';
 import 'package:rtiapp/src/feature/admin/query-status/services/query.service.dart';
-
-
-
+import 'package:rtiapp/src/initial-setup/models/query_status.dart';
 
 part 'query_state.dart';
 
@@ -74,7 +72,17 @@ class QueryCubit extends Cubit<QueryState> {
   Future updatedQuery({required int id, required String newName}) async {
     var res = await QueryService().updateQuery(id, newName);
 
-    EasyLoading.showSuccess(res["message"]);
+    if (res['success']) {
+      EasyLoading.showSuccess(res["message"]);
+
+      var resq = await QueryService().fetchQuery();
+
+      if (resq['success']) {
+        var raw = resq["data"] as List;
+        var list = raw.map((e) => QueryStatusModel.fromJson(e)).toList();
+        await SharedPrefHelper.saveQueryStatus(list);
+      }
+    }
     getQueryTableData(limit: state.limit ?? 10, page: state.page ?? 1);
   }
 }
