@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:image_network/image_network.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
+import 'package:rtiapp/src/common/widget/pagination.widget.dart';
 
 import 'package:rtiapp/src/common/widget/serial_number.dart';
 import 'package:rtiapp/src/core/app_config.dart';
@@ -47,31 +48,47 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
   List<StringUint8ListModel> _files = [];
   TextEditingController controller = TextEditingController();
 
-  @override
-  void initState() {
-    getRTIDetials();
-    super.initState();
-  }
+//rti logs
+  List<Map<String, dynamic>> logsData = [];
+
+  Map<String, dynamic> pagination = {};
+
+  int initialPage = 1;
+  int initialLimit = 5;
 
   getRTIDetials() async {
-    var res = await RTIService().fetchRTIDetails(widget.rtiId);
+    var res = await RTIService()
+        .fetchRTIDetails(widget.rtiId, initialPage, initialLimit);
     // var queryStatus = await SharedPrefHelper.getQueryStatus();
-    logger.d(res);
+
     setState(() {
       // _queryStatus = queryStatus;
       data = res["data"];
       citizenDetails = res["data"]["citizen_details"];
       applicationNo = res["data"]["rti_no"];
       queries = res["data"]["queries"];
-      // tableData.clear();
-      // var list = res["data"]["rti_status_log"] as List;
-      // for (var element in list) {
-      //   tableData.add(element as Map<String, dynamic>);
-      // }
+      tableData.clear();
+      var list = res["data"]["rti_status_log"] as List;
+      pagination = res["data"]["pagination"];
+      for (var element in list) {
+        tableData.add(element as Map<String, dynamic>);
+      }
       if (citizenDetails["bpl"] == "1") {
         bplDetails = res["data"]["bpl_details"];
       }
     });
+  }
+
+  @override
+  void initState() {
+    getRTIDetials();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -80,6 +97,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Text(initialPage.toString()),
         pageHeader(context),
         const Gap(20),
         Expanded(
@@ -167,15 +185,41 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                 const Gap(20),
                 _queries(),
                 const Gap(10),
-                RTIStatusLogsTableWidget(
-                  rtiId: widget.rtiId,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const AppText.heading(
+                      "RTI Status logs",
+                      color: KCOLOR.brand,
+                    ),
+                    PaginationBtn(
+                      initialPage: initialPage,
+                      next: () {
+                        if (initialPage < pagination['pageCount']) {
+                          initialPage++;
+                          setState(() {
+                            getRTIDetials();
+                          });
+                        }
+                      },
+                      previous: () {
+                        if (initialPage > 1) {
+                          initialPage--;
+                          setState(() {
+                            getRTIDetials();
+                          });
+                        }
+                      },
+                    ),
+                  ],
                 ),
-                // Container(
-                //   color: KCOLOR.shade3,
-                //   height: (55 * tableData.length).toDouble(),
-                //   child: _tableData(),
-                // ),
-                // const Gap(10),
+                const Gap(10),
+                Container(
+                  color: KCOLOR.shade3,
+                  height: 200,
+                  child: _tableData(),
+                ),
+                const Gap(10),
                 // _tableData()
                 //BPL
               ],
@@ -204,7 +248,9 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                   //TODO Change page: 1,limit: 10, here
                   DataCell(
                     Text(getSerialNumber(
-                            page: 1, limit: 10, index: tableData.indexOf(e))
+                            page: initialPage,
+                            limit: initialLimit,
+                            index: tableData.indexOf(e))
                         .toString()),
                   ),
                   DataCell(RTIStatusWidget(

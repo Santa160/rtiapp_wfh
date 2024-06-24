@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:rtiapp/src/common/exception/exception.dart';
 import 'package:rtiapp/src/common/utils/filepicker.helper.dart';
@@ -73,11 +74,15 @@ class RTIService extends RTIInterface {
   }
 
   @override
-  Future fetchRTIDetails(String id) async {
+  Future fetchRTIDetails(String id, int? page, int? limit) async {
     try {
       var res = await dio.get("${EndPoint.rti}/$id");
+      var log =
+          await dio.get("${EndPoint.rtiStatusLog}/$id?page=$page&limit=$limit");
 
       var data = res.data;
+      res.data["data"]["rti_status_log"] = log.data["data"];
+      res.data["data"]["pagination"] = log.data["pagination"];
 
       return data;
     } on DioException catch (e) {
@@ -87,7 +92,6 @@ class RTIService extends RTIInterface {
     }
   }
 
-  @override
   Future fetchPia() async {
     try {
       var res = await dio.get(EndPoint.pia);

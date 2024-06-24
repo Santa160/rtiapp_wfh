@@ -34,6 +34,14 @@ class _RTIViewPageState extends State<RTIViewPage> {
 
   TextEditingController controller = TextEditingController();
 
+  //rti logs
+  List<Map<String, dynamic>> logsData = [];
+
+  Map<String, dynamic> pagination = {};
+
+  int initialPage = 1;
+  int initialLimit = 5;
+
   @override
   void initState() {
     getRTIDetials();
@@ -42,7 +50,9 @@ class _RTIViewPageState extends State<RTIViewPage> {
   }
 
   getRTIDetials() async {
-    var res = await RTIService().fetchRTIDetails(widget.rtiId);
+    var res = await RTIService()
+        .fetchRTIDetails(widget.rtiId, initialPage, initialLimit);
+    // var queryStatus = await SharedPrefHelper.getQueryStatus();
 
     setState(() {
       // _queryStatus = queryStatus;
@@ -50,7 +60,11 @@ class _RTIViewPageState extends State<RTIViewPage> {
       citizenDetails = res["data"]["citizen_details"];
       applicationNo = res["data"]["rti_no"];
       queries = res["data"]["queries"];
-
+      tableData.clear();
+      var list = res["data"]["rti_status_log"] as List;
+      for (var element in list) {
+        tableData.add(element as Map<String, dynamic>);
+      }
       if (citizenDetails["bpl"] == "1") {
         bplDetails = res["data"]["bpl_details"];
       }

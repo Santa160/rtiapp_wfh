@@ -27,7 +27,7 @@ abstract class RTIInterface extends ServiceIterface {
   Future<dynamic> fetchTermAndConditions();
   Future<dynamic> fetchRTIs(int page, int limit);
   Future<dynamic> fetchRTIStatusLogsByRTIID(String rtiId, int page, int limit);
-  Future<dynamic> fetchRTIDetails(String id);
+  Future<dynamic> fetchRTIDetails(String id, int? page, int? limit);
   Future<dynamic> fetchRTIStatus();
 }
 
@@ -78,7 +78,7 @@ abstract class RTIStatusInterface extends ServiceIterface {
 }
 
 abstract class RTIStaffInterface extends ServiceIterface {
-  Future<dynamic> fetchRTIApplicationStaff(int page,int limit);
+  Future<dynamic> fetchRTIApplicationStaff(int page, int limit);
   Future<dynamic> updateRTIApplicationStatus(int rtiId, int statusId);
   Future<dynamic> createQueryResponse(
       Map<String, dynamic> data, List<StringUint8ListModel> files);

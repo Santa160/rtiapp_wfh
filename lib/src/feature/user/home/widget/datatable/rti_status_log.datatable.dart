@@ -32,6 +32,8 @@ class _RTIStatusLogsTableWidgetState extends State<RTIStatusLogsTableWidget> {
     super.initState();
   }
 
+  
+
   getRtiStatusLogs() async {
     tableData.clear();
     var res = await RTIService()
