@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
+import 'package:image_network/image_network.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/query.status.dropdown.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
+import 'package:rtiapp/src/service/helper/endpoints.dart';
 
 class EditResponsePopup extends StatefulWidget {
   const EditResponsePopup({
@@ -83,18 +85,34 @@ class _EditResponsePopupState extends State<EditResponsePopup> {
                               EasyLoading.showToast("view press");
                               // doc.remove(e);
                             },
-                            child: SizedBox(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: KCOLOR.shade1)),
+                              height: 80,
+                              width: 80,
+                              // child: SelectableText(
+                              //     '${EndPoint.baseUrl}/${e["document_url"]}'),
+                              child: ImageNetwork(
+                                image:
+                                    '${EndPoint.baseUrl}/${e["document_url"]}',
                                 height: 80,
                                 width: 80,
-                                child: Placeholder(child: Text(e.toString()))),
+                              ),
+                            ),
                           ),
-                          IconButton(
-                              onPressed: () {
-                                deletedIds.add("${e['id']}");
-                                setState(() {});
-                                EasyLoading.showToast("Delete $deletedIds");
-                              },
-                              icon: const Icon(Icons.close)),
+                          CircleAvatar(
+                            backgroundColor: Colors.black.withOpacity(0.2),
+                            child: IconButton(
+                                onPressed: () {
+                                  deletedIds.add("${e['id']}");
+                                  setState(() {});
+                                  EasyLoading.showToast("Delete $deletedIds");
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: KCOLOR.danger,
+                                )),
+                          ),
                         ],
                       );
                     },
