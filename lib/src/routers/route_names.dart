@@ -30,7 +30,7 @@ class KRoutes {
   static const String statePath = "/state";
   static const String district = "District";
   static const String districtPath = "/district";
-  static const String pia = "Pia";
+  static const String pia = "PIA";
   static const String piaPath = "/pia";
   static List<String> routeNames = [
     application,
@@ -43,3 +43,31 @@ class KRoutes {
     setting,
   ];
 }
+
+class NavTab {
+  final String title;
+  final String route;
+  final List<NavTab>? subRoute;
+
+  NavTab({
+    required this.title,
+    required this.route,
+    this.subRoute,
+  });
+}
+
+List<NavTab> sideNavItesm = [
+  NavTab(title: KRoutes.application, route: KRoutes.applicationPath),
+  NavTab(title: KRoutes.rtiStatus, route: KRoutes.rtiStatusPath),
+  NavTab(title: KRoutes.querystatus, route: KRoutes.querystatusPath),
+  NavTab(
+    title: KRoutes.setting,
+    route: KRoutes.settingPath,
+    subRoute: [
+      NavTab(title: KRoutes.qualification, route: KRoutes.qualificationPath),
+      NavTab(title: KRoutes.state, route: KRoutes.statePath),
+      NavTab(title: KRoutes.district, route: KRoutes.districtPath),
+      NavTab(title: KRoutes.pia, route: KRoutes.piaPath),
+    ],
+  ),
+];

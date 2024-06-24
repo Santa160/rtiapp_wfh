@@ -31,7 +31,7 @@ class KTHEME {
       filled: true,
       fillColor: Colors.white,
       hintStyle: TextStyle(color: Colors.grey),
-      contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20),
+      // contentPadding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 20),
       border: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.grey, width: 1.0),
         // borderRadius: BorderRadius.all(Radius.circular(10.0)),

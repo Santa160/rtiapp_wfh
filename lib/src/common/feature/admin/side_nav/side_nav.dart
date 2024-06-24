@@ -34,38 +34,77 @@ class SideNavPage extends StatelessWidget {
                     Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: KRoutes.routeNames.length,
+                        itemCount: sideNavItesm.length,
                         itemBuilder: (context, index) {
+                          var title = sideNavItesm[index].title;
                           return Container(
                             padding: const EdgeInsets.only(left: 20),
                             decoration: BoxDecoration(
-                              color: activeTab == KRoutes.routeNames[index]
+                              color: activeTab == sideNavItesm[index].title
                                   ? KCOLOR.shade3.withOpacity(0.1)
                                   : null,
-                              // border: Border(
-                              //   left: activeTab == KRoutes.routeNames[index]
-                              //       ? const BorderSide(
-                              //           width: 5, color: Colors.red)
-                              //       : const BorderSide(),
-                              // ),
                             ),
-                            child: ListTile(
-                              onTap: () {
-                                context
-                                    .read<TabCubit>()
-                                    .activeTab(KRoutes.routeNames[index]);
+                            child: title == KRoutes.setting
+                                ? ExpansionTile(
+                                    iconColor: Colors.white,
+                                    collapsedIconColor: Colors.white,
+                                    title: Text(
+                                      title,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                    children: [
+                                      ...sideNavItesm[index].subRoute!.map(
+                                        (e) {
+                                          return Container(
+                                            decoration: BoxDecoration(
+                                              color: activeTab == e.title
+                                                  ? KCOLOR.shade3
+                                                      .withOpacity(0.1)
+                                                  : null,
+                                            ),
+                                            child: ListTile(
+                                              onTap: () {
+                                                context
+                                                    .read<TabCubit>()
+                                                    .activeTab(e.title);
 
-                                context.goNamed(KRoutes.routeNames[index]);
-                              },
-                              title: Text(
-                                KRoutes.routeNames[index],
-                                style: TextStyle(
-                                    color:
-                                        activeTab == KRoutes.routeNames[index]
-                                            ? Colors.white
-                                            : Colors.white),
-                              ),
-                            ),
+                                                context.goNamed(e.title);
+                                              },
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      left: 30,
+                                                      top: 0,
+                                                      bottom: 0),
+                                              title: Text(
+                                                e.title,
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  )
+                                : ListTile(
+                                    onTap: () {
+                                      context
+                                          .read<TabCubit>()
+                                          .activeTab(sideNavItesm[index].title);
+
+                                      context
+                                          .goNamed(sideNavItesm[index].title);
+                                    },
+                                    title: Text(
+                                      sideNavItesm[index].title,
+                                      style: TextStyle(
+                                          color: activeTab ==
+                                                  KRoutes.routeNames[index]
+                                              ? Colors.white
+                                              : Colors.white),
+                                    ),
+                                  ),
                           );
                         },
                       ),

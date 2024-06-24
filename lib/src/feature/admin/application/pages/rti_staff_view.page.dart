@@ -298,87 +298,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                   TextButton.icon(
                       icon: const Icon(Icons.send),
                       onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              actions: [
-                                AppBtn.outline(
-                                  "Cancel",
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  outlineColor: KCOLOR.danger,
-                                ),
-                                AppBtn.fill(
-                                  "Submit",
-                                  onPressed: () async {
-                                    var service = ApplicationService();
-                                    var res =
-                                        await service.createQueryResponse({
-                                      'rti_query_id': queries[index]["id"],
-                                      'rti_query_status':
-                                          _selectedQueryStatus!.id,
-                                      'response': controller.text
-                                    }, _files);
-                                    if (res["success"]) {
-                                      controller.clear();
-                                      getRTIDetials();
-                                    }
-                                    Navigator.pop(context);
-                                  },
-                                )
-                              ],
-                              contentPadding: const EdgeInsets.all(30),
-                              content: SizedBox(
-                                height: 500,
-                                width: 500,
-                                child: SingleChildScrollView(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      const Text(
-                                        "Response",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      const Gap(20),
-                                      TextFormField(
-                                        controller: controller,
-                                        maxLines: 5,
-                                        decoration: const InputDecoration(
-                                          hintText:
-                                              "Enter your response here...",
-                                          label: Text("Response"),
-                                        ),
-                                      ),
-                                      const Gap(20),
-                                      QueryStatusDropdown(
-                                          onChanged: (status) async {
-                                            _selectedQueryStatus = status;
-                                            setState(() {});
-                                          },
-                                          initialId: queries[index]
-                                              ["query_status_id"]),
-                                      const Gap(20),
-                                      ImagePickerFormWidget(
-                                        onPicked: (files) {
-                                          _files = files;
-
-                                          setState(() {});
-                                        },
-                                      ),
-                                      const Gap(20)
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        );
+                        createResponseDialog(context, index);
                       },
                       label: const Text("Response")),
                 ],
@@ -390,26 +310,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                   AppText.subheading(queries[index]["query"]),
                   InkWell(
                     onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            actions: [
-                              AppBtn.outline(
-                                "Okay",
-                                onPressed: () {
-                                  getRTIDetials();
-                                  Navigator.pop(context);
-                                },
-                              )
-                            ],
-                            title: const Text("Response"),
-                            content: ViewResponsePopup(
-                              data: queries[index],
-                            ),
-                          );
-                        },
-                      );
+                      viewResponseDialog(context, index);
                     },
                     child: const AppText.smallText(
                       "view response",
@@ -422,6 +323,106 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
           },
         ),
       ],
+    );
+  }
+
+  Future<dynamic> viewResponseDialog(BuildContext context, int index) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          actions: [
+            AppBtn.outline(
+              "Okay",
+              onPressed: () {
+                getRTIDetials();
+                Navigator.pop(context);
+              },
+            )
+          ],
+          title: const Text("Response"),
+          content: ViewResponsePopup(
+            data: queries[index],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<dynamic> createResponseDialog(BuildContext context, int index) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          actions: [
+            AppBtn.outline(
+              "Cancel",
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              outlineColor: KCOLOR.danger,
+            ),
+            AppBtn.fill(
+              "Submit",
+              onPressed: () async {
+                var service = ApplicationService();
+                var res = await service.createQueryResponse({
+                  'rti_query_id': queries[index]["id"],
+                  'rti_query_status': _selectedQueryStatus!.id,
+                  'response': controller.text
+                }, _files);
+                if (res["success"]) {
+                  controller.clear();
+                  getRTIDetials();
+                }
+                Navigator.pop(context);
+              },
+            )
+          ],
+          contentPadding: const EdgeInsets.all(30),
+          content: SizedBox(
+            height: 500,
+            width: 500,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text(
+                    "Response",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const Gap(20),
+                  TextFormField(
+                    controller: controller,
+                    maxLines: 5,
+                    decoration: const InputDecoration(
+                      hintText: "Enter your response here...",
+                      label: Text("Response"),
+                    ),
+                  ),
+                  const Gap(20),
+                  QueryStatusDropdown(
+                      onChanged: (status) async {
+                        _selectedQueryStatus = status;
+                        setState(() {});
+                      },
+                      initialId: queries[index]["query_status_id"]),
+                  const Gap(20),
+                  ImagePickerFormWidget(
+                    onPicked: (files) {
+                      _files = files;
+
+                      setState(() {});
+                    },
+                  ),
+                  const Gap(20)
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
