@@ -81,4 +81,46 @@ class ApplicationService extends RTIStaffInterface {
       logger.e('Unexpected error: $e');
     }
   }
+
+  @override
+  Future deleteImages(List<int> ids) async {
+    var data = FormData.fromMap({
+      "rti_response_id[]": ids,
+    });
+    try {
+      var res = await dio.post(EndPoint.deleteDocs, data: data);
+      return res.data;
+    } on DioException catch (e) {
+      handleDioException(e);
+    } catch (e) {
+      logger.e('Unexpected error: $e');
+    }
+  }
+
+  @override
+  Future updateResponse(String rtiResId, String responseText,
+      List<StringUint8ListModel> files) async {
+    List<MultipartFile> f = [];
+
+    for (var element in files) {
+      f.add(MultipartFile.fromBytes(
+        element.uint8ListValue as List<int>,
+        filename: element.stringValue,
+        contentType: MediaType("png", "jpg"),
+      ));
+    }
+    var formdata = FormData.fromMap({
+      "document[]": f,
+      "rti_response_id": rtiResId,
+      "response": responseText
+    });
+    try {
+      var res = await dio.post(EndPoint.updateResponse, data: formdata);
+      return res.data;
+    } on DioException catch (e) {
+      handleDioException(e);
+    } catch (e) {
+      logger.e('Unexpected error: $e');
+    }
+  }
 }

@@ -134,7 +134,7 @@ class _RTIViewPageState extends State<RTIViewPage> {
                                     visible: bplDetails["bpl_card_url"] != null,
                                     child: ImageNetwork(
                                         onTap: () async {
-                                          await launchUrl(Uri.parse(
+                                          launchUrl(Uri.parse(
                                               "${EndPoint.baseUrl}/${bplDetails["bpl_card_url"]}"));
                                         },
                                         height: 80,

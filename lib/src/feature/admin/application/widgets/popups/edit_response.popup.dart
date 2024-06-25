@@ -8,7 +8,9 @@ import 'package:gap/gap.dart';
 import 'package:image_network/image_network.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
+import 'package:rtiapp/src/core/shared_pref.dart';
 import 'package:rtiapp/src/feature/admin/application/models/req-models/StringUnit8.model.dart';
+import 'package:rtiapp/src/feature/admin/application/services/rti_staff.service.dart';
 import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/query.status.dropdown.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
@@ -29,20 +31,33 @@ class EditResponsePopup extends StatefulWidget {
 }
 
 class _EditResponsePopupState extends State<EditResponsePopup> {
-  late TextEditingController textEditingController;
+  var service = ApplicationService();
+
+  late TextEditingController responseTextController;
   QueryStatusModel? _selectedStatus;
   List<Map<String, dynamic>> doc = [];
   Set<String> deletedIds = {};
 
   @override
   void initState() {
-    doc = widget.doc;
-    textEditingController =
-        TextEditingController(text: widget.response['response']);
+    initial();
     super.initState();
   }
 
-  List<StringUint8ListModel> data = [];
+  initial() async {
+    doc = widget.doc;
+    responseTextController =
+        TextEditingController(text: widget.response['response']);
+    var l = await SharedPrefHelper.getQueryStatus();
+    _selectedStatus = l
+        ?.where(
+          (element) => element.id.toString() == widget.queryStatusId,
+        )
+        .first;
+    setState(() {});
+  }
+
+  List<StringUint8ListModel> files = [];
 
   final _formKey = GlobalKey<FormState>();
 
@@ -55,57 +70,54 @@ class _EditResponsePopupState extends State<EditResponsePopup> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(widget.response['id'].toString()),
           const Text(
             "Edit Response",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const Gap(20),
-          SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Resposne field can\'t be empty ';
-                      }
-                      return null;
-                    },
-                    controller: textEditingController,
-                    maxLines: 5,
-                    decoration: const InputDecoration(
-                      hintText: "Enter your response here...",
-                      labelText: "Response",
-                    ),
-                  ),
-                  const Gap(20),
-                  QueryStatusDropdown(
-                      onChanged: (status) async {
-                        _selectedStatus = status;
-                        setState(() {});
+          Expanded(
+            child: SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    // AppText.heading(widget.response.toString()),
+                    TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Resposne field can\'t be empty ';
+                        }
+                        return null;
                       },
-                      initialId: widget.queryStatusId),
-                  const Gap(20),
-                  const AppText.smallText("Uploaded Document"),
-                  const Gap(10),
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 10,
-                    children: [
-                      ...doc.map(
-                        (e) {
-                          return Stack(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  EasyLoading.showToast("view press");
-                                  // doc.remove(e);
-                                },
-                                child: Container(
+                      controller: responseTextController,
+                      maxLines: 5,
+                      decoration: const InputDecoration(
+                        hintText: "Enter your response here...",
+                        labelText: "Response",
+                      ),
+                    ),
+                    const Gap(20),
+                    QueryStatusDropdown(
+                        onChanged: (status) async {
+                          _selectedStatus = status;
+                          setState(() {});
+                        },
+                        initialId: widget.queryStatusId),
+                    const Gap(20),
+                    const AppText.smallText("Uploaded Document"),
+                    const Gap(10),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: [
+                        ...doc.map(
+                          (e) {
+                            return Stack(
+                              key: UniqueKey(),
+                              children: [
+                                Container(
                                   decoration: BoxDecoration(
                                       border: Border.all(color: KCOLOR.shade1)),
                                   height: 80,
@@ -119,35 +131,30 @@ class _EditResponsePopupState extends State<EditResponsePopup> {
                                     width: 80,
                                   ),
                                 ),
-                              ),
-                              CircleAvatar(
-                                backgroundColor: Colors.black.withOpacity(0.2),
-                                child: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        deletedIds.add("${e['id']}");
-                                        doc.remove(e);
-                                      });
-                                    },
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: KCOLOR.danger,
-                                    )),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                      ...data.map(
-                        (e) {
-                          return Stack(
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  EasyLoading.showToast("view press");
-                                  // doc.remove(e);
-                                },
-                                child: Container(
+                                CircleAvatar(
+                                  backgroundColor:
+                                      Colors.black.withOpacity(0.2),
+                                  child: IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          deletedIds.add("${e['id']}");
+                                          doc.remove(e);
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: KCOLOR.danger,
+                                      )),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        ...files.map(
+                          (e) {
+                            return Stack(
+                              children: [
+                                Container(
                                   decoration: BoxDecoration(
                                       border: Border.all(color: KCOLOR.shade1)),
                                   height: 80,
@@ -159,61 +166,61 @@ class _EditResponsePopupState extends State<EditResponsePopup> {
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                              ),
-                              CircleAvatar(
-                                backgroundColor: Colors.black.withOpacity(0.2),
-                                child: IconButton(
-                                    onPressed: () {
-                                      setState(() {});
-                                      data.remove(e);
-                                      setState(() {});
-                                    },
-                                    icon: const Icon(
-                                      Icons.delete,
-                                      color: KCOLOR.danger,
-                                    )),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                      InkWell(
-                        onTap: () async {
-                          FilePickerResult? result =
-                              await FilePicker.platform.pickFiles(
-                            type: FileType.custom,
-                            allowedExtensions: ['jpg', 'png'],
-                          );
-                          var b = result?.files.first.bytes;
-                          var name = result?.files.first.name;
-                          data.add(StringUint8ListModel(
-                              stringValue: name, uint8ListValue: b));
-                          setState(() {});
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: KCOLOR.shade1)),
-                            height: 80,
-                            width: 80,
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.add,
-                                  color: KCOLOR.brand,
-                                ),
-                                AppText.smallText(
-                                  "Add New",
-                                  color: KCOLOR.brand,
+                                CircleAvatar(
+                                  backgroundColor:
+                                      Colors.black.withOpacity(0.2),
+                                  child: IconButton(
+                                      onPressed: () {
+                                        files.remove(e);
+                                        setState(() {});
+                                      },
+                                      icon: const Icon(
+                                        Icons.delete,
+                                        color: KCOLOR.danger,
+                                      )),
                                 ),
                               ],
-                            )),
-                      ),
-                    ],
-                  ),
-                  const Gap(10)
-                ],
+                            );
+                          },
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles(
+                              type: FileType.custom,
+                              allowedExtensions: ['jpg', 'png'],
+                            );
+                            var b = result?.files.first.bytes;
+                            var name = result?.files.first.name;
+                            files.add(StringUint8ListModel(
+                                stringValue: name, uint8ListValue: b));
+                            setState(() {});
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: KCOLOR.shade1)),
+                              height: 80,
+                              width: 80,
+                              child: const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.add,
+                                    color: KCOLOR.brand,
+                                  ),
+                                  AppText.smallText(
+                                    "Add New",
+                                    color: KCOLOR.brand,
+                                  ),
+                                ],
+                              )),
+                        ),
+                      ],
+                    ),
+                    const Gap(10)
+                  ],
+                ),
               ),
             ),
           ),
@@ -232,7 +239,39 @@ class _EditResponsePopupState extends State<EditResponsePopup> {
               AppBtn.fill(
                 "Update",
                 onPressed: () async {
-                  EasyLoading.show(status: "Please wait..");
+                  if (_formKey.currentState!.validate()) {
+                    EasyLoading.show(
+                        status: "Please wait...\nWhile updating response");
+
+                    try {
+                      if (deletedIds.isNotEmpty) {
+                        var deleteResponse = await service.deleteImages(
+                          deletedIds.map(int.parse).toList(),
+                        );
+
+                        if (!deleteResponse['success']) {
+                          EasyLoading.showError("Failed to delete images");
+                          return;
+                        }
+                      }
+
+                      var updateResponse = await service.updateResponse(
+                        widget.response['id'],
+                        responseTextController.text,
+                        files,
+                      );
+
+                      if (updateResponse['success']) {
+                        Navigator.pop(context);
+                      } else {
+                        EasyLoading.showError("Failed to update response");
+                      }
+                    } catch (error) {
+                      EasyLoading.showError("An error occurred: $error");
+                    } finally {
+                      EasyLoading.dismiss();
+                    }
+                  }
                 },
               )
             ],

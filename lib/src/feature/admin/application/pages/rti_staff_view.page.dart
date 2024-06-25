@@ -1,15 +1,14 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-
 import 'package:gap/gap.dart';
 import 'package:image_network/image_network.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/widget/pagination.widget.dart';
-
 import 'package:rtiapp/src/common/widget/serial_number.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
+import 'package:rtiapp/src/core/shared_pref.dart';
 import 'package:rtiapp/src/feature/admin/application/models/req-models/StringUnit8.model.dart';
 import 'package:rtiapp/src/feature/admin/application/services/rti_staff.service.dart';
 import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/application_status.dropdown.dart';
@@ -276,48 +275,67 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
           shrinkWrap: true,
           itemCount: queries.length,
           itemBuilder: (context, index) {
-            var count = index + 1;
-            return ListTile(
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      const Text(
-                        "Status : ",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      TextButton.icon(
-                          onPressed: () {},
-                          label: QueryStatusWidget(
-                            id: int.parse(queries[index]["query_status_id"]),
-                          )),
-                    ],
-                  ),
-                  const Gap(10),
-                  TextButton.icon(
-                      icon: const Icon(Icons.send),
-                      onPressed: () {
-                        createResponseDialog(context, index);
-                      },
-                      label: const Text("Response")),
-                ],
+            // var count = index + 1;
+            return Container(
+              margin: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: KCOLOR.brand.withOpacity(0.03),
+                border: const Border(
+                  left: BorderSide(color: KCOLOR.brand, width: 2),
+                ),
               ),
-              title: AppText.heading("Question $count", color: KCOLOR.brand),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText.subheading(queries[index]["query"]),
-                  InkWell(
-                    onTap: () {
-                      viewResponseDialog(context, index);
-                    },
-                    child: const AppText.smallText(
-                      "view response",
-                      color: KCOLOR.brand,
+              child: ListTile(
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Gap(10),
+                    Visibility(
+                      visible: queries[index]['response'].toString() == 'null',
+                      child: TextButton.icon(
+                          icon: const Icon(Icons.send),
+                          onPressed: () async {
+                            var l = await SharedPrefHelper.getQueryStatus();
+                            _selectedQueryStatus = l
+                                ?.where(
+                                  (element) =>
+                                      element.id.toString() ==
+                                      queries[index]["query_status_id"],
+                                )
+                                .first;
+                            createResponseDialog(context, index);
+                          },
+                          label: const Text("Response")),
                     ),
-                  ),
-                ],
+                  ],
+                ),
+                title: AppText.subheading("Query : ${queries[index]["query"]}"),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const AppText.smallText(
+                          "Status : ",
+                        ),
+                        QueryStatusWidget(
+                          id: int.parse(queries[index]["query_status_id"]),
+                        ),
+                      ],
+                    ),
+                    Visibility(
+                      visible: queries[index]['response'].toString() != 'null',
+                      child: InkWell(
+                        onTap: () {
+                          viewResponseDialog(context, index);
+                        },
+                        child: const AppText.smallText(
+                          "view response",
+                          color: KCOLOR.brand,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             );
           },
@@ -388,6 +406,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  
                   const Text(
                     "Response",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -412,7 +431,6 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                   ImagePickerFormWidget(
                     onPicked: (files) {
                       _files = files;
-
                       setState(() {});
                     },
                   ),

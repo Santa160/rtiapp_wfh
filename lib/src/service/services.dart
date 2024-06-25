@@ -83,4 +83,7 @@ abstract class RTIStaffInterface extends ServiceIterface {
   Future<dynamic> createQueryResponse(
       Map<String, dynamic> data, List<StringUint8ListModel> files);
   Future<dynamic> fetchResponseById(String id);
+  Future<dynamic> deleteImages(List<int> ids);
+  Future<dynamic> updateResponse(
+      String rtiResId, String responseText, List<StringUint8ListModel> files);
 }
