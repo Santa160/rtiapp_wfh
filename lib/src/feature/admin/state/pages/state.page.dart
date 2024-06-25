@@ -28,6 +28,7 @@ class _StatePageState extends State<StatePage> {
     super.initState();
   }
 
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     var state = context.watch<StateCubit>().state;
@@ -63,8 +64,17 @@ class _StatePageState extends State<StatePage> {
                                   color: KCOLOR.brand),
                             ),
                             const SizedBox(height: 10),
-                            TextFormField(
-                              controller: nameController,
+                            Form(
+                              key: _formKey,
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter state Name';
+                                  }
+                                  return null;
+                                },
+                                controller: nameController,
+                              ),
                             ),
                             const SizedBox(height: 10),
                             ElevatedButton(
@@ -74,16 +84,18 @@ class _StatePageState extends State<StatePage> {
                                     backgroundColor:
                                         WidgetStatePropertyAll(KCOLOR.brand)),
                                 onPressed: () async {
-                                  context
-                                      .read<StateCubit>()
-                                      .addState(
-                                          context: context,
-                                          name: nameController.text)
-                                      .then((value) {
-                                    Navigator.of(context).pop();
+                                  if (_formKey.currentState!.validate()) {
+                                    context
+                                        .read<StateCubit>()
+                                        .addState(
+                                            context: context,
+                                            name: nameController.text)
+                                        .then((value) {
+                                      Navigator.of(context).pop();
 
-                                    nameController.clear();
-                                  });
+                                      nameController.clear();
+                                    });
+                                  }
                                 },
                                 child: const Row(
                                   children: [

@@ -31,6 +31,8 @@ class _RTIStatusPageState extends State<RTIStatusPage> {
     super.initState();
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     var state = context.watch<RTIStatusCubit>().state;
@@ -66,8 +68,17 @@ class _RTIStatusPageState extends State<RTIStatusPage> {
                                   color: KCOLOR.brand),
                             ),
                             const SizedBox(height: 10),
-                            TextFormField(
-                              controller: nameController,
+                            Form(
+                              key: _formKey,
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter RTI Status Name';
+                                  }
+                                  return null;
+                                },
+                                controller: nameController,
+                              ),
                             ),
                             const SizedBox(height: 10),
                             ElevatedButton(
@@ -77,16 +88,18 @@ class _RTIStatusPageState extends State<RTIStatusPage> {
                                     backgroundColor:
                                         WidgetStatePropertyAll(KCOLOR.brand)),
                                 onPressed: () async {
-                                  context
-                                      .read<RTIStatusCubit>()
-                                      .addRTIStatus(
-                                          context: context,
-                                          name: nameController.text)
-                                      .then((value) {
-                                    Navigator.of(context).pop();
+                                  if (_formKey.currentState!.validate()) {
+                                    context
+                                        .read<RTIStatusCubit>()
+                                        .addRTIStatus(
+                                            context: context,
+                                            name: nameController.text)
+                                        .then((value) {
+                                      Navigator.of(context).pop();
 
-                                    nameController.clear();
-                                  });
+                                      nameController.clear();
+                                    });
+                                  }
                                 },
                                 child: const Row(
                                   children: [

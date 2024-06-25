@@ -106,6 +106,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                         var auth = Auth();
                                         var res = await auth.login(
                                             _username!, _password!);
+
                                         if (res["success"]) {
                                           await SharedPrefHelper.saveUserInfo(
                                               res["data"]["username"],
@@ -118,6 +119,8 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
                                           EasyLoading.showSuccess(
                                               "Login Succesfull");
                                           context.goNamed(KRoutes.application);
+                                        } else {
+                                          EasyLoading.showError(res["message"]);
                                         }
                                       },
                                 child: const Text("LOGIN"))),

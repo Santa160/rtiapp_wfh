@@ -27,6 +27,8 @@ class _PiaPageState extends State<PiaPage> {
     super.initState();
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     var state = context.watch<PiaCubit>().state;
@@ -62,8 +64,17 @@ class _PiaPageState extends State<PiaPage> {
                                   color: KCOLOR.brand),
                             ),
                             const SizedBox(height: 10),
-                            TextFormField(
-                              controller: nameController,
+                            Form(
+                              key: _formKey,
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter pia Name';
+                                  }
+                                  return null;
+                                },
+                                controller: nameController,
+                              ),
                             ),
                             const SizedBox(height: 10),
                             ElevatedButton(
@@ -73,16 +84,18 @@ class _PiaPageState extends State<PiaPage> {
                                     backgroundColor:
                                         WidgetStatePropertyAll(KCOLOR.brand)),
                                 onPressed: () async {
-                                  context
-                                      .read<PiaCubit>()
-                                      .addPia(
-                                          context: context,
-                                          name: nameController.text)
-                                      .then((value) {
-                                    Navigator.of(context).pop();
+                                  if (_formKey.currentState!.validate()) {
+                                    context
+                                        .read<PiaCubit>()
+                                        .addPia(
+                                            context: context,
+                                            name: nameController.text)
+                                        .then((value) {
+                                      Navigator.of(context).pop();
 
-                                    nameController.clear();
-                                  });
+                                      nameController.clear();
+                                    });
+                                  }
                                 },
                                 child: const Row(
                                   children: [

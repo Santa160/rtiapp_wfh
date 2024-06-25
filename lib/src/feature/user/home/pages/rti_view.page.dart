@@ -14,6 +14,7 @@ import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/widget/query_status.widget.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RTIViewPage extends StatefulWidget {
   const RTIViewPage({super.key, required this.rtiId, required this.onBackTab});
@@ -132,6 +133,10 @@ class _RTIViewPageState extends State<RTIViewPage> {
                                   child: Visibility(
                                     visible: bplDetails["bpl_card_url"] != null,
                                     child: ImageNetwork(
+                                        onTap: () async {
+                                          await launchUrl(Uri.parse(
+                                              "${EndPoint.baseUrl}/${bplDetails["bpl_card_url"]}"));
+                                        },
                                         height: 80,
                                         width: 80,
                                         image:

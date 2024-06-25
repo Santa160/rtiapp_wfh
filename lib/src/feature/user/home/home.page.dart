@@ -83,10 +83,11 @@ class _HomePageState extends State<HomePage> {
 
   // Method to handle form submission
   void handleSubmit(context) async {
-    if (_selectedPia == null || _file == null) {
-      EasyLoading.showInfo("Please complete the form fields");
-    }
-    if (_formKey.currentState!.validate()) {
+    if (_selectedPia == null) {
+      EasyLoading.showInfo("Please select pia");
+    } else if (_file == null) {
+      EasyLoading.showInfo("Please select a file");
+    } else if (_formKey.currentState!.validate()) {
       var loQ = controllers
           .map(
             (e) => e.text,
@@ -149,36 +150,6 @@ class _HomePageState extends State<HomePage> {
       }
     }
   } // Method to handle form submission
-
-  void handleSubmitTest(context) async {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return const AlertDialog(
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              AppText.heading(
-                "Success",
-              ),
-              Gap(10),
-              AppText.smallText(
-                "You have successfully submitted your RTI Application",
-              ),
-              Gap(10),
-              AppText.smallText(
-                "Your RTI application number is",
-              ),
-              AppText.heading(
-                "RTI NO",
-              ),
-              Gap(10),
-            ],
-          ),
-        );
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -350,7 +321,6 @@ class _HomePageState extends State<HomePage> {
                                   backgroundColor:
                                       WidgetStatePropertyAll(KCOLOR.brand)),
                               onPressed: () {
-                                // EasyLoading.showToast("pressed");
                                 handleSubmit(context);
                               },
                               child: const Text("Submit")),

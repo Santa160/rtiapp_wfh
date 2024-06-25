@@ -28,6 +28,8 @@ class _QualificationPageState extends State<QualificationPage> {
     super.initState();
   }
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     var state = context.watch<QualificationCubit>().state;
@@ -63,8 +65,17 @@ class _QualificationPageState extends State<QualificationPage> {
                                   color: KCOLOR.brand),
                             ),
                             const SizedBox(height: 10),
-                            TextFormField(
-                              controller: nameController,
+                            Form(
+                              key: _formKey,
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter qualification Name';
+                                  }
+                                  return null;
+                                },
+                                controller: nameController,
+                              ),
                             ),
                             const SizedBox(height: 10),
                             ElevatedButton(
@@ -74,16 +85,18 @@ class _QualificationPageState extends State<QualificationPage> {
                                     backgroundColor:
                                         WidgetStatePropertyAll(KCOLOR.brand)),
                                 onPressed: () async {
-                                  context
-                                      .read<QualificationCubit>()
-                                      .addQualification(
-                                          context: context,
-                                          name: nameController.text)
-                                      .then((value) {
-                                    Navigator.of(context).pop();
+                                  if (_formKey.currentState!.validate()) {
+                                    context
+                                        .read<QualificationCubit>()
+                                        .addQualification(
+                                            context: context,
+                                            name: nameController.text)
+                                        .then((value) {
+                                      Navigator.of(context).pop();
 
-                                    nameController.clear();
-                                  });
+                                      nameController.clear();
+                                    });
+                                  }
                                 },
                                 child: const Row(
                                   children: [

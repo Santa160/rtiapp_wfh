@@ -10,6 +10,8 @@ class EndPoint {
   static const rtiStaff = "/api/rtis/list-staff"; //GET POST
   static const rtiStatusUpdate = "/api/rtis/status-update"; //GET POST
   static const queryResponse = "/api/rti-responses"; //GET POST
+  static const deleteDocs =
+      "/api/rti-responses//delete-response-document"; //GET POST
   static const rtiStatusLog = "/api//rti-status-logs"; //GET
   static const rtistatus = "/api/status"; //GET
 

@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtiapp/src/core/logger.dart';
 
 void handleDioException(DioException e) {
@@ -10,7 +11,7 @@ void handleDioException(DioException e) {
     logger.e('Receive timeout');
   } else if (e.type == DioExceptionType.badResponse) {
     logger.e('Response error: ${e.response?.statusCode}');
-    logger.e('Response data: ${e.response?.data}');
+    EasyLoading.showError('${e.response?.data['message']}');
   } else if (e.type == DioExceptionType.cancel) {
     logger.e('Request canceled');
   } else {

@@ -1,9 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:image_network/image_network.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
+import 'package:rtiapp/src/feature/admin/application/models/req-models/StringUnit8.model.dart';
 import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/query.status.dropdown.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
@@ -28,6 +33,7 @@ class _EditResponsePopupState extends State<EditResponsePopup> {
   QueryStatusModel? _selectedStatus;
   List<Map<String, dynamic>> doc = [];
   Set<String> deletedIds = {};
+
   @override
   void initState() {
     doc = widget.doc;
@@ -35,6 +41,10 @@ class _EditResponsePopupState extends State<EditResponsePopup> {
         TextEditingController(text: widget.response['response']);
     super.initState();
   }
+
+  List<StringUint8ListModel> data = [];
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -45,81 +55,166 @@ class _EditResponsePopupState extends State<EditResponsePopup> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Text(widget.response['id'].toString()),
           const Text(
             "Edit Response",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const Gap(20),
           SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                TextFormField(
-                  controller: textEditingController,
-                  maxLines: 5,
-                  decoration: const InputDecoration(
-                    hintText: "Enter your response here...",
-                    labelText: "Response",
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Resposne field can\'t be empty ';
+                      }
+                      return null;
+                    },
+                    controller: textEditingController,
+                    maxLines: 5,
+                    decoration: const InputDecoration(
+                      hintText: "Enter your response here...",
+                      labelText: "Response",
+                    ),
                   ),
-                ),
-                const Gap(20),
-                QueryStatusDropdown(
-                    onChanged: (status) async {
-                      _selectedStatus = status;
-                      setState(() {});
-                    },
-                    initialId: widget.queryStatusId),
-                const Gap(20),
-                const AppText.smallText("Uploaded Document"),
-                const Gap(10),
-                Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: doc.map(
-                    (e) {
-                      return Stack(
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              EasyLoading.showToast("view press");
-                              // doc.remove(e);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: KCOLOR.shade1)),
-                              height: 80,
-                              width: 80,
-                              // child: SelectableText(
-                              //     '${EndPoint.baseUrl}/${e["document_url"]}'),
-                              child: ImageNetwork(
-                                image:
-                                    '${EndPoint.baseUrl}/${e["document_url"]}',
-                                height: 80,
-                                width: 80,
-                              ),
-                            ),
-                          ),
-                          CircleAvatar(
-                            backgroundColor: Colors.black.withOpacity(0.2),
-                            child: IconButton(
-                                onPressed: () {
-                                  deletedIds.add("${e['id']}");
-                                  setState(() {});
-                                  EasyLoading.showToast("Delete $deletedIds");
+                  const Gap(20),
+                  QueryStatusDropdown(
+                      onChanged: (status) async {
+                        _selectedStatus = status;
+                        setState(() {});
+                      },
+                      initialId: widget.queryStatusId),
+                  const Gap(20),
+                  const AppText.smallText("Uploaded Document"),
+                  const Gap(10),
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 10,
+                    children: [
+                      ...doc.map(
+                        (e) {
+                          return Stack(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  EasyLoading.showToast("view press");
+                                  // doc.remove(e);
                                 },
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: KCOLOR.danger,
-                                )),
-                          ),
-                        ],
-                      );
-                    },
-                  ).toList(),
-                ),
-                const Gap(20)
-              ],
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: KCOLOR.shade1)),
+                                  height: 80,
+                                  width: 80,
+                                  // child: SelectableText(
+                                  //     '${EndPoint.baseUrl}/${e["document_url"]}'),
+                                  child: ImageNetwork(
+                                    image:
+                                        '${EndPoint.baseUrl}/${e["document_url"]}',
+                                    height: 80,
+                                    width: 80,
+                                  ),
+                                ),
+                              ),
+                              CircleAvatar(
+                                backgroundColor: Colors.black.withOpacity(0.2),
+                                child: IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        deletedIds.add("${e['id']}");
+                                        doc.remove(e);
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: KCOLOR.danger,
+                                    )),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      ...data.map(
+                        (e) {
+                          return Stack(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  EasyLoading.showToast("view press");
+                                  // doc.remove(e);
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: KCOLOR.shade1)),
+                                  height: 80,
+                                  width: 80,
+                                  // child: SelectableText(
+                                  //     '${EndPoint.baseUrl}/${e["document_url"]}'),
+                                  child: Image.memory(
+                                    e.uint8ListValue as Uint8List,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              CircleAvatar(
+                                backgroundColor: Colors.black.withOpacity(0.2),
+                                child: IconButton(
+                                    onPressed: () {
+                                      setState(() {});
+                                      data.remove(e);
+                                      setState(() {});
+                                    },
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: KCOLOR.danger,
+                                    )),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          FilePickerResult? result =
+                              await FilePicker.platform.pickFiles(
+                            type: FileType.custom,
+                            allowedExtensions: ['jpg', 'png'],
+                          );
+                          var b = result?.files.first.bytes;
+                          var name = result?.files.first.name;
+                          data.add(StringUint8ListModel(
+                              stringValue: name, uint8ListValue: b));
+                          setState(() {});
+                        },
+                        child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: KCOLOR.shade1)),
+                            height: 80,
+                            width: 80,
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.add,
+                                  color: KCOLOR.brand,
+                                ),
+                                AppText.smallText(
+                                  "Add New",
+                                  color: KCOLOR.brand,
+                                ),
+                              ],
+                            )),
+                      ),
+                    ],
+                  ),
+                  const Gap(10)
+                ],
+              ),
             ),
           ),
           Row(
