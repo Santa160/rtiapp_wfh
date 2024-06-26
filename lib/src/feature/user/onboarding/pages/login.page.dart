@@ -39,29 +39,31 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                width: 350,
+                width: 400,
                 child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [Image.asset(KASSETS.logo)],
                     ),
-                    Text("RTI Online",
-                        style: Theme.of(context)
-                            .textTheme
-                            .headlineMedium!
-                            .copyWith(
-                                color: KCOLOR.brand,
-                                fontWeight: FontWeight.bold)),
+                    const AppText.heading(
+                      "Manipur State Power Company Limited",
+                    ),
+                    const Gap(10),
+                    const AppText.heading(
+                      "RTI Online Application",
+                      color: KCOLOR.brand,
+                    ),
+                    const AppText.subheading("Citizen Portal"),
                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         const Gap(10),
                         const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             AppText.subheading(
-                              "Login",
+                              "Continue with mobile number",
                             ),
                           ],
                         ),
@@ -113,60 +115,64 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     ),
                                     hintText: "Enter Mobile Number"))),
-                        SizedBox(
-                            width: 350,
-                            child: TextFormField(
-                                initialValue: "123456",
-                                inputFormatters: [
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                onChanged: (value) {
-                                  if (value.length == 6) {
-                                    code = value;
-                                    setState(() {});
-                                  }
-                                },
-                                maxLength: 6,
-                                enabled: isOTPSent,
-                                decoration: const InputDecoration(
-                                    counter: Text(""), hintText: "Enter OTP"))),
-                        SizedBox(
-                            height: 50,
-                            width: 350,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                    foregroundColor:
-                                        const WidgetStatePropertyAll(
-                                            Colors.white),
-                                    backgroundColor: WidgetStatePropertyAll(
-                                        isOTPSent
-                                            ? KCOLOR.brand
-                                            : Colors.grey)),
-                                onPressed: isOTPSent
-                                    ? () async {
-                                        // Verify OTP logic here
-                                        EasyLoading.show(
-                                            status: "Verifing OTP");
+                        if (isOTPSent) ...[
+                          SizedBox(
+                              width: 350,
+                              child: TextFormField(
+                                  initialValue: "123456",
+                                  inputFormatters: [
+                                    FilteringTextInputFormatter.digitsOnly
+                                  ],
+                                  onChanged: (value) {
+                                    if (value.length == 6) {
+                                      code = value;
+                                      setState(() {});
+                                    }
+                                  },
+                                  maxLength: 6,
+                                  enabled: isOTPSent,
+                                  decoration: const InputDecoration(
+                                      counter: Text(""),
+                                      hintText: "Enter OTP"))),
+                          SizedBox(
+                              height: 50,
+                              width: 350,
+                              child: ElevatedButton(
+                                  style: ButtonStyle(
+                                      foregroundColor:
+                                          const WidgetStatePropertyAll(
+                                              Colors.white),
+                                      backgroundColor: WidgetStatePropertyAll(
+                                          isOTPSent
+                                              ? KCOLOR.brand
+                                              : Colors.grey)),
+                                  onPressed: isOTPSent
+                                      ? () async {
+                                          // Verify OTP logic here
+                                          EasyLoading.show(
+                                              status: "Verifing OTP");
 
-                                        var res = await auth.verifyOtp(
-                                            number!, code!);
-                                        if (res["success"]) {
-                                          await SharedPrefHelper.saveToken(
-                                              "token", res["data"]["token"]);
-                                          if (res["data"]
-                                              ["registrationCompleted"]) {
-                                            context.replaceNamed(KRoutes.home);
-                                          } else {
-                                            context
-                                                .goNamed(KRoutes.registration);
+                                          var res = await auth.verifyOtp(
+                                              number!, code!);
+                                          if (res["success"]) {
+                                            await SharedPrefHelper.saveToken(
+                                                "token", res["data"]["token"]);
+                                            if (res["data"]
+                                                ["registrationCompleted"]) {
+                                              context
+                                                  .replaceNamed(KRoutes.home);
+                                            } else {
+                                              context.goNamed(
+                                                  KRoutes.registration);
+                                            }
+                                            EasyLoading.showSuccess(
+                                                res["message"]);
                                           }
-                                          EasyLoading.showSuccess(
-                                              res["message"]);
                                         }
-                                      }
-                                    : null,
-                                child: const Text("Verify OTP"))),
-                        const Gap(10),
+                                      : null,
+                                  child: const Text("Verify OTP"))),
+                          const Gap(10),
+                        ]
                       ],
                     )
                   ],

@@ -68,7 +68,7 @@ class _ResgistrationPageState extends State<ResgistrationPage> {
                 ),
                 const Gap(20),
                 Text(
-                  "Submit RTI",
+                  "Apply RTI",
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium!

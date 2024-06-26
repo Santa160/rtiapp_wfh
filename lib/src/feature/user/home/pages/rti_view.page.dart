@@ -83,129 +83,128 @@ class _RTIViewPageState extends State<RTIViewPage> {
       children: [
         pageHeader(context),
         const Gap(20),
-        Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const AppText.heading(
+              "Citizen Profile",
+              color: KCOLOR.brand,
+            ),
+            const Gap(10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const AppText.heading(
-                  "Citizen Profile",
-                  color: KCOLOR.brand,
-                ),
-                const Gap(10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(child: userProfile()),
-                    Expanded(child: userAddress()),
-                  ],
-                ),
-                const Gap(20),
-                const AppText.heading(
-                  "Education",
-                  color: KCOLOR.brand,
-                ),
-                const Gap(10),
-                _education(),
-
-                if (citizenDetails["bpl"] == "1") ...[
-                  const Gap(20),
-                  const AppText.heading(
-                    "BPL",
-                    color: KCOLOR.brand,
-                  ),
-                  const Gap(10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(child: _bpl()),
-                      Expanded(
-                          child: Stack(
-                        children: [
-                          SizedBox(
-                            height: 80,
-                            width: 80,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(15),
-                              child: Container(
-                                  color: Colors.grey,
-                                  width: 80,
-                                  child: Visibility(
-                                    visible: bplDetails["bpl_card_url"] != null,
-                                    child: ImageNetwork(
-                                        onTap: () async {
-                                          launchUrl(Uri.parse(
-                                              "${EndPoint.baseUrl}/${bplDetails["bpl_card_url"]}"));
-                                        },
-                                        height: 80,
-                                        width: 80,
-                                        image:
-                                            "${EndPoint.baseUrl}/${bplDetails["bpl_card_url"]}"),
-                                  )),
-                            ),
-                          ),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(15),
-                            child: Container(
-                              color: Colors.black.withOpacity(0.5),
-                              height: 80,
-                              width: 80,
-                              child: const Center(
-                                child: Icon(
-                                  Icons.remove_red_eye,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
-                    ],
-                  ),
-                ],
-                const Gap(20),
-                _queries(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const AppText.heading(
-                      "RTI Status logs",
-                      color: KCOLOR.brand,
-                    ),
-                    PaginationBtn(
-                      initialPage: initialPage,
-                      next: () {
-                        if (initialPage < pagination['pageCount']) {
-                          initialPage++;
-                          setState(() {
-                            getRTIDetials();
-                          });
-                        }
-                      },
-                      previous: () {
-                        if (initialPage > 1) {
-                          initialPage--;
-                          setState(() {
-                            getRTIDetials();
-                          });
-                        }
-                      },
-                    ),
-                  ],
-                ),
-                const Gap(10),
-                Container(
-                  color: KCOLOR.shade3,
-                  height: 200,
-                  child: _logsTableData(),
-                ),
-                const Gap(10),
-
-                // _tableData()
-                //BPL
+                Expanded(child: userProfile()),
+                Expanded(child: userAddress()),
               ],
             ),
-          ),
+            const Gap(20),
+            const AppText.heading(
+              "Education",
+              color: KCOLOR.brand,
+            ),
+            const Gap(10),
+            _education(),
+
+            if (citizenDetails["bpl"] == "1") ...[
+              const Gap(20),
+              const AppText.heading(
+                "BPL",
+                color: KCOLOR.brand,
+              ),
+              const Gap(10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(child: _bpl()),
+                  Expanded(
+                      child: Stack(
+                    children: [
+                      SizedBox(
+                        height: 80,
+                        width: 80,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15),
+                          child: Container(
+                              color: Colors.grey,
+                              width: 80,
+                              child: Visibility(
+                                visible: bplDetails["bpl_card_url"] != null,
+                                child: ImageNetwork(
+                                    onTap: () async {
+                                      launchUrl(Uri.parse(
+                                          "${EndPoint.baseUrl}/${bplDetails["bpl_card_url"]}"));
+                                    },
+                                    height: 80,
+                                    width: 80,
+                                    image:
+                                        "${EndPoint.baseUrl}/${bplDetails["bpl_card_url"]}"),
+                              )),
+                        ),
+                      ),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Container(
+                          color: Colors.black.withOpacity(0.5),
+                          height: 80,
+                          width: 80,
+                          child: const Center(
+                            child: Icon(
+                              Icons.remove_red_eye,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+                ],
+              ),
+            ],
+            const Gap(20),
+            _queries(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const AppText.heading(
+                  "RTI Status logs",
+                  color: KCOLOR.brand,
+                ),
+                PaginationBtn(
+                  initialPage: initialPage,
+                  next: () {
+                    if (initialPage < pagination['pageCount']) {
+                      initialPage++;
+                      setState(() {
+                        getRTIDetials();
+                      });
+                    }
+                  },
+                  previous: () {
+                    if (initialPage > 1) {
+                      initialPage--;
+                      setState(() {
+                        getRTIDetials();
+                      });
+                    }
+                  },
+                ),
+              ],
+            ),
+            const Gap(10),
+
+            Container(
+              color: KCOLOR.shade3,
+              height: queries.length == 1
+                  ? 55 * (queries.length + 1)
+                  : 55 * queries.length.toDouble(),
+              child: _logsTableData(),
+            ),
+            const Gap(10),
+
+            // _tableData()
+            //BPL
+          ],
         ),
       ],
     ).addPadding(left: mw > 650 ? 150 : 50, right: mw > 650 ? 150 : 50);
@@ -260,62 +259,58 @@ class _RTIViewPageState extends State<RTIViewPage> {
           shrinkWrap: true,
           itemCount: queries.length,
           itemBuilder: (context, index) {
-            return ListTile(
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      const Text(
-                        "Status : ",
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      TextButton.icon(
-                          onPressed: () {},
-                          label: QueryStatusWidget(
-                            id: int.parse(queries[index]["query_status_id"]),
-                          )),
-                    ],
-                  ),
-                  const Gap(10),
-                ],
+            return Container(
+              margin: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: KCOLOR.brand.withOpacity(0.03),
+                border: const Border(
+                  left: BorderSide(color: KCOLOR.brand, width: 2),
+                ),
               ),
-              // title: Text(
-              //   "Question $count",
-              //   style: style,
-              // ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  AppText.subheading(queries[index]["query"]),
-                  InkWell(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (context) {
-                          return AlertDialog(
-                            actions: [
-                              AppBtn.fill(
-                                "Close",
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              )
-                            ],
-                            title: const AppText.heading("Responses"),
-                            content: ViewResponsePopup(
-                              data: queries[index],
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: const AppText.smallText(
-                      "view response",
-                      color: KCOLOR.brand,
+              child: ListTile(
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppText.subheading(queries[index]["query"]),
+                    Row(
+                      children: [
+                        const Text(
+                          "Status : ",
+                          style: TextStyle(color: Colors.black),
+                        ),
+                        TextButton.icon(
+                            onPressed: () {},
+                            label: QueryStatusWidget(
+                              id: int.parse(queries[index]["query_status_id"]),
+                            )),
+                      ],
                     ),
-                  ),
-                ],
+                    AppBtn.outline(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              actions: [
+                                AppBtn.fill(
+                                  "Close",
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                )
+                              ],
+                              title: const AppText.heading("Responses"),
+                              content: ViewResponsePopup(
+                                data: queries[index],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      "View response",
+                    ),
+                  ],
+                ),
               ),
             );
           },

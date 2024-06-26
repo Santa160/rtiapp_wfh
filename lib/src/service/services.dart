@@ -23,12 +23,13 @@ abstract class CitizenOnboardingInterface extends ServiceIterface {
 
 abstract class RTIInterface extends ServiceIterface {
   Future<dynamic> createRTI(
-      List<String> questions, FilePickerModel file, String piaId);
+      List<String> questions, FilePickerModel? file, String piaId);
   Future<dynamic> fetchTermAndConditions();
   Future<dynamic> fetchRTIs(int page, int limit);
   Future<dynamic> fetchRTIStatusLogsByRTIID(String rtiId, int page, int limit);
   Future<dynamic> fetchRTIDetails(String id, int? page, int? limit);
   Future<dynamic> fetchRTIStatus();
+  Future<dynamic> confirmPayment(Map<String, dynamic> paymentOrderDetail);
 }
 
 abstract class StaffAuthentication extends ServiceIterface {
@@ -84,6 +85,6 @@ abstract class RTIStaffInterface extends ServiceIterface {
       Map<String, dynamic> data, List<StringUint8ListModel> files);
   Future<dynamic> fetchResponseById(String id);
   Future<dynamic> deleteImages(List<int> ids);
-  Future<dynamic> updateResponse(
-      String rtiResId, String responseText, List<StringUint8ListModel> files);
+  Future<dynamic> updateResponse(String rtiResId, String responseText,
+      List<StringUint8ListModel> files, String rtiQueryStatusId);
 }

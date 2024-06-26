@@ -97,19 +97,6 @@ class RTIDataTableWidget extends StatelessWidget {
                             viewAction!(e);
                           },
                         ),
-
-                        // IconButton(
-                        //   icon: Image.asset(KICONS.edit),
-                        //   onPressed: () {
-                        //     editAction(e);
-                        //   },
-                        // ),
-                        // IconButton(
-                        //   icon: Image.asset(KICONS.delete),
-                        //   onPressed: () {
-                        //     deleteAction(e);
-                        //   },
-                        // ),
                       ],
                     )),
                   ]);

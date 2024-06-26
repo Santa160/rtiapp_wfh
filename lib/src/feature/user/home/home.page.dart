@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:razorpay_web/razorpay_web.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/utils/filepicker.helper.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
@@ -29,17 +31,34 @@ class _HomePageState extends State<HomePage> {
   // List to store TextEditingControllers for each TextFormField
   List<TextEditingController> controllers = [];
 
+  Map<String, dynamic> paymentOption = {};
+
   // GlobalKey to access the form
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
+    _razorpay = Razorpay();
+
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+
     InitialSetup.queryStatus();
     InitialSetup.status();
     addField();
-    addField();
   }
+
+  void openCheckout() async {
+    try {
+      _razorpay.open(paymentOption);
+    } catch (e) {
+      debugPrint('Error: e');
+    }
+  }
+
+  late Razorpay _razorpay;
 
   Map<String, dynamic>? _selectedPia;
   FilePickerModel? _file;
@@ -61,7 +80,7 @@ class _HomePageState extends State<HomePage> {
               },
               icon: const Icon(Icons.close)),
           border: const OutlineInputBorder(),
-          labelText: 'Question ${count + 1}',
+          labelText: 'Query',
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -70,6 +89,79 @@ class _HomePageState extends State<HomePage> {
           return null;
         },
       ),
+    );
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    var order = {
+      "razorpay_order_id": response.orderId,
+      "razorpay_payment_id": response.paymentId,
+      "razorpay_signature": response.signature
+    };
+
+    var service = RTIService();
+    var res = await service.confirmPayment(order);
+    if (res['success']) {
+      controllers.clear();
+      addField();
+      EasyLoading.dismiss();
+    }
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          actions: [
+            AppBtn.outline(
+              "Okay",
+              onPressed: () {
+                activeTab = "Home";
+                setState(() {});
+                Navigator.pop(context);
+              },
+            )
+          ],
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Success",
+                style: TextStyle(
+                  color: KCOLOR.success,
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Gap(10),
+              const Text(
+                "You have successfully submitted your RTI Application",
+                style: TextStyle(fontSize: 20),
+              ),
+              const Gap(10),
+              const Text(
+                "Your RTI application number is",
+                style: TextStyle(fontSize: 20),
+              ),
+              Text(
+                "${res["data"]["rti_no"]}",
+                style: const TextStyle(fontSize: 30, color: KCOLOR.brand),
+              ),
+              const Gap(10),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    EasyLoading.showError(
+      "ERROR: ${response.code} - ${response.message!}",
+    );
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    EasyLoading.showInfo(
+      "EXTERNAL_WALLET: ${response.walletName!}",
     );
   }
 
@@ -85,8 +177,6 @@ class _HomePageState extends State<HomePage> {
   void handleSubmit(context) async {
     if (_selectedPia == null) {
       EasyLoading.showInfo("Please select pia");
-    } else if (_file == null) {
-      EasyLoading.showInfo("Please select a file");
     } else if (_formKey.currentState!.validate()) {
       var loQ = controllers
           .map(
@@ -99,54 +189,63 @@ class _HomePageState extends State<HomePage> {
       EasyLoading.show(status: "Please wait");
 
       var res =
-          await service.createRTI(loQ, _file!, _selectedPia!["id"].toString());
+          await service.createRTI(loQ, _file, _selectedPia!["id"].toString());
       if (res["success"]) {
-        EasyLoading.dismiss();
-        activeTab = 'Home';
-        setState(() {});
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              actions: [
-                AppBtn.outline(
-                  "Okay",
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                )
-              ],
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    "Success",
-                    style: TextStyle(
-                      color: KCOLOR.success,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const Gap(10),
-                  const Text(
-                    "You have successfully submitted your RTI Application",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  const Gap(10),
-                  const Text(
-                    "Your RTI application number is",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Text(
-                    res["data"]["rti_no"],
-                    style: const TextStyle(fontSize: 30, color: KCOLOR.brand),
-                  ),
-                  const Gap(10),
+        if (res['data']['order'].toString() == 'null') {
+          EasyLoading.dismiss();
+          activeTab = 'Home';
+          setState(() {});
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                actions: [
+                  AppBtn.outline(
+                    "Okay",
+                    onPressed: () {
+                      activeTab = "Home";
+                      setState(() {});
+                      Navigator.pop(context);
+                    },
+                  )
                 ],
-              ),
-            );
-          },
-        );
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text(
+                      "Success",
+                      style: TextStyle(
+                        color: KCOLOR.success,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const Gap(10),
+                    const Text(
+                      "You have successfully submitted your RTI Application",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    const Gap(10),
+                    const Text(
+                      "Your RTI application number is",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Text(
+                      "${res["data"]["rti_no"]}",
+                      style: const TextStyle(fontSize: 30, color: KCOLOR.brand),
+                    ),
+                    const Gap(10),
+                  ],
+                ),
+              );
+            },
+          );
+        } else {
+          setState(() {
+            paymentOption = res['data']['order'];
+          });
+          openCheckout();
+        }
       }
     }
   } // Method to handle form submission
@@ -155,183 +254,206 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var mw = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Column(
-        children: [
-          const HeaderWidget().addPadding(
-              left: mw > 650 ? 150 : 50, right: mw > 650 ? 150 : 50),
-          const Gap(20),
-          Container(
-            color: KCOLOR.brand,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        activeTab = "Home";
-                        setState(() {});
-                      },
-                      child: Container(
-                        color: Colors.white
-                            .withOpacity(activeTab == "Home" ? 0.2 : 0),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text("Home",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: Colors.white,
-                                  )),
-                        ),
-                      ),
-                    ),
-                    const Gap(20),
-                    InkWell(
-                      onTap: () {
-                        activeTab = "Submit RTI";
-                        showDialog(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (context) {
-                            return TermAndConditions(
-                              onCancel: () {
-                                setState(() {
-                                  activeTab = "Home";
-                                });
-                              },
-                            );
-                          },
-                        );
-                        setState(() {});
-                      },
-                      child: Container(
-                        color: Colors.white
-                            .withOpacity(activeTab == "Submit RTI" ? 0.2 : 0),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            "Submit RTI",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ).addPadding(
-                    left: mw > 650 ? 150 : 50,
-                    right: mw > 650 ? 150 : 50,
-                    top: 8,
-                    bottom: 8),
-                InkWell(
-                  onTap: () async {
-                    await SharedPrefHelper.removeToken("token");
-                    context.replaceNamed(KRoutes.stafflogin);
-                  },
-                  child: Text(
-                    "Logout",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: Colors.white),
-                  ).addPadding(
-                      left: mw > 650 ? 150 : 50,
-                      right: mw > 650 ? 150 : 50,
-                      top: 8,
-                      bottom: 8),
-                ),
-              ],
-            ),
-          ),
-          Visibility(
-              visible: activeTab == "View",
-              child: Expanded(
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const HeaderWidget().addPadding(
+                top: 10, left: mw > 650 ? 150 : 50, right: mw > 650 ? 150 : 50),
+            const Gap(10),
+            pageHeader(context, mw),
+            Visibility(
+                visible: activeTab == "View",
                 child: RTIViewPage(
                   onBackTab: () {
                     activeTab = "Home";
                     setState(() {});
                   },
                   rtiId: rtiId,
-                ),
-              )),
-          Visibility(
-              visible: activeTab == "Home",
-              child: Expanded(
-                  child: RTITableView(
-                onViewTab: (data) {
-                  setState(() {
-                    activeTab = "View";
-                    rtiId = data["id"];
-                  });
-                },
-              ).addPadding(
-                      left: mw > 650 ? 150 : 20, right: mw > 650 ? 150 : 20))),
-          Visibility(
-            visible: activeTab == "Submit RTI",
-            child: Expanded(
-              child: SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Gap(5),
-                      const AppText.subheading(
-                        'Submit RTI Request',
-                      ),
-                      PiaDropdownForm(
-                        pia: (pia) {
-                          logger.d(pia);
-                          setState(() {
-                            _selectedPia = pia;
-                          });
-                        },
-                        file: (file) {
-                          logger.d(file!.fileName);
-                          setState(() {
-                            _file = file;
-                          });
-                        },
-                      ),
-                      const Gap(5),
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: controllers.length,
-                        itemBuilder: (context, index) {
-                          return createTextFormField(controllers[index], index);
-                        },
-                      ),
-                      const Gap(5),
-                      TextButton.icon(
-                          icon: const Icon(Icons.add),
-                          onPressed: addField,
-                          label: const Text("Add more questions")),
-                      const Gap(5),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          ElevatedButton(
-                              style: const ButtonStyle(
-                                  foregroundColor:
-                                      WidgetStatePropertyAll(Colors.white),
-                                  backgroundColor:
-                                      WidgetStatePropertyAll(KCOLOR.brand)),
-                              onPressed: () {
-                                handleSubmit(context);
-                              },
-                              child: const Text("Submit")),
-                        ],
-                      )
-                    ],
-                  ).addPadding(left: 150, right: 150),
-                ),
+                )),
+            const Gap(10),
+            Visibility(
+                visible: activeTab == "Home",
+                child: RTITableView(
+                  onViewTab: (data) {
+                    setState(() {
+                      activeTab = "View";
+                      rtiId = data["id"];
+                    });
+                  },
+                ).addPadding(
+                    left: mw > 650 ? 150 : 20, right: mw > 650 ? 150 : 20)),
+            Visibility(
+              visible: activeTab == "Apply RTI",
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Gap(5),
+                    const AppText.subheading(
+                      'Apply RTI Request',
+                    ),
+                    PiaDropdownForm(
+                      pia: (pia) {
+                        logger.d(pia);
+                        setState(() {
+                          _selectedPia = pia;
+                        });
+                      },
+                      file: (file) {
+                        logger.d(file!.fileName);
+                        setState(() {
+                          _file = file;
+                        });
+                      },
+                    ),
+                    const Gap(5),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: controllers.length,
+                      itemBuilder: (context, index) {
+                        return createTextFormField(controllers[index], index);
+                      },
+                    ),
+                    const Gap(5),
+                    TextButton.icon(
+                        icon: const Icon(Icons.add),
+                        onPressed: addField,
+                        label: const Text("Add more questions")),
+                    const Gap(5),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ElevatedButton(
+                            style: const ButtonStyle(
+                                foregroundColor:
+                                    WidgetStatePropertyAll(Colors.white),
+                                backgroundColor:
+                                    WidgetStatePropertyAll(KCOLOR.brand)),
+                            onPressed: () {
+                              handleSubmit(context);
+                              // openCheckout();
+                            },
+                            child: const Text("Submit")),
+                      ],
+                    )
+                  ],
+                ).addPadding(left: 150, right: 150),
               ),
             ),
-          )
+            const Gap(10),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                    color: KCOLOR.brand,
+                    height: 80,
+                    width: double.infinity,
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AppText.smallText(
+                          "© 2015 Manipur State Power Company Ltd. All rights reserved. All contents are provided by MSPCL",
+                          color: Colors.white,
+                        ),
+                        AppText.smallText(
+                          "Powered by: Globizs Web Solutions Pvt Ltd",
+                          color: Colors.white,
+                        )
+                      ],
+                    )),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container pageHeader(BuildContext context, double mw) {
+    return Container(
+      color: KCOLOR.brand,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              InkWell(
+                onTap: () {
+                  activeTab = "Home";
+                  setState(() {});
+                },
+                child: Container(
+                  color:
+                      Colors.white.withOpacity(activeTab == "Home" ? 0.2 : 0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("Home",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.white,
+                            )),
+                  ),
+                ),
+              ),
+              const Gap(20),
+              InkWell(
+                onTap: () {
+                  activeTab = "Apply RTI";
+                  // _formKey.currentState!.reset();
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return TermAndConditions(
+                        onCancel: () {
+                          setState(() {
+                            activeTab = "Home";
+                          });
+                        },
+                      );
+                    },
+                  );
+                  setState(() {});
+                },
+                child: Container(
+                  color: Colors.white
+                      .withOpacity(activeTab == "Apply RTI" ? 0.2 : 0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Apply RTI",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ).addPadding(
+              left: mw > 650 ? 150 : 50,
+              right: mw > 650 ? 150 : 50,
+              top: 8,
+              bottom: 8),
+          InkWell(
+            onTap: () async {
+              await SharedPrefHelper.removeToken("token");
+              context.replaceNamed(KRoutes.stafflogin);
+            },
+            child: Text(
+              "Logout",
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyMedium!
+                  .copyWith(color: Colors.white),
+            ).addPadding(
+                left: mw > 650 ? 150 : 50,
+                right: mw > 650 ? 150 : 50,
+                top: 8,
+                bottom: 8),
+          ),
         ],
       ),
     );

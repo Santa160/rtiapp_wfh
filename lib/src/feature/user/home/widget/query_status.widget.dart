@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/core/shared_pref.dart';
-import 'package:rtiapp/src/feature/admin/query-status/models/res_models/query.model.dart';
+
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
 
-import 'package:rtiapp/src/initial-setup/models/status.model.dart';
+
 import 'package:shimmer_animation/shimmer_animation.dart';
 
 class QueryStatusWidget extends StatefulWidget {

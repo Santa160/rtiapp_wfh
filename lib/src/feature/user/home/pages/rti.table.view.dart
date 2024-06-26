@@ -43,7 +43,7 @@ class _RTITableViewState extends State<RTITableView> {
       },
     ).toList();
     if (l.isEmpty) {
-      msg = "No Record";
+      msg = "You have no rti application applied";
     } else {
       msg = '';
     }
@@ -57,13 +57,13 @@ class _RTITableViewState extends State<RTITableView> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
               children: [
                 const AppText.heading("RTI Application"),
-                AppText.smallText(
-                  msg,
-                  color: KCOLOR.danger,
+                const Gap(10),
+                AppBtn.outline(
+                  "Apply RTI",
+                  onPressed: () {},
                 )
               ],
             ),
@@ -86,27 +86,33 @@ class _RTITableViewState extends State<RTITableView> {
             ),
           ],
         ),
+        if (msg.isNotEmpty) AppText.heading(msg),
         const Gap(10),
-        Expanded(
-          child: RTIDataTableWidget(
-            initialLimit: initialLimit,
-            initialPage: initialPage,
-            loading: false,
-            row: data,
-            fetchData: (limit, page) async {},
-            editAction: (data) {},
-            column: const [
-              "Sl no",
-              "Application No",
-              "Date",
-              "Status",
-              "",
-            ],
-            viewAction: (data) {
-              widget.onViewTab(data);
-            },
+        // if (data.isEmpty) Expanded(child: Container()),
+        if (data.isNotEmpty)
+          SizedBox(
+            height: data.length == 1
+                ? 55 * (data.length + 1)
+                : 55 * data.length.toDouble(),
+            child: RTIDataTableWidget(
+              initialLimit: initialLimit,
+              initialPage: initialPage,
+              loading: false,
+              row: data,
+              fetchData: (limit, page) async {},
+              editAction: (data) {},
+              column: const [
+                "Sl no",
+                "Application No",
+                "Date",
+                "Status",
+                "",
+              ],
+              viewAction: (data) {
+                widget.onViewTab(data);
+              },
+            ),
           ),
-        ),
       ],
     );
 

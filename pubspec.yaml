@@ -61,6 +61,8 @@ dependencies:
   data_table_2: ^2.5.12
   image_network: ^2.5.6
   url_launcher: ^6.3.0
+  razorpay_web: ^1.4.2
+  fluttertoast: ^8.2.6
 
 dev_dependencies:
   flutter_test:

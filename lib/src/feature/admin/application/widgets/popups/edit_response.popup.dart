@@ -115,7 +115,6 @@ class _EditResponsePopupState extends State<EditResponsePopup> {
                         ...doc.map(
                           (e) {
                             return Stack(
-                              
                               key: UniqueKey(),
                               children: [
                                 Container(
@@ -257,10 +256,10 @@ class _EditResponsePopupState extends State<EditResponsePopup> {
                       }
 
                       var updateResponse = await service.updateResponse(
-                        widget.response['id'],
-                        responseTextController.text,
-                        files,
-                      );
+                          widget.response['id'],
+                          responseTextController.text,
+                          files,
+                          "${_selectedStatus!.id}");
 
                       if (updateResponse['success']) {
                         Navigator.pop(context);

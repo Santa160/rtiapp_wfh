@@ -99,7 +99,7 @@ class ApplicationService extends RTIStaffInterface {
 
   @override
   Future updateResponse(String rtiResId, String responseText,
-      List<StringUint8ListModel> files) async {
+      List<StringUint8ListModel> files, String rtiQueryStatusId) async {
     List<MultipartFile> f = [];
 
     for (var element in files) {
@@ -111,6 +111,7 @@ class ApplicationService extends RTIStaffInterface {
     }
     var formdata = FormData.fromMap({
       "document[]": f,
+      "rti_query_status": rtiQueryStatusId,
       "rti_response_id": rtiResId,
       "response": responseText
     });
