@@ -109,18 +109,18 @@ class SideNavPage extends StatelessWidget {
                         },
                       ),
                     ),
-                    InkWell(
-                      onTap: () async {
-                        await SharedPrefHelper.removeToken("token");
-                        context.goNamed(KRoutes.adminlogin);
-                      },
-                      child: const SizedBox(
-                          width: 100,
-                          child: Text(
-                            "Logout",
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    ),
+                    // InkWell(
+                    //   onTap: () async {
+                    //     await SharedPrefHelper.removeToken("token");
+                    //     context.goNamed(KRoutes.adminlogin);
+                    //   },
+                    //   child: const SizedBox(
+                    //       width: 100,
+                    //       child: Text(
+                    //         "Logout",
+                    //         style: TextStyle(color: Colors.white),
+                    //       )),
+                    // ),
                   ],
                 )),
           Expanded(child: child)
