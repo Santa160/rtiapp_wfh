@@ -106,7 +106,6 @@ class _HomePageState extends State<HomePage> {
     if (res['success']) {
       controllers.clear();
       addField();
-      isPaymentFailed = false;
       EasyLoading.dismiss();
     }
     showDialog(
@@ -267,6 +266,7 @@ class _HomePageState extends State<HomePage> {
                 top: 10, left: mw > 650 ? 150 : 50, right: mw > 650 ? 150 : 50),
             const Gap(10),
             pageHeader(context, mw),
+            Text(isPaymentFailed.toString()),
             Visibility(
                 visible: activeTab == "View",
                 child: RTIViewPage(
@@ -341,15 +341,17 @@ class _HomePageState extends State<HomePage> {
                               // openCheckout();
                             },
                             child: const Text("Submit")),
-                        if (isPaymentFailed) ...[
-                          const Gap(10),
-                          AppBtn.outline(
-                            "Pay",
-                            onPressed: () {
-                              openCheckout();
-                            },
-                          )
-                        ],
+                        if (isPaymentFailed)
+                          ElevatedButton(
+                              style: const ButtonStyle(
+                                  foregroundColor:
+                                      WidgetStatePropertyAll(Colors.white),
+                                  backgroundColor:
+                                      WidgetStatePropertyAll(KCOLOR.brand)),
+                              onPressed: () {
+                                openCheckout();
+                              },
+                              child: const Text("Pay")),
                       ],
                     )
                   ],
