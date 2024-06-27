@@ -87,10 +87,13 @@ class _RTIViewPageState extends State<RTIViewPage> {
 
   void _handlePaymentError(PaymentFailureResponse response) {
     unsuccessfulMsg = response.message!;
+    EasyLoading.dismiss();
     setState(() {});
   }
 
-  void _handleExternalWallet(ExternalWalletResponse response) {}
+  void _handleExternalWallet(ExternalWalletResponse response) {
+    EasyLoading.dismiss();
+  }
 
   getRTIDetials() async {
     var res =
@@ -298,23 +301,35 @@ class _RTIViewPageState extends State<RTIViewPage> {
       children: [
         const Gap(10),
         const AppText.heading("Queries", color: KCOLOR.brand),
-        if (unsuccessfulMsg.isNotEmpty) AppText.subheading(unsuccessfulMsg),
         if (data["view_response_text"].toString() != "null") ...[
           const Divider(),
           Row(
             children: [
-              const Icon(
-                Icons.warning_amber,
-                color: KCOLOR.warning,
-              ),
               AppText.subheading(" ${data['view_response_text']}",
                   color: KCOLOR.black),
             ],
           ),
+          if (unsuccessfulMsg.isNotEmpty)
+            Row(
+              children: [
+                const Icon(
+                  Icons.warning_amber,
+                  color: KCOLOR.danger,
+                ),
+                AppText.subheading(
+                  unsuccessfulMsg,
+                  color: KCOLOR.danger,
+                ),
+              ],
+            ).addPadding(bottom: 20),
           const Divider(),
           AppBtn.fill(
             "Pay",
             onPressed: () async {
+              EasyLoading.show(
+                  status: "Please wait",
+                  dismissOnTap: false,
+                  maskType: EasyLoadingMaskType.black);
               var paymentOrderDetail =
                   await _service.fetchPaymentDetailForResponse(widget.rtiId);
               if (paymentOrderDetail['success']) {

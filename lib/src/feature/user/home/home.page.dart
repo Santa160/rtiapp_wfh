@@ -193,7 +193,7 @@ class _HomePageState extends State<HomePage> {
 
       var service = RTIService();
 
-      EasyLoading.show(status: "Please wait $_file");
+      EasyLoading.show(status: "Please wait");
 
       var res =
           await service.createRTI(loQ, _file, _selectedPia!["id"].toString());
