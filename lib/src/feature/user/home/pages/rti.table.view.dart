@@ -97,7 +97,7 @@ class _RTITableViewState extends State<RTITableView> {
           ),
         if (data.isNotEmpty)
           SizedBox(
-            height: data.isEmpty || data.length < 2
+            height: data.isEmpty || data.length < 5
                 ? 400
                 : 55 * data.length.toDouble(),
             child: RTIDataTableWidget(

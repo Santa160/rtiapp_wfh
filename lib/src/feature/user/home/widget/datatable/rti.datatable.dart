@@ -79,8 +79,8 @@ class RTIDataTableWidget extends StatelessWidget {
                             page: initialPage,
                             index: row.indexOf(e))
                         .toString())), // Adjust as per your data model
-                    DataCell(
-                        Text(e["rti_no"])), // Adjust as per your data model
+                    DataCell(Text(
+                        "${e["rti_no"]} ||${e['id']}")), // Adjust as per your data model
                     DataCell(Text(e["created_at"]
                         .toString()
                         .getFormattedDate())), // Adjust as per your data model

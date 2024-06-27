@@ -143,4 +143,36 @@ class RTIService extends RTIInterface {
       logger.e('Unexpected error: $e');
     }
   }
+
+  @override
+  Future confirmResponsePayment(Map<String, dynamic> paymentOrderDetail) async {
+    try {
+      var res = await dio.post(EndPoint.responsePaymentConfirmation,
+          data: paymentOrderDetail);
+
+      var data = res.data;
+
+      return data;
+    } on DioException catch (e) {
+      handleDioException(e);
+    } catch (e) {
+      logger.e('Unexpected error: $e');
+    }
+  }
+
+  @override
+  Future fetchPaymentDetailForResponse(String rtiId) async {
+    var formData = FormData.fromMap({"rti_id": rtiId});
+    try {
+      var res = await dio.post(EndPoint.pay, data: formData);
+
+      var data = res.data;
+
+      return data;
+    } on DioException catch (e) {
+      handleDioException(e);
+    } catch (e) {
+      logger.e('Unexpected error: $e');
+    }
+  }
 }

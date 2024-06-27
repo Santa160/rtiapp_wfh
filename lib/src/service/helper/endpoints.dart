@@ -16,6 +16,9 @@ class EndPoint {
       "/api/rti-responses/delete-response-document"; //GET POST
   static const rtiStatusLog = "/api/rti-status-logs"; //GET
   static const paymentConfirmation = "/api/payments/confirm"; //GET
+  static const responsePaymentConfirmation =
+      "/api/response-payments/confirm"; //GET
+  static const pay = "/api//rti-response-payments/pay"; //GET
   static const rtistatus = "/api/status"; //GET
 
   //citizen apis

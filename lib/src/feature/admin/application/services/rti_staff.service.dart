@@ -22,7 +22,8 @@ class ApplicationService extends RTIStaffInterface {
   }
 
   @override
-  Future updateRTIApplicationStatus(int rtiId, int statusId) async {
+  Future updateRTIApplicationStatus(
+      int rtiId, int statusId, int pageCount) async {
     var userinfo = SharedPrefHelper.getUserInfo();
 
     if (userinfo != null) {
@@ -30,7 +31,8 @@ class ApplicationService extends RTIStaffInterface {
         var res = await dio.post(EndPoint.rtiStatusUpdate, data: {
           "rti_id": rtiId,
           "status_id": statusId,
-          "staff_id": userinfo.id
+          "staff_id": userinfo.id,
+          "page_count": pageCount
         });
         return res.data;
       } on DioException catch (e) {

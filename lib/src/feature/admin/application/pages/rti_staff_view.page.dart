@@ -43,6 +43,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
   List queries = [];
   List<StringUint8ListModel> _files = [];
   TextEditingController controller = TextEditingController();
+  TextEditingController pageCountController = TextEditingController();
 
 //rti logs
   List<Map<String, dynamic>> logsData = [];
@@ -51,6 +52,10 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
 
   int initialPage = 1;
   int initialLimit = 5;
+
+  var statusId;
+
+  final _pageForm = GlobalKey<FormState>();
 
   getRTIDetials() async {
     var res = await RTIService()
@@ -406,7 +411,6 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  
                   const Text(
                     "Response",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -663,6 +667,26 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
+                        actions: [
+                          AppBtn.fill(
+                            "Update",
+                            onPressed: () async {
+                              if (_pageForm.currentState!.validate()) {
+                                var service = ApplicationService();
+                                var res =
+                                    await service.updateRTIApplicationStatus(
+                                        int.parse(data["id"]),
+                                        statusId,
+                                        int.parse(pageCountController.text));
+                                if (res["success"]) {
+                                  EasyLoading.showSuccess(res["message"]);
+                                  Navigator.pop(context);
+                                  getRTIDetials();
+                                }
+                              }
+                            },
+                          )
+                        ],
                         contentPadding: const EdgeInsets.all(30),
                         title: const AppText.heading(
                           "Status Update",
@@ -672,17 +696,26 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                           children: [
                             ApplicationStatusDropdown(
                                 onChanged: (status) async {
-                                  var service = ApplicationService();
-                                  var res =
-                                      await service.updateRTIApplicationStatus(
-                                          int.parse(data["id"]), status.id);
-                                  if (res["success"]) {
-                                    EasyLoading.showSuccess(res["message"]);
-                                    Navigator.pop(context);
-                                    getRTIDetials();
-                                  }
+                                  statusId = status.id;
+                                  setState(() {});
                                 },
                                 initialId: data["status"]),
+                            const Gap(10),
+                            Form(
+                              key: _pageForm,
+                              child: TextFormField(
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return "Please enter page number";
+                                  }
+                                  return null;
+                                },
+                                controller: pageCountController,
+                                decoration: const InputDecoration(
+                                    label: Text("Page"),
+                                    hintText: "Enter total number of document"),
+                              ),
+                            ),
                             const Gap(20)
                           ],
                         ),

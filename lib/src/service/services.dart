@@ -30,6 +30,9 @@ abstract class RTIInterface extends ServiceIterface {
   Future<dynamic> fetchRTIDetails(String id, int? page, int? limit);
   Future<dynamic> fetchRTIStatus();
   Future<dynamic> confirmPayment(Map<String, dynamic> paymentOrderDetail);
+  Future<dynamic> confirmResponsePayment(
+      Map<String, dynamic> paymentOrderDetail);
+  Future<dynamic> fetchPaymentDetailForResponse(String rtiId);
 }
 
 abstract class StaffAuthentication extends ServiceIterface {
@@ -80,7 +83,8 @@ abstract class RTIStatusInterface extends ServiceIterface {
 
 abstract class RTIStaffInterface extends ServiceIterface {
   Future<dynamic> fetchRTIApplicationStaff(int page, int limit);
-  Future<dynamic> updateRTIApplicationStatus(int rtiId, int statusId);
+  Future<dynamic> updateRTIApplicationStatus(
+      int rtiId, int statusId, int pageCount);
   Future<dynamic> createQueryResponse(
       Map<String, dynamic> data, List<StringUint8ListModel> files);
   Future<dynamic> fetchResponseById(String id);

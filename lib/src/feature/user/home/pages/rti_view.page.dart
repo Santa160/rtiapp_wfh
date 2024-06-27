@@ -1,7 +1,10 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:gap/gap.dart';
 import 'package:image_network/image_network.dart';
+import 'package:razorpay_web/razorpay_web.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/widget/pagination.widget.dart';
 import 'package:rtiapp/src/common/widget/serial_number.dart';
@@ -10,11 +13,14 @@ import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 
 import 'package:rtiapp/src/feature/admin/application/widgets/popups/view_responses.popup.dart';
+import 'package:rtiapp/src/feature/user/home/helper/payment.helper.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/widget/query_status.widget.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+var _service = RTIService();
 
 class RTIViewPage extends StatefulWidget {
   const RTIViewPage({super.key, required this.rtiId, required this.onBackTab});
@@ -26,7 +32,9 @@ class RTIViewPage extends StatefulWidget {
 }
 
 class _RTIViewPageState extends State<RTIViewPage> {
-  Map<String, dynamic> data = {"status": " "};
+  Map<String, dynamic> data = {
+    "status": " ",
+  };
   // List<QueryStatusModel>? _queryStatus;
 
   Map<String, dynamic> citizenDetails = {};
@@ -42,24 +50,60 @@ class _RTIViewPageState extends State<RTIViewPage> {
 
   Map<String, dynamic> pagination = {};
 
+  Map<String, dynamic> paymentOption = {};
+
   int initialPage = 1;
   int initialLimit = 5;
 
+  late Razorpay _razorpay;
+
   @override
   void initState() {
-    getRTIDetials();
-
     super.initState();
+    _razorpay = Razorpay();
+
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+
+    getRTIDetials();
   }
 
-  getRTIDetials() async {
-    var res = await RTIService()
-        .fetchRTIDetails(widget.rtiId, initialPage, initialLimit);
-    // var queryStatus = await SharedPrefHelper.getQueryStatus();
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
+    var order = {
+      "razorpay_order_id": response.orderId,
+      "razorpay_payment_id": response.paymentId,
+      "razorpay_signature": response.signature
+    };
 
+    var res = await _service.confirmResponsePayment(order);
+    if (res['success']) {
+      EasyLoading.showSuccess(res['message']);
+      getRTIDetials();
+    }
+  }
+
+  String unsuccessfulMsg = '';
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    unsuccessfulMsg = response.message!;
+    setState(() {});
+  }
+
+  void _handleExternalWallet(ExternalWalletResponse response) {}
+
+  getRTIDetials() async {
+    var res =
+        await _service.fetchRTIDetails(widget.rtiId, initialPage, initialLimit);
+    // var queryStatus = await SharedPrefHelper.getQueryStatus();
+    Fluttertoast.showToast(
+        msg: "RTI ID : ${widget.rtiId}",
+        webShowClose: true,
+        timeInSecForIosWeb: 1000);
     setState(() {
       // _queryStatus = queryStatus;
       data = res["data"];
+
       citizenDetails = res["data"]["citizen_details"];
       applicationNo = res["data"]["rti_no"];
       queries = res["data"]["queries"];
@@ -163,44 +207,44 @@ class _RTIViewPageState extends State<RTIViewPage> {
             ],
             const Gap(20),
             _queries(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const AppText.heading(
-                  "RTI Status logs",
-                  color: KCOLOR.brand,
-                ),
-                PaginationBtn(
-                  initialPage: initialPage,
-                  next: () {
-                    if (initialPage < pagination['pageCount']) {
-                      initialPage++;
-                      setState(() {
-                        getRTIDetials();
-                      });
-                    }
-                  },
-                  previous: () {
-                    if (initialPage > 1) {
-                      initialPage--;
-                      setState(() {
-                        getRTIDetials();
-                      });
-                    }
-                  },
-                ),
-              ],
-            ),
-            const Gap(10),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     const AppText.heading(
+            //       "RTI Status logs",
+            //       color: KCOLOR.brand,
+            //     ),
+            //     PaginationBtn(
+            //       initialPage: initialPage,
+            //       next: () {
+            //         if (initialPage < pagination['pageCount']) {
+            //           initialPage++;
+            //           setState(() {
+            //             getRTIDetials();
+            //           });
+            //         }
+            //       },
+            //       previous: () {
+            //         if (initialPage > 1) {
+            //           initialPage--;
+            //           setState(() {
+            //             getRTIDetials();
+            //           });
+            //         }
+            //       },
+            //     ),
+            //   ],
+            // ),
+            // const Gap(10),
 
-            Container(
-              color: KCOLOR.shade3,
-              height: queries.length == 1
-                  ? 55 * (queries.length + 1)
-                  : 55 * queries.length.toDouble(),
-              child: _logsTableData(),
-            ),
-            const Gap(10),
+            // Container(
+            //   color: KCOLOR.shade3,
+            //   height: queries.length == 1
+            //       ? 55 * (queries.length + 1)
+            //       : 55 * queries.length.toDouble(),
+            //   child: _logsTableData(),
+            // ),
+            // const Gap(10),
 
             // _tableData()
             //BPL
@@ -254,6 +298,38 @@ class _RTIViewPageState extends State<RTIViewPage> {
       children: [
         const Gap(10),
         const AppText.heading("Queries", color: KCOLOR.brand),
+        if (unsuccessfulMsg.isNotEmpty) AppText.subheading(unsuccessfulMsg),
+        if (data["view_response_text"].toString() != "null") ...[
+          const Divider(),
+          Row(
+            children: [
+              const Icon(
+                Icons.warning_amber,
+                color: KCOLOR.warning,
+              ),
+              AppText.subheading(" ${data['view_response_text']}",
+                  color: KCOLOR.black),
+            ],
+          ),
+          const Divider(),
+          AppBtn.fill(
+            "Pay",
+            onPressed: () async {
+              var paymentOrderDetail =
+                  await _service.fetchPaymentDetailForResponse(widget.rtiId);
+              if (paymentOrderDetail['success']) {
+                paymentOption = paymentOrderDetail["data"]['order'];
+                setState(() {});
+
+                try {
+                  _razorpay.open(paymentOption);
+                } catch (e) {
+                  debugPrint('Error: e');
+                }
+              }
+            },
+          ),
+        ],
         const Gap(5),
         ListView.builder(
           shrinkWrap: true,
@@ -285,30 +361,32 @@ class _RTIViewPageState extends State<RTIViewPage> {
                             )),
                       ],
                     ),
-                    AppBtn.outline(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              actions: [
-                                AppBtn.fill(
-                                  "Close",
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                )
-                              ],
-                              title: const AppText.heading("Responses"),
-                              content: ViewResponsePopup(
-                                data: queries[index],
-                              ),
-                            );
-                          },
-                        );
-                      },
-                      "View response",
-                    ),
+                    if (queries[index]["response"].toString() != "null" &&
+                        data["can_view_response"] == "1")
+                      AppBtn.outline(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                actions: [
+                                  AppBtn.fill(
+                                    "Close",
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  )
+                                ],
+                                title: const AppText.heading("Responses"),
+                                content: ViewResponsePopup(
+                                  data: queries[index],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        "View response",
+                      ),
                   ],
                 ),
               ),
