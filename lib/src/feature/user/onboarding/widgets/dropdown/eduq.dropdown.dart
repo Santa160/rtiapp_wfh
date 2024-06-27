@@ -16,7 +16,7 @@ class EduQDropdownForm extends StatefulWidget {
 
 class _EduQDropdownFormState extends State<EduQDropdownForm> {
   Map<String, dynamic>? _selectedEduQ;
-  String? _isLiterate = "Illiterate";
+  String? _isLiterate = "Literate";
 
   var state = OnboardingServices();
 

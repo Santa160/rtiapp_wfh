@@ -7,6 +7,7 @@ import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/feature/user/home/widget/datatable/rti.datatable.dart';
 
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class RTITableView extends StatefulWidget {
   const RTITableView({super.key, required this.onViewTab});
@@ -88,11 +89,16 @@ class _RTITableViewState extends State<RTITableView> {
         ),
         if (msg.isNotEmpty) AppText.heading(msg),
         const Gap(10),
-        // if (data.isEmpty) Expanded(child: Container()),
+        if (data.isEmpty)
+          Shimmer(
+            child: const Placeholder(
+              color: Colors.transparent,
+            ),
+          ),
         if (data.isNotEmpty)
           SizedBox(
-            height: data.length == 1
-                ? 55 * (data.length + 1)
+            height: data.isEmpty || data.length < 2
+                ? 400
                 : 55 * data.length.toDouble(),
             child: RTIDataTableWidget(
               initialLimit: initialLimit,

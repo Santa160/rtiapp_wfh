@@ -38,6 +38,8 @@ class _HomePageState extends State<HomePage> {
 
   bool isPaymentFailed = false;
 
+  String errorMsg = '';
+
   @override
   void initState() {
     super.initState();
@@ -107,6 +109,7 @@ class _HomePageState extends State<HomePage> {
       controllers.clear();
       addField();
       isPaymentFailed = false;
+      paymentOption.clear();
       EasyLoading.dismiss();
     }
     showDialog(
@@ -157,10 +160,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    EasyLoading.showError(
-      "ERROR: ${response.code} - ${response.message!}",
-    );
+    EasyLoading.dismiss();
     isPaymentFailed = true;
+    errorMsg = "${response.message}";
     setState(() {});
   }
 
@@ -191,7 +193,7 @@ class _HomePageState extends State<HomePage> {
 
       var service = RTIService();
 
-      EasyLoading.show(status: "Please wait");
+      EasyLoading.show(status: "Please wait $_file");
 
       var res =
           await service.createRTI(loQ, _file, _selectedPia!["id"].toString());
@@ -272,6 +274,8 @@ class _HomePageState extends State<HomePage> {
                 child: RTIViewPage(
                   onBackTab: () {
                     activeTab = "Home";
+                    controllers.clear();
+                    addField();
                     setState(() {});
                   },
                   rtiId: rtiId,
@@ -307,7 +311,6 @@ class _HomePageState extends State<HomePage> {
                         });
                       },
                       file: (file) {
-                        logger.d(file!.fileName);
                         setState(() {
                           _file = file;
                         });
@@ -327,6 +330,43 @@ class _HomePageState extends State<HomePage> {
                         onPressed: addField,
                         label: const Text("Add more questions")),
                     const Gap(5),
+                    if (errorMsg.isNotEmpty)
+                      Container(
+                          margin: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: KCOLOR.danger.withOpacity(0.03),
+                            border: const Border(
+                              left: BorderSide(color: KCOLOR.danger, width: 2),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const AppText.subheading("Payment Failed!",
+                                      color: KCOLOR.danger),
+                                  AppText.smallText(errorMsg),
+                                  const AppText.smallText(
+                                      "Try after sometime or click pay to continue try again"),
+                                  const Gap(10)
+                                ],
+                              ).addPadding(bottom: 20),
+                              if (isPaymentFailed)
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 20),
+                                  child: AppBtn.outline(
+                                    "Pay",
+                                    onPressed: () {
+                                      errorMsg = '';
+                                      setState(() {});
+                                      openCheckout();
+                                    },
+                                  ),
+                                )
+                            ],
+                          )),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -341,15 +381,6 @@ class _HomePageState extends State<HomePage> {
                               // openCheckout();
                             },
                             child: const Text("Submit")),
-                        if (isPaymentFailed) ...[
-                          const Gap(10),
-                          AppBtn.outline(
-                            "Pay",
-                            onPressed: () {
-                              openCheckout();
-                            },
-                          )
-                        ],
                       ],
                     )
                   ],
@@ -357,6 +388,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             const Gap(10),
+            if (controllers.length < 3) Container(height: 130),
             const FooterWidget()
           ],
         ),
@@ -375,6 +407,9 @@ class _HomePageState extends State<HomePage> {
               InkWell(
                 onTap: () {
                   activeTab = "Home";
+                  paymentOption.clear();
+
+                  errorMsg = '';
                   setState(() {});
                 },
                 child: Container(
@@ -394,6 +429,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   activeTab = "Apply RTI";
                   // _formKey.currentState!.reset();
+
                   showDialog(
                     barrierDismissible: false,
                     context: context,

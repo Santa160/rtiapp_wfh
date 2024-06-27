@@ -14,8 +14,7 @@ class UploadFileWidget extends StatefulWidget {
 class _UploadFileWidgetState extends State<UploadFileWidget> {
   String _fileName = '';
 
-  late FilePickerModel filePickerModel;
-
+  FilePickerModel? filePickerModel;
 
   @override
   Widget build(BuildContext context) {
@@ -63,23 +62,33 @@ class _UploadFileWidgetState extends State<UploadFileWidget> {
                         allowedExtensions: ['jpg', 'jpeg', 'png'],
                       );
 
-                      var byte = result?.files.first.bytes;
-                      var name = result?.files.first.name;
+                      if (result != null && result.files.isNotEmpty) {
+                        var byte = result.files.first.bytes;
+                        var name = result.files.first.name;
 
-                      _fileName = name ?? 'No File';
+                        _fileName = name;
 
-                      var fileModel =
-                          FilePickerModel(fileName: name, bytes: byte);
+                        var fileModel =
+                            FilePickerModel(fileName: name, bytes: byte);
 
-                      widget.onFilePicked(fileModel); // return the file to parent class
-                      setState(() {});
+                        widget.onFilePicked(
+                            fileModel); // return the file to parent class
+
+                        setState(() {});
+                      } else {
+                        widget.onFilePicked(null);
+                        _fileName = 'No File';
+
+                        setState(() {});
+                        // Optionally handle the case when no file is picked, e.g., show a message to the user
+                      }
                     },
-                    child: Center(
+                    child: const Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        padding: EdgeInsets.symmetric(horizontal: 20),
                         child: Text(
-                          _fileName.isNotEmpty ? "Uploaded" : "Choose File",
-                          style: const TextStyle(color: Colors.white),
+                          "Choose File",
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),

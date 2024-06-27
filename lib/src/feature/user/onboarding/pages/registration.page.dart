@@ -60,20 +60,13 @@ class _ResgistrationPageState extends State<ResgistrationPage> {
             child: Row(
               children: [
                 Text(
-                  "Home",
+                  "Registration",
                   style: Theme.of(context)
                       .textTheme
                       .bodyMedium!
                       .copyWith(color: Colors.white),
                 ),
                 const Gap(20),
-                Text(
-                  "Apply RTI",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: Colors.white),
-                ),
               ],
             ).addPadding(left: 150, right: 150, bottom: 20),
           ),
