@@ -99,21 +99,28 @@ class _TermAndConditionsState extends State<TermAndConditions> {
               ),
             )),
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Checkbox.adaptive(
-                  value: isAgreed,
-                  onChanged: (value) {
-                    isAgreed = !isAgreed;
-                    setState(() {});
-                  },
-                ),
-                const Text(
-                  "I have read and understood the above guidelines.",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ],
+            InkWell(
+              onTap: () {
+                isAgreed = !isAgreed;
+                setState(() {});
+              },
+              
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Checkbox.adaptive(
+                    value: isAgreed,
+                    onChanged: (value) {
+                      isAgreed = !isAgreed;
+                      setState(() {});
+                    },
+                  ),
+                  const Text(
+                    "I have read and understood the above guidelines.",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
             ),
             const Gap(20),
             Row(

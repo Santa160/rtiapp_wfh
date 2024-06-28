@@ -6,14 +6,12 @@ import 'package:gap/gap.dart';
 import 'package:image_network/image_network.dart';
 import 'package:razorpay_web/razorpay_web.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
-import 'package:rtiapp/src/common/widget/pagination.widget.dart';
 import 'package:rtiapp/src/common/widget/serial_number.dart';
 
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 
 import 'package:rtiapp/src/feature/admin/application/widgets/popups/view_responses.popup.dart';
-import 'package:rtiapp/src/feature/user/home/helper/payment.helper.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/widget/query_status.widget.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';

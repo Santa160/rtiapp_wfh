@@ -20,7 +20,7 @@ class FooterWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 AppText.smallText(
-                  "© 2015 Manipur State Power Company Ltd. All rights reserved. All contents are provided by MSPCL",
+                  "© 2024 Manipur State Power Company Ltd. All rights reserved. All contents are provided by MSPCL",
                   color: Colors.white,
                 ),
                 AppText.smallText(

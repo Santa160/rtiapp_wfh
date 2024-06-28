@@ -3,6 +3,8 @@ import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/widget/serial_number.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
+import 'package:rtiapp/src/core/shared_pref.dart';
+
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 
 import 'package:shimmer_animation/shimmer_animation.dart';
@@ -31,6 +33,7 @@ class RTIDataTableWidget extends StatelessWidget {
   final void Function(dynamic data)? editAction;
   final void Function(dynamic data)? deleteAction;
   final void Function(dynamic data)? viewAction;
+
   final int initialPage;
   final int initialLimit;
   final bool loading;
@@ -45,6 +48,7 @@ class RTIDataTableWidget extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: DataTable2(
+          smRatio: 0.40,
           isVerticalScrollBarVisible: row.length >= 10 ? true : false,
           isHorizontalScrollBarVisible: row.length >= 10 ? true : false,
           headingRowColor: const WidgetStatePropertyAll(KCOLOR.shade1),
@@ -54,14 +58,17 @@ class RTIDataTableWidget extends StatelessWidget {
               initialCoun = row.length;
               initialcolumn = column;
               return DataColumn2(
-                numeric: e == "Action" || e == "Sl no",
-                size: e == "Sl no" ? ColumnSize.S : ColumnSize.M,
-                label: Padding(
-                  padding: const EdgeInsets.only(right: 22),
-                  child: Text(
-                    e,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                // numeric: e == "Action" || e == "Sl no",
+                size: e == "Application No"
+                    ? ColumnSize.L
+                    : e == 'Sl no'
+                        ? ColumnSize.S
+                        : e == 'Action'
+                            ? ColumnSize.S
+                            : ColumnSize.M,
+                label: Text(
+                  e,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               );
             },
@@ -80,24 +87,20 @@ class RTIDataTableWidget extends StatelessWidget {
                             index: row.indexOf(e))
                         .toString())), // Adjust as per your data model
                     DataCell(Text(
-                        "${e["rti_no"]} ||${e['id']}")), // Adjust as per your data model
-                    DataCell(Text(e["created_at"]
-                        .toString()
-                        .getFormattedDate())), // Adjust as per your data model
+                        "${e["rti_no"]}")), // Adjust as per your data model
+                    DataCell(
+                        Text(e["created_at"].toString().getFormattedDate())),
+                    DataCell(Text(e["days_pending"] ??
+                        0)), // Adjust as per your data model
                     DataCell(RTIStatusWidget(
                       id: int.parse(e["status_id"]),
                     )), // Adjust as per your data model
 
-                    DataCell(Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        AppBtn.fill(
-                          "view",
-                          onPressed: () {
-                            viewAction!(e);
-                          },
-                        ),
-                      ],
+                    DataCell(AppBtn.fill(
+                      "View",
+                      onPressed: () {
+                        viewAction!(e);
+                      },
                     )),
                   ]);
             },

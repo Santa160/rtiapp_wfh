@@ -8,7 +8,10 @@ class EduQDropdownForm extends StatefulWidget {
   const EduQDropdownForm({
     super.key,
     required this.onEduQChanged,
+    required this.educationForm,
   });
+
+  final GlobalKey<FormState> educationForm;
 
   @override
   State<EduQDropdownForm> createState() => _EduQDropdownFormState();
@@ -23,7 +26,7 @@ class _EduQDropdownFormState extends State<EduQDropdownForm> {
   final List<Map<String, dynamic>> _listOfEduQ = [];
 
   var dto = {
-    'education_status': '1', //1=Literate, 0= Illiterate
+    'education_status': 'Literate', //1=Literate, 0= Illiterate
     'qualification_id': '3', //
   };
 
@@ -50,78 +53,82 @@ class _EduQDropdownFormState extends State<EduQDropdownForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          children: [
-            Row(
-              children: [
-                Radio(
-                    value: "Literate",
-                    groupValue: _isLiterate,
-                    onChanged: (value) {
-                      setState(() {
-                        _isLiterate = value;
-                        dto["education_status"] = value!;
-                      });
-                      _updatedEduQ();
-                    }),
-                const Text("Literate")
-              ],
-            ),
-            Row(
-              children: [
-                Radio(
-                    value: "Illiterate",
-                    groupValue: _isLiterate,
-                    onChanged: (value) {
-                      setState(() {
-                        _isLiterate = value;
-                        dto["education_status"] = value!;
-                      });
-                      dto["qualification_id"] = '3';
-                      _updatedEduQ();
-                    }),
-                const Text("Illiterate")
-              ],
-            ),
-          ],
-        ),
-        if (_isLiterate == "Literate")
-          DropdownButtonFormField<Map<String, dynamic>>(
-            autovalidateMode: AutovalidateMode.onUserInteraction,
-            decoration: InputDecoration(
-              labelText: _selectedEduQ == null ? 'Education Qualification' : '',
-              labelStyle: const TextStyle(color: Colors.grey),
-              border: const OutlineInputBorder(),
-            ),
-            value: _selectedEduQ,
-            items: _listOfEduQ.map((Map<String, dynamic> value) {
-              return DropdownMenuItem<Map<String, dynamic>>(
-                value: value,
-                child: Text(value["name"]),
-              );
-            }).toList(),
-            onChanged: _isLiterate == "Literate"
-                ? (Map<String, dynamic>? newValue) async {
-                    setState(() {
-                      _selectedEduQ = newValue;
-                    });
-                    dto["qualification_id"] = newValue!["id"].toString();
-                    _updatedEduQ();
-                  }
-                : null,
-            validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Select Education Qualification';
-              }
-              if (_isLiterate == 'Illiterate') {
-                return null;
-              }
-              return null;
-            },
+    return Form(
+      key: widget.educationForm,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Row(
+                children: [
+                  Radio(
+                      value: "Literate",
+                      groupValue: _isLiterate,
+                      onChanged: (value) {
+                        setState(() {
+                          _isLiterate = value;
+                          dto["education_status"] = value!;
+                        });
+                        _updatedEduQ();
+                      }),
+                  const Text("Literate")
+                ],
+              ),
+              Row(
+                children: [
+                  Radio(
+                      value: "Illiterate",
+                      groupValue: _isLiterate,
+                      onChanged: (value) {
+                        setState(() {
+                          _isLiterate = value;
+                          dto["education_status"] = value!;
+                        });
+                        dto["qualification_id"] = '3';
+                        _updatedEduQ();
+                      }),
+                  const Text("Illiterate")
+                ],
+              ),
+            ],
           ),
-      ],
+          if (_isLiterate == "Literate")
+            DropdownButtonFormField<Map<String, dynamic>>(
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              decoration: InputDecoration(
+                labelText:
+                    _selectedEduQ == null ? 'Education Qualification' : '',
+                labelStyle: const TextStyle(color: Colors.grey),
+                border: const OutlineInputBorder(),
+              ),
+              value: _selectedEduQ,
+              items: _listOfEduQ.map((Map<String, dynamic> value) {
+                return DropdownMenuItem<Map<String, dynamic>>(
+                  value: value,
+                  child: Text(value["name"]),
+                );
+              }).toList(),
+              onChanged: _isLiterate == "Literate"
+                  ? (Map<String, dynamic>? newValue) async {
+                      setState(() {
+                        _selectedEduQ = newValue;
+                      });
+                      dto["qualification_id"] = newValue!["id"].toString();
+                      _updatedEduQ();
+                    }
+                  : null,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Select Education Qualification';
+                }
+                if (_isLiterate == 'Illiterate') {
+                  return null;
+                }
+                return null;
+              },
+            ),
+        ],
+      ),
     );
   }
 }

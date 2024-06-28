@@ -31,6 +31,7 @@ class HeaderWidget extends StatelessWidget {
                 onSelected: (value) async {
                   if (value == "Logout") {
                     await SharedPrefHelper.removeToken("token");
+                    await SharedPrefHelper.deleletUserInfo();
                     context.goNamed(KRoutes.adminlogin);
                   }
                 },

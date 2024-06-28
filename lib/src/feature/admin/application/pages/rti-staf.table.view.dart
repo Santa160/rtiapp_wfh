@@ -96,6 +96,7 @@ class _RTIStaffTableViewState extends State<RTIStaffTableView> {
               "Sl no",
               "Application No",
               "Date",
+              "Days Pending",
               "Status",
               "Action",
             ],

@@ -25,7 +25,8 @@ abstract class RTIInterface extends ServiceIterface {
   Future<dynamic> createRTI(
       List<String> questions, FilePickerModel? file, String piaId);
   Future<dynamic> fetchTermAndConditions();
-  Future<dynamic> fetchRTIs(int page, int limit);
+  Future<dynamic> fetchRTIs(int page, int limit,
+      {String? rtiid, String? statusid});
   Future<dynamic> fetchRTIStatusLogsByRTIID(String rtiId, int page, int limit);
   Future<dynamic> fetchRTIDetails(String id, int? page, int? limit);
   Future<dynamic> fetchRTIStatus();

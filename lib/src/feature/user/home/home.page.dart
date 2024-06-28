@@ -11,7 +11,8 @@ import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/core/shared_pref.dart';
-import 'package:rtiapp/src/feature/user/home/pages/rti_view.page.dart';
+import 'package:rtiapp/src/feature/user/home/pages/rti_apply.view.dart';
+import 'package:rtiapp/src/feature/user/home/pages/rti_view.view.dart';
 import 'package:rtiapp/src/feature/user/home/widget/popups/term_and_conditions.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/pages/rti.table.view.dart';
@@ -260,6 +261,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var mw = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -284,6 +286,23 @@ class _HomePageState extends State<HomePage> {
             Visibility(
                 visible: activeTab == "Home",
                 child: RTITableView(
+                  onApplyTab: () {
+                    activeTab = "Apply RTI";
+                    showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return TermAndConditions(
+                          onCancel: () {
+                            setState(() {
+                              activeTab = "Home";
+                            });
+                          },
+                        );
+                      },
+                    );
+                    setState(() {});
+                  },
                   onViewTab: (data) {
                     setState(() {
                       activeTab = "View";
@@ -300,9 +319,11 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Gap(5),
-                    const AppText.subheading(
+                    const AppText.heading(
                       'Apply RTI Request',
+                      color: KCOLOR.brand,
                     ),
+                    const Gap(10),
                     PiaDropdownForm(
                       pia: (pia) {
                         logger.d(pia);
@@ -339,8 +360,8 @@ class _HomePageState extends State<HomePage> {
                               left: BorderSide(color: KCOLOR.danger, width: 2),
                             ),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -352,18 +373,23 @@ class _HomePageState extends State<HomePage> {
                                       "Try after sometime or click pay to continue try again"),
                                   const Gap(10)
                                 ],
-                              ).addPadding(bottom: 20),
+                              ).addPadding(bottom: 10),
                               if (isPaymentFailed)
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 20),
-                                  child: AppBtn.outline(
-                                    "Pay",
-                                    onPressed: () {
-                                      errorMsg = '';
-                                      setState(() {});
-                                      openCheckout();
-                                    },
-                                  ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: AppBtn.outline(
+                                        "Pay",
+                                        onPressed: () {
+                                          errorMsg = '';
+                                          setState(() {});
+                                          openCheckout();
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 )
                             ],
                           )),
@@ -469,6 +495,7 @@ class _HomePageState extends State<HomePage> {
           InkWell(
             onTap: () async {
               await SharedPrefHelper.removeToken("token");
+              await SharedPrefHelper.deleletUserInfo();
               context.replaceNamed(KRoutes.stafflogin);
             },
             child: Text(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rtiapp/src/common/utils/filepicker.helper.dart';
+import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/onboarding/widgets/upload/upload_file.dart';
 
@@ -59,45 +60,61 @@ class _PiaDropdownFormState extends State<PiaDropdownForm> {
         children: [
           SizedBox(
             width: containerWidth,
-            child: Padding(
-                padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
-                child: DropdownButtonFormField<Map<String, dynamic>>(
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                  decoration: const InputDecoration(
-                    labelText: 'Pia',
-                    labelStyle: TextStyle(color: Colors.grey),
-                    border: OutlineInputBorder(),
-                  ),
-                  value: _selectedPia,
-                  items: _listOfPia.map((Map<String, dynamic> value) {
-                    return DropdownMenuItem<Map<String, dynamic>>(
-                      value: value,
-                      child: Text(value["name"]),
-                    );
-                  }).toList(),
-                  onChanged: (Map<String, dynamic>? newValue) async {
-                    setState(() {
-                      _selectedPia = newValue;
-                    });
-                    widget.pia(newValue);
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please select state';
-                    }
-                    return null;
-                  },
-                )),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const AppText.smallText("Select PIA"),
+                Padding(
+                    padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
+                    child: DropdownButtonFormField<Map<String, dynamic>>(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      decoration: const InputDecoration(
+                        labelText: 'PIA',
+                        labelStyle: TextStyle(color: Colors.grey),
+                        border: OutlineInputBorder(),
+                      ),
+                      value: _selectedPia,
+                      items: _listOfPia.map((Map<String, dynamic> value) {
+                        return DropdownMenuItem<Map<String, dynamic>>(
+                          value: value,
+                          child: Text(value["name"]),
+                        );
+                      }).toList(),
+                      onChanged: (Map<String, dynamic>? newValue) async {
+                        setState(() {
+                          _selectedPia = newValue;
+                        });
+                        widget.pia(newValue);
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please select state';
+                        }
+                        return null;
+                      },
+                    )),
+              ],
+            ),
           ),
           SizedBox(
               width: containerWidth,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
-                child: UploadFileWidget(
-                  onFilePicked: (value) {
-                    widget.file(value);
-                  },
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    maxLines: 1,
+                    "Upload Related Document pdf (max 2mb)",
+                    style: TextStyle(overflow: TextOverflow.ellipsis),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8, bottom: 8, right: 8),
+                    child: UploadFileWidget(
+                      onFilePicked: (value) {
+                        widget.file(value);
+                      },
+                    ),
+                  ),
+                ],
               ))
         ],
       );

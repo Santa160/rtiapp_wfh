@@ -3,8 +3,12 @@ import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/feature/user/onboarding/widgets/dropdown/eduq.dropdown.dart';
 
 class EducationForm extends StatefulWidget {
-  const EducationForm({super.key, required this.educationDetails});
+  const EducationForm(
+      {super.key,
+      required this.educationDetails,
+      required this.educationFormKey});
   final Function(Map<String, dynamic>?) educationDetails;
+  final GlobalKey<FormState> educationFormKey;
 
   @override
   State<EducationForm> createState() => _EducationFormState();
@@ -12,11 +16,17 @@ class EducationForm extends StatefulWidget {
 
 class _EducationFormState extends State<EducationForm> {
   var eduQ = {
-    'education_status': '1',
-    'qualification_id': '3',
+    'education_status': 'Literate',
+    'qualification_id': '',
   };
   _updatedEduQDetails() {
     widget.educationDetails(eduQ);
+  }
+
+  @override
+  void initState() {
+    _updatedEduQDetails();
+    super.initState();
   }
 
   @override
@@ -43,6 +53,7 @@ class _EducationFormState extends State<EducationForm> {
                     "Education Status",
                   ),
                   EduQDropdownForm(
+                    educationForm: widget.educationFormKey,
                     onEduQChanged: (value) {
                       eduQ["education_status"] = value!["education_status"];
                       eduQ["qualification_id"] = value["qualification_id"];

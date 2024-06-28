@@ -56,9 +56,11 @@ class RTIService extends RTIInterface {
   }
 
   @override
-  Future fetchRTIs(int page, int limit) async {
+  Future fetchRTIs(int page, int limit,
+      {String? rtiid, String? statusid}) async {
     try {
-      var res = await dio.get("${EndPoint.rti}?page=$page&limit=$limit");
+      var res = await dio.get(
+          "${EndPoint.rti}?page=$page&limit=$limit&rti_no=$rtiid&status_id=$statusid");
 
       return res.data;
     } on DioException catch (e) {

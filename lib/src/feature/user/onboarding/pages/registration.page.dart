@@ -25,6 +25,7 @@ class ResgistrationPage extends StatefulWidget {
 class _ResgistrationPageState extends State<ResgistrationPage> {
   final personalDetailsformKey = GlobalKey<FormState>();
   final belowPovertyLineformKey = GlobalKey<FormState>();
+  final educationFormKey = GlobalKey<FormState>();
 
   Map<String, dynamic> citizenDto = {
     // 'name': 'John',
@@ -35,7 +36,7 @@ class _ResgistrationPageState extends State<ResgistrationPage> {
     // 'address': 'asd',
     // 'gender': 'male',
     // 'marital_status': 'married',
-    'education_status': 0,
+    'education_status': "Literate",
     'qualification_id': 3,
     'bpl': 0,
     // 'bpl_card_no': '566512',
@@ -100,6 +101,7 @@ class _ResgistrationPageState extends State<ResgistrationPage> {
                   ),
                   const Gap(10),
                   EducationForm(
+                    educationFormKey: educationFormKey,
                     educationDetails: (eduQ) {
                       citizenDto.addAll({...eduQ!});
                     },
@@ -144,7 +146,8 @@ class _ResgistrationPageState extends State<ResgistrationPage> {
 
   bool validate() {
     if (personalDetailsformKey.currentState!.validate() &&
-        belowPovertyLineformKey.currentState!.validate()) {
+        belowPovertyLineformKey.currentState!.validate() &&
+        educationFormKey.currentState!.validate()) {
       return true;
     } else {
       return false;
