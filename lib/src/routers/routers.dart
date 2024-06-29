@@ -60,6 +60,21 @@ final GoRouter routerConfig = GoRouter(
           },
         ),
         GoRoute(
+          name: KRoutes.fee,
+          path: KRoutes.feePath,
+          builder: (context, state) {
+            context.read<TabCubit>().activeTab(KRoutes.fee);
+            return const FeePage();
+          },
+          redirect: (context, state) async {
+            var isStaff = SharedPrefHelper.isStaff();
+            if (isStaff != null && isStaff) {
+              return null;
+            }
+            return KRoutes.homePath;
+          },
+        ),
+        GoRoute(
           name: KRoutes.qualification,
           path: KRoutes.qualificationPath,
           builder: (context, state) {

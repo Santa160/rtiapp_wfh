@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
 import 'package:go_router/go_router.dart';
+import 'package:rtiapp/src/core/app_config.dart';
 
 import 'package:rtiapp/src/core/kcolors.dart';
-
-
 
 import 'package:rtiapp/src/routers/route_names.dart';
 
@@ -130,27 +130,22 @@ class SideNavPage extends StatelessWidget {
   }
 
   Widget sideNavLogo() {
-    return SizedBox(
-      height: 200,
+    return const SizedBox(
+      height: 150,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            height: 80,
-            child: Image.asset(
-              KASSETS.logo,
-              fit: BoxFit.contain,
-              scale: 1,
-            ),
+          AppText.display(
+            "MSPCL",
+            color: Colors.white,
           ),
-          const SizedBox(
-            height: 5,
+          AppText.subheading(
+            "RTI Online",
+            color: Colors.white,
           ),
-          const Text(
-            "MSPCL RTI",
-            style: TextStyle(color: Color(0xffE6E2C3), fontSize: 12),
-          ),
+          Gap(20),
+          Divider()
         ],
       ),
     );

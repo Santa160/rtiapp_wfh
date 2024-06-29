@@ -32,6 +32,8 @@ class KRoutes {
   static const String districtPath = "/district";
   static const String pia = "PIA";
   static const String piaPath = "/pia";
+  static const String fee = "Fee";
+  static const String feePath = "/fee";
   static List<String> routeNames = [
     application,
     querystatus,
@@ -65,6 +67,7 @@ List<NavTab> sideNavItesm = [
     route: KRoutes.settingPath,
     subRoute: [
       NavTab(title: KRoutes.qualification, route: KRoutes.qualificationPath),
+      NavTab(title: KRoutes.fee, route: KRoutes.feePath),
       NavTab(title: KRoutes.state, route: KRoutes.statePath),
       NavTab(title: KRoutes.district, route: KRoutes.districtPath),
       NavTab(title: KRoutes.pia, route: KRoutes.piaPath),

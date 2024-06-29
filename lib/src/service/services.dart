@@ -93,3 +93,11 @@ abstract class RTIStaffInterface extends ServiceIterface {
   Future<dynamic> updateResponse(String rtiResId, String responseText,
       List<StringUint8ListModel> files, String rtiQueryStatusId);
 }
+
+abstract class FeeInterface extends ServiceIterface {
+  Future<dynamic> createFeeAmount(String amount);
+  Future<dynamic> fetchFeeAmount();
+  Future<dynamic> fetchPerPageFeeAmount();
+  Future<dynamic> updateFeesAndChargesAmount(String id,
+      {String? newFeeAmount, String? newChargeAmount});
+}

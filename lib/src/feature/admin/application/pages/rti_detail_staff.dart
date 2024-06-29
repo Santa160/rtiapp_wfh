@@ -1,5 +1,6 @@
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:image_network/image_network.dart';
@@ -10,6 +11,7 @@ import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/core/shared_pref.dart';
 import 'package:rtiapp/src/feature/admin/application/models/req-models/StringUnit8.model.dart';
+import 'package:rtiapp/src/feature/admin/application/services/fees.service.dart';
 import 'package:rtiapp/src/feature/admin/application/services/rti_staff.service.dart';
 import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/application_status.dropdown.dart';
 import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/query.status.dropdown.dart';
@@ -45,6 +47,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
   List<StringUint8ListModel> _files = [];
   TextEditingController controller = TextEditingController();
   TextEditingController pageCountController = TextEditingController();
+  var number = 0;
 
 //rti logs
   List<Map<String, dynamic>> logsData = [];
@@ -54,7 +57,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
   int initialPage = 1;
   int initialLimit = 5;
 
-  var statusId;
+  // var statusId;
 
   final _pageForm = GlobalKey<FormState>();
 
@@ -686,66 +689,47 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
             const Text("   Status:"),
             TextButton.icon(
                 icon: const Icon(Icons.schedule),
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        actions: [
-                          AppBtn.fill(
-                            "Update",
-                            onPressed: () async {
-                              if (_pageForm.currentState!.validate()) {
-                                var service = ApplicationService();
-                                var res =
-                                    await service.updateRTIApplicationStatus(
-                                        int.parse(data["id"]),
-                                        statusId,
-                                        int.parse(pageCountController.text));
-                                if (res["success"]) {
-                                  EasyLoading.showSuccess(res["message"]);
-                                  Navigator.pop(context);
-                                  getRTIDetials();
-                                }
-                              }
-                            },
-                          )
-                        ],
-                        contentPadding: const EdgeInsets.all(30),
-                        title: const AppText.heading(
-                          "Status Update",
-                        ),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            ApplicationStatusDropdown(
-                                onChanged: (status) async {
-                                  statusId = status.id;
-                                  setState(() {});
-                                },
-                                initialId: data["status"]),
-                            const Gap(10),
-                            Form(
-                              key: _pageForm,
-                              child: TextFormField(
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return "Please enter page number";
-                                  }
-                                  return null;
-                                },
-                                controller: pageCountController,
-                                decoration: const InputDecoration(
-                                    label: Text("Page"),
-                                    hintText: "Enter total number of document"),
-                              ),
+                onPressed: () async {
+                  EasyLoading.show(status: "Please wait");
+
+                  var service = FeeService();
+                  var res = await service.fetchPerPageFeeAmount();
+                  if (res != null) {
+                    EasyLoading.dismiss();
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                            actions: const [
+                              // AppBtn.fill(
+                              //   "Update",
+                              //   onPressed: () async {
+                              //     if (_pageForm.currentState!.validate()) {
+                              //       var service = ApplicationService();
+                              //       var res =
+                              //           await service.updateRTIApplicationStatus(
+                              //               int.parse(data["id"]),
+                              //               statusId,
+                              //               int.parse(pageCountController.text));
+                              //       if (res["success"]) {
+                              //         EasyLoading.showSuccess(res["message"]);
+                              //         Navigator.pop(context);
+                              //         getRTIDetials();
+                              //       }
+                              //     }
+                              //   },
+                              // )
+                            ],
+                            contentPadding: const EdgeInsets.all(30),
+                            title: const AppText.heading(
+                              "Status Update",
                             ),
-                            const Gap(20)
-                          ],
-                        ),
-                      );
-                    },
-                  );
+                            content: RTIStatusUpdatePopup(
+                              statuId: data['status'],
+                            ));
+                      },
+                    );
+                  }
                 },
                 label: Text(
                   data["status"],
@@ -753,6 +737,94 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                 )),
           ],
         ),
+      ],
+    );
+  }
+}
+
+class RTIStatusUpdatePopup extends StatefulWidget {
+  const RTIStatusUpdatePopup({super.key, required this.statuId});
+  final String statuId;
+
+  @override
+  State<RTIStatusUpdatePopup> createState() => _RTIStatusUpdatePopupState();
+}
+
+class _RTIStatusUpdatePopupState extends State<RTIStatusUpdatePopup> {
+  var data = {};
+
+  final _formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    getFee();
+    super.initState();
+  }
+
+  int amountToPay = 0;
+
+  getFee() async {
+    var service = FeeService();
+    var res = await service.fetchPerPageFeeAmount();
+    if (res["success"]) {
+      setState(() {
+        data = res;
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ApplicationStatusDropdown(
+          onChanged: (status) async {
+            // statusId = status.id;
+            setState(() {});
+          },
+
+          // initialId: data["status"],
+          initialId: widget.statuId,
+        ),
+        const Gap(10),
+        const AppText.subheading("Enter the number of extra pages"),
+        const Gap(10),
+        Form(
+          key: _formKey,
+          child: TextFormField(
+            keyboardType: TextInputType.number,
+            initialValue: "0",
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9999999]'))
+            ],
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return "Please enter number";
+              }
+              return null;
+            },
+            onChanged: (value) {
+              if (value.isEmpty) {
+                amountToPay = 0;
+                setState(() {});
+              } else {
+                setState(() {
+                  amountToPay = int.parse(value);
+                });
+              }
+            },
+            // controller: pageCountController,
+            decoration: const InputDecoration(
+                label: Text("Page"), hintText: "number of extra pages"),
+          ),
+        ),
+        const Gap(10),
+        if (amountToPay > 0)
+          AppText.smallText(
+            "Citizen has to pay of ₹${amountToPay * data["data"]['amount_per_page']} for extra pages",
+            color: KCOLOR.danger,
+          ),
       ],
     );
   }
