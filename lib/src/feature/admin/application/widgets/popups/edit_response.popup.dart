@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
@@ -14,6 +13,7 @@ import 'package:rtiapp/src/feature/admin/application/services/rti_staff.service.
 import 'package:rtiapp/src/feature/admin/application/widgets/dropdowns/query.status.dropdown.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EditResponsePopup extends StatefulWidget {
   const EditResponsePopup({
@@ -117,18 +117,24 @@ class _EditResponsePopupState extends State<EditResponsePopup> {
                             return Stack(
                               key: UniqueKey(),
                               children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: KCOLOR.shade1)),
-                                  height: 80,
-                                  width: 80,
-                                  // child: SelectableText(
-                                  //     '${EndPoint.baseUrl}/${e["document_url"]}'),
-                                  child: ImageNetwork(
-                                    image:
-                                        '${EndPoint.baseUrl}/${e["document_url"]}',
+                                InkWell(
+                                  onTap: () {
+                                    launchUrl(Uri.parse(
+                                        '${EndPoint.baseUrl}/${e["document_url"]}'));
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        border:
+                                            Border.all(color: KCOLOR.shade1)),
                                     height: 80,
                                     width: 80,
+
+                                    // child: SelectableText(
+                                    //     '${EndPoint.baseUrl}/${e["document_url"]}'),
+                                    child: const Icon(
+                                      Icons.file_present,
+                                      color: KCOLOR.warning,
+                                    ),
                                   ),
                                 ),
                                 CircleAvatar(

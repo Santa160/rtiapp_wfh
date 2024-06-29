@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:rtiapp/src/common/widget/pagination.widget.dart';
 import 'package:rtiapp/src/core/app_config.dart';
@@ -34,12 +34,17 @@ class _RTITableViewState extends State<RTITableView> {
     super.initState();
   }
 
+  String initialStatus = "All";
+
   getTableData({String? rtiNo, String? statusId}) async {
     data.clear();
     pagination.clear();
     var service = RTIService();
     var res = await service.fetchRTIs(initialPage, initialLimit,
         rtiid: rtiNo ?? '', statusid: statusId ?? '');
+    if (res['success']) {
+      EasyLoading.dismiss();
+    }
 
     pagination = res['pagination'] as Map<String, dynamic>;
     var l = res["data"] as List;
@@ -80,6 +85,7 @@ class _RTITableViewState extends State<RTITableView> {
               children: [
                 SearchWidget(
                   onTab: (value) {
+                    EasyLoading.show(status: "Please wait");
                     getTableData(rtiNo: value);
                   },
                 ),
@@ -89,9 +95,14 @@ class _RTITableViewState extends State<RTITableView> {
                     if (snapshot.hasData) {
                       var d = snapshot.data;
                       return PopupMenuButton(
-                        icon: const Icon(Icons.filter_alt_outlined),
+                        icon: const Row(
+                          children: [
+                            Icon(Icons.filter_alt_outlined),
+                          ],
+                        ),
                         onSelected: (value) {
                           initialPage = 1;
+                          EasyLoading.show(status: "Please wait");
                           getTableData(statusId: value.toString());
                         },
                         tooltip: '',

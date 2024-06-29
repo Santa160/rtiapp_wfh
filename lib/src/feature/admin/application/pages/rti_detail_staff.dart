@@ -9,6 +9,7 @@ import 'package:rtiapp/src/common/widget/pagination.widget.dart';
 import 'package:rtiapp/src/common/widget/serial_number.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
+import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/core/shared_pref.dart';
 import 'package:rtiapp/src/feature/admin/application/models/req-models/StringUnit8.model.dart';
 import 'package:rtiapp/src/feature/admin/application/services/fees.service.dart';
@@ -21,6 +22,7 @@ import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/widget/query_status.widget.dart';
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 import 'package:rtiapp/src/initial-setup/models/query_status.dart';
+import 'package:rtiapp/src/initial-setup/models/status.model.dart';
 import 'package:rtiapp/src/service/helper/endpoints.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -46,7 +48,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
   List queries = [];
   List<StringUint8ListModel> _files = [];
   TextEditingController controller = TextEditingController();
-  TextEditingController pageCountController = TextEditingController();
+
   var number = 0;
 
 //rti logs
@@ -57,9 +59,9 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
   int initialPage = 1;
   int initialLimit = 5;
 
-  // var statusId;
+  int? statusId;
 
-  final _pageForm = GlobalKey<FormState>();
+  int pageCount = 0;
 
   getRTIDetials() async {
     var res = await RTIService()
@@ -361,7 +363,7 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                                 viewResponseDialog(context, index);
                               },
                               child: const AppText.smallText(
-                                "view response",
+                                "View response",
                                 color: KCOLOR.brand,
                               ),
                             ),
@@ -700,31 +702,42 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                            actions: const [
-                              // AppBtn.fill(
-                              //   "Update",
-                              //   onPressed: () async {
-                              //     if (_pageForm.currentState!.validate()) {
-                              //       var service = ApplicationService();
-                              //       var res =
-                              //           await service.updateRTIApplicationStatus(
-                              //               int.parse(data["id"]),
-                              //               statusId,
-                              //               int.parse(pageCountController.text));
-                              //       if (res["success"]) {
-                              //         EasyLoading.showSuccess(res["message"]);
-                              //         Navigator.pop(context);
-                              //         getRTIDetials();
-                              //       }
-                              //     }
-                              //   },
-                              // )
+                            actions: [
+                              AppBtn.fill(
+                                "Update",
+                                onPressed: () async {
+                                  try {
+                                    var service = ApplicationService();
+                                    var res = await service
+                                        .updateRTIApplicationStatus(
+                                            int.parse(data["id"]),
+                                            statusId ??
+                                                int.parse(data['status_id']),
+                                            pageCount);
+                                    if (res["success"]) {
+                                      EasyLoading.showSuccess(res["message"]);
+                                      Navigator.pop(context);
+                                      getRTIDetials();
+                                    }
+                                  } catch (e) {
+                                    EasyLoading.showError(e.toString());
+                                  }
+                                },
+                              )
                             ],
                             contentPadding: const EdgeInsets.all(30),
                             title: const AppText.heading(
                               "Status Update",
                             ),
                             content: RTIStatusUpdatePopup(
+                              onStatusUpdate: (status) {
+                                statusId = status.id;
+                                setState(() {});
+                              },
+                              onPageCount: (v) {
+                                pageCount = v;
+                                setState(() {});
+                              },
                               statuId: data['status'],
                             ));
                       },
@@ -743,8 +756,14 @@ class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
 }
 
 class RTIStatusUpdatePopup extends StatefulWidget {
-  const RTIStatusUpdatePopup({super.key, required this.statuId});
+  const RTIStatusUpdatePopup(
+      {super.key,
+      required this.statuId,
+      required this.onPageCount,
+      required this.onStatusUpdate});
   final String statuId;
+  final Function(int) onPageCount;
+  final Function(StatusModel) onStatusUpdate;
 
   @override
   State<RTIStatusUpdatePopup> createState() => _RTIStatusUpdatePopupState();
@@ -780,8 +799,7 @@ class _RTIStatusUpdatePopupState extends State<RTIStatusUpdatePopup> {
       children: [
         ApplicationStatusDropdown(
           onChanged: (status) async {
-            // statusId = status.id;
-            setState(() {});
+            widget.onStatusUpdate(status);
           },
 
           // initialId: data["status"],
@@ -807,10 +825,12 @@ class _RTIStatusUpdatePopupState extends State<RTIStatusUpdatePopup> {
             onChanged: (value) {
               if (value.isEmpty) {
                 amountToPay = 0;
+                widget.onPageCount(0);
                 setState(() {});
               } else {
                 setState(() {
                   amountToPay = int.parse(value);
+                  widget.onPageCount(amountToPay);
                 });
               }
             },

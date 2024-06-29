@@ -93,16 +93,14 @@ class _ViewResponsePopupState extends State<ViewResponsePopup> {
                   children: doc.map((e) {
                     return Container(
                       padding: const EdgeInsets.all(8),
-                      width: 80,
-                      height: 80,
-                      child: ImageNetwork(
-                          onTap: () {
-                            launchUrl(Uri.parse(
-                                "${EndPoint.baseUrl}/${e["document_url"]}"));
-                          },
-                          height: 80,
-                          width: 80,
-                          image: "${EndPoint.baseUrl}/${e["document_url"]}"),
+                      child: TextButton.icon(
+                        icon: const Icon(Icons.download),
+                        label: const Text("Download"),
+                        onPressed: () {
+                          launchUrl(Uri.parse(
+                              "${EndPoint.baseUrl}/${e["document_url"]}"));
+                        },
+                      ),
                     );
                   }).toList(),
                 ),

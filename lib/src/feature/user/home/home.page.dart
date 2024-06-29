@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
               },
               icon: const Icon(Icons.close)),
           border: const OutlineInputBorder(),
-          labelText: 'Query',
+          labelText: 'Enter Your Query',
         ),
         validator: (value) {
           if (value == null || value.isEmpty) {

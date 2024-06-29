@@ -25,6 +25,7 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   String? _username = 'mspcl_admin';
   String? _password = "12345678";
   int otpStatus = 0;
+  bool isPasswordVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +65,22 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
               SizedBox(
                   width: 350,
                   child: TextFormField(
+                      obscureText: isPasswordVisible,
                       initialValue: kReleaseMode ? '' : "12345678",
                       onChanged: (value) {
                         setState(() {
                           _password = value;
                         });
                       },
-                      decoration: const InputDecoration(hintText: "Password"))),
+                      decoration: InputDecoration(
+                          hintText: "Password",
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  isPasswordVisible = !isPasswordVisible;
+                                });
+                              },
+                              icon: const Icon(Icons.remove_red_eye))))),
               const Gap(20),
               SizedBox(
                   height: 50,

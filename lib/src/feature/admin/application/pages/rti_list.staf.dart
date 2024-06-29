@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:rtiapp/src/common/widget/pagination.widget.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
+import 'package:rtiapp/src/core/shared_pref.dart';
 import 'package:rtiapp/src/feature/admin/application/services/rti_staff.service.dart';
 
 import 'package:rtiapp/src/feature/user/home/widget/datatable/rti.datatable.dart';
+import 'package:rtiapp/src/feature/user/home/widget/search.widget.dart';
 
 class RTIListStaff extends StatefulWidget {
   const RTIListStaff({super.key, required this.onViewTab});
@@ -28,11 +30,12 @@ class _RTIListStaffState extends State<RTIListStaff> {
     super.initState();
   }
 
-  getTableData() async {
+  getTableData({String? rtiNo, String? statusId}) async {
     data.clear();
     pagination.clear();
     var service = ApplicationService();
-    var res = await service.fetchRTIApplicationStaff(initialPage, initialLimit);
+    var res = await service.fetchRTIApplicationStaff(initialPage, initialLimit,
+        rtiid: rtiNo ?? '', statusid: statusId ?? '');
     pagination = res['pagination'] as Map<String, dynamic>;
     var l = res["data"] as List;
 
@@ -66,22 +69,60 @@ class _RTIListStaffState extends State<RTIListStaff> {
                 )
               ],
             ),
-            PaginationBtn(
-              initialPage: initialPage,
-              next: () {
-                if (initialPage < pagination['pageCount']) {
-                  initialPage++;
-                  getTableData();
-                  setState(() {});
-                }
-              },
-              previous: () {
-                if (initialPage > 1) {
-                  initialPage--;
-                  getTableData();
-                  setState(() {});
-                }
-              },
+            Row(
+              children: [
+                SearchWidget(
+                  onTab: (value) {
+                    getTableData(rtiNo: value);
+                  },
+                ),
+                FutureBuilder(
+                  future: SharedPrefHelper.getQueryStatus(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var d = snapshot.data;
+                      return PopupMenuButton(
+                        icon: const Icon(Icons.filter_alt_outlined),
+                        onSelected: (value) {
+                          initialPage = 1;
+                          getTableData(statusId: value.toString());
+                        },
+                        tooltip: '',
+                        itemBuilder: (context) {
+                          return [
+                            const PopupMenuItem(value: 0, child: Text("All")),
+                            ...d!.map(
+                              (e) {
+                                return PopupMenuItem(
+                                    value: e.id, child: Text(e.name));
+                              },
+                            )
+                          ];
+                        },
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+                PaginationBtn(
+                  initialPage: initialPage,
+                  next: () {
+                    if (initialPage < pagination['pageCount']) {
+                      initialPage++;
+                      getTableData();
+                      setState(() {});
+                    }
+                  },
+                  previous: () {
+                    if (initialPage > 1) {
+                      initialPage--;
+                      getTableData();
+                      setState(() {});
+                    }
+                  },
+                ),
+              ],
             ),
           ],
         ),

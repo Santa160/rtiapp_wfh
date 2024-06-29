@@ -10,9 +10,12 @@ import 'package:http_parser/http_parser.dart';
 
 class ApplicationService extends RTIStaffInterface {
   @override
-  Future fetchRTIApplicationStaff(int page, int limit) async {
+  Future fetchRTIApplicationStaff(int page, int limit,
+      {String? name, String? rtiid, String? statusid}) async {
     try {
-      var res = await dio.get("${EndPoint.rtiStaff}?page=$page&limit=$limit");
+      var res = await dio.get(
+          "${EndPoint.rtiStaff}?page=$page&limit=$limit&name=$name&rti_no=$rtiid&status_id=$statusid");
+
       return res.data;
     } on DioException catch (e) {
       handleDioException(e);
