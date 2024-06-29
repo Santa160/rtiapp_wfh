@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rtiapp/src/common/widget/footer.widget.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 
 import 'package:rtiapp/src/core/kassets.dart';
@@ -29,109 +30,85 @@ class _AdminLoginPageState extends State<AdminLoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
+          Expanded(
+              child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Image.asset(KASSETS.logo),
+              const AppText.display(
+                "Manipur State Power Company Limited",
+                color: KCOLOR.brand,
+              ),
+              const AppText.heading(
+                "RTI Application Online",
+              ),
+              const AppText.heading(
+                "Admin Login",
+              ),
+              const Gap(10),
               SizedBox(
                 width: 350,
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [Image.asset(KASSETS.logo)],
-                    ),
-                    const AppText.display(
-                      "RTI Online",
-                      color: KCOLOR.brand,
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Gap(10),
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            AppText.heading(
-                              "Admin Login",
-                            ),
-                          ],
-                        ),
-                        const Gap(10),
-                        const Gap(10),
-                        SizedBox(
-                          width: 350,
-                          child: TextFormField(
-                            initialValue: kReleaseMode ? '' : "mspcl_admin",
-                            onChanged: (value) {
-                              setState(() {
-                                _username = value;
-                              });
-                            },
-                            decoration:
-                                const InputDecoration(hintText: "Username"),
-                          ),
-                        ),
-                        const Gap(10),
-                        SizedBox(
-                            width: 350,
-                            child: TextFormField(
-                                initialValue: kReleaseMode ? '' : "12345678",
-                                onChanged: (value) {
-                                  setState(() {
-                                    _password = value;
-                                  });
-                                },
-                                decoration: const InputDecoration(
-                                    hintText: "Password"))),
-                        const Gap(20),
-                        SizedBox(
-                            height: 50,
-                            width: 350,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                    foregroundColor:
-                                        const WidgetStatePropertyAll(
-                                            Colors.white),
-                                    backgroundColor: WidgetStatePropertyAll(
-                                        _username == null && _password == null
-                                            ? Colors.grey
-                                            : KCOLOR.brand)),
-                                onPressed: _username == null &&
-                                        _password == null
-                                    ? null
-                                    : () async {
-                                        EasyLoading.show(status: "Please wait");
-                                        var auth = Auth();
-                                        var res = await auth.login(
-                                            _username!, _password!);
-
-                                        if (res["success"]) {
-                                          await SharedPrefHelper.saveUserInfo(
-                                              res["data"]["username"],
-                                              res["data"]["email"],
-                                              res["data"]["id"],
-                                              res["data"]["accessToken"]);
-                                          await SharedPrefHelper.saveToken(
-                                              "token",
-                                              res["data"]["accessToken"]);
-                                          EasyLoading.showSuccess(
-                                              "Login Succesfull");
-                                          context.goNamed(KRoutes.application);
-                                        } else {
-                                          EasyLoading.showError(res["message"]);
-                                        }
-                                      },
-                                child: const Text("LOGIN"))),
-                        const Gap(10),
-                      ],
-                    )
-                  ],
+                child: TextFormField(
+                  initialValue: kReleaseMode ? '' : "mspcl_admin",
+                  onChanged: (value) {
+                    setState(() {
+                      _username = value;
+                    });
+                  },
+                  decoration: const InputDecoration(hintText: "Username"),
                 ),
               ),
+              const Gap(10),
+              SizedBox(
+                  width: 350,
+                  child: TextFormField(
+                      initialValue: kReleaseMode ? '' : "12345678",
+                      onChanged: (value) {
+                        setState(() {
+                          _password = value;
+                        });
+                      },
+                      decoration: const InputDecoration(hintText: "Password"))),
+              const Gap(20),
+              SizedBox(
+                  height: 50,
+                  width: 350,
+                  child: ElevatedButton(
+                      style: ButtonStyle(
+                          foregroundColor:
+                              const WidgetStatePropertyAll(Colors.white),
+                          backgroundColor: WidgetStatePropertyAll(
+                              _username == null && _password == null
+                                  ? Colors.grey
+                                  : KCOLOR.brand)),
+                      onPressed: _username == null && _password == null
+                          ? null
+                          : () async {
+                              EasyLoading.show(status: "Please wait");
+                              var auth = Auth();
+                              var res =
+                                  await auth.login(_username!, _password!);
+
+                              if (res["success"]) {
+                                await SharedPrefHelper.saveUserInfo(
+                                    res["data"]["username"],
+                                    res["data"]["email"],
+                                    res["data"]["id"],
+                                    res["data"]["accessToken"]);
+                                await SharedPrefHelper.saveToken(
+                                    "token", res["data"]["accessToken"]);
+                                EasyLoading.showSuccess("Login Succesfull");
+                                context.goNamed(KRoutes.application);
+                              } else {
+                                EasyLoading.showError(res["message"]);
+                              }
+                            },
+                      child: const Text("LOGIN"))),
             ],
-          ),
+          )),
+          const FooterWidget()
         ],
       ),
     );

@@ -3,7 +3,6 @@ import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/widget/serial_number.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
-import 'package:rtiapp/src/core/shared_pref.dart';
 
 import 'package:rtiapp/src/feature/user/home/widget/rti_status.widget.dart';
 
@@ -49,8 +48,8 @@ class RTIDataTableWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         child: DataTable2(
           smRatio: 0.40,
-          isVerticalScrollBarVisible: row.length >= 10 ? true : false,
-          isHorizontalScrollBarVisible: row.length >= 10 ? true : false,
+          // isVerticalScrollBarVisible: row.length >= 10 ? true : false,
+          // isHorizontalScrollBarVisible: row.length >= 10 ? true : false,
           headingRowColor: const WidgetStatePropertyAll(KCOLOR.shade1),
           minWidth: 900,
           columns: column.map(
@@ -63,9 +62,8 @@ class RTIDataTableWidget extends StatelessWidget {
                     ? ColumnSize.L
                     : e == 'Sl no'
                         ? ColumnSize.S
-                        : e == 'Action'
-                            ? ColumnSize.S
-                            : ColumnSize.M,
+                        : ColumnSize.M,
+
                 label: Text(
                   e,
                   style: const TextStyle(fontWeight: FontWeight.bold),
@@ -91,7 +89,7 @@ class RTIDataTableWidget extends StatelessWidget {
                     DataCell(
                         Text(e["created_at"].toString().getFormattedDate())),
                     DataCell(Text(e["days_pending"] ??
-                        0)), // Adjust as per your data model
+                        "0")), // Adjust as per your data model
                     DataCell(RTIStatusWidget(
                       id: int.parse(e["status_id"]),
                     )), // Adjust as per your data model

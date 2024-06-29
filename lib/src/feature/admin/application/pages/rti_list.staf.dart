@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:rtiapp/src/common/widget/pagination.widget.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
@@ -6,16 +7,16 @@ import 'package:rtiapp/src/feature/admin/application/services/rti_staff.service.
 
 import 'package:rtiapp/src/feature/user/home/widget/datatable/rti.datatable.dart';
 
-class RTIStaffTableView extends StatefulWidget {
-  const RTIStaffTableView({super.key, required this.onViewTab});
+class RTIListStaff extends StatefulWidget {
+  const RTIListStaff({super.key, required this.onViewTab});
 
   final Function(dynamic) onViewTab;
 
   @override
-  State<RTIStaffTableView> createState() => _RTIStaffTableViewState();
+  State<RTIListStaff> createState() => _RTIListStaffState();
 }
 
-class _RTIStaffTableViewState extends State<RTIStaffTableView> {
+class _RTIListStaffState extends State<RTIListStaff> {
   List<Map<String, dynamic>> data = [];
   Map<String, dynamic> pagination = {};
   int initialPage = 1;
