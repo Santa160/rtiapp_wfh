@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
+import 'package:rtiapp/src/common/header_footer_wrapper.dart';
 import 'package:rtiapp/src/common/widget/generic_data_table.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
 import 'package:rtiapp/src/core/app_config.dart';
@@ -32,12 +33,11 @@ class _StatePageState extends State<StatePage> {
   @override
   Widget build(BuildContext context) {
     var state = context.watch<StateCubit>().state;
-    return Scaffold(
-      body: Column(
+    return HeaderFooterWrapper(
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const HeaderWidget(),
           const Gap(20),
           Row(
             children: [
@@ -112,45 +112,42 @@ class _StatePageState extends State<StatePage> {
           ),
           const Gap(20),
           if (state.status == Status.initial || state.status == Status.loading)
-            Expanded(child: buildShimmer(state.dataColumn)),
+            buildShimmer(state.dataColumn),
           if (state.status == Status.error)
-            const Expanded(
-                child: Center(
+            const Center(
               child: Text("No More Data Available"),
-            )),
+            ),
           if (state.status == Status.loaded)
-            Expanded(
-              child: GenericDataTable<StateModel>(
-                initialLimit: limit,
-                initialPage: initialPage,
-                column: state.dataColumn,
-                deleteAction: (data) {
-                  //
-                  showConfirmationDialog(
-                    context: context,
-                    data: data,
-                    onConfirmTap: () {
-                      context.read<StateCubit>().deleteState(id: data.id);
-                    },
-                  );
-                },
-                editAction: (data) {
-                  showUpdateFormDialog<StateModel>(
-                    context: context,
-                    data: data,
-                    onUpdateTap: (newName) async {
-                      context
-                          .read<StateCubit>()
-                          .updatedState(id: data.id, newName: newName);
-                    },
-                  );
-                },
-                fetchData: (limit, page) async {
-                  //
-                },
-                row: state.dataRaw!,
-                loading: state.dataRaw!.isEmpty ? true : false,
-              ),
+            GenericDataTable<StateModel>(
+              initialLimit: limit,
+              initialPage: initialPage,
+              column: state.dataColumn,
+              deleteAction: (data) {
+                //
+                showConfirmationDialog(
+                  context: context,
+                  data: data,
+                  onConfirmTap: () {
+                    context.read<StateCubit>().deleteState(id: data.id);
+                  },
+                );
+              },
+              editAction: (data) {
+                showUpdateFormDialog<StateModel>(
+                  context: context,
+                  data: data,
+                  onUpdateTap: (newName) async {
+                    context
+                        .read<StateCubit>()
+                        .updatedState(id: data.id, newName: newName);
+                  },
+                );
+              },
+              fetchData: (limit, page) async {
+                //
+              },
+              row: state.dataRaw!,
+              loading: state.dataRaw!.isEmpty ? true : false,
             ),
           const Gap(10),
         ],

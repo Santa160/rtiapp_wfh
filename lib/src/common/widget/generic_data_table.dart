@@ -44,9 +44,7 @@ class GenericDataTable<T extends HasName> extends StatelessWidget {
         child: SizedBox(
           width: 650,
           height: (row.length * 50) + 50,
-          child: DataTable2(
-            isVerticalScrollBarVisible: row.length >= 10 ? true : false,
-            isHorizontalScrollBarVisible: row.length >= 10 ? true : false,
+          child: DataTable(
             headingRowColor: const WidgetStatePropertyAll(KCOLOR.shade1),
             columns: column.map(
               (e) {
@@ -107,13 +105,12 @@ Widget buildShimmer(List<String> column) {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
         child: SizedBox(
-          width: 600,
-          height: (initialCoun * 50) + 50,
+          width: 650,
           child: DataTable(
             headingRowColor: const WidgetStatePropertyAll(KCOLOR.shade1),
             columns: column
                 .map(
-                  (e) => DataColumn2(
+                  (e) => DataColumn(
                     numeric: e == "Action",
                     label: Padding(
                       padding: const EdgeInsets.only(right: 22),

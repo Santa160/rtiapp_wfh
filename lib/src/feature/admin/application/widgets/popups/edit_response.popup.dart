@@ -167,9 +167,9 @@ class _EditResponsePopupState extends State<EditResponsePopup> {
                                   width: 80,
                                   // child: SelectableText(
                                   //     '${EndPoint.baseUrl}/${e["document_url"]}'),
-                                  child: Image.memory(
-                                    e.uint8ListValue as Uint8List,
-                                    fit: BoxFit.cover,
+                                  child: const Icon(
+                                    Icons.file_present,
+                                    color: KCOLOR.warning,
                                   ),
                                 ),
                                 CircleAvatar(
@@ -194,7 +194,7 @@ class _EditResponsePopupState extends State<EditResponsePopup> {
                             FilePickerResult? result =
                                 await FilePicker.platform.pickFiles(
                               type: FileType.custom,
-                              allowedExtensions: ['jpg', 'png'],
+                              allowedExtensions: ['pdf'],
                             );
                             var b = result?.files.first.bytes;
                             var name = result?.files.first.name;
