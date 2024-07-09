@@ -90,7 +90,7 @@ class _RTITableViewState extends State<RTITableView> {
                   },
                 ),
                 FutureBuilder(
-                  future: SharedPrefHelper.getQueryStatus(),
+                  future: SharedPrefHelper.getStatus(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       var d = snapshot.data;
@@ -158,9 +158,7 @@ class _RTITableViewState extends State<RTITableView> {
           ),
         if (data.isNotEmpty)
           SizedBox(
-            height: data.isEmpty || data.length < 5
-                ? 500
-                : 55 * data.length.toDouble(),
+            width: double.maxFinite,
             child: RTIDataTableWidget(
               initialLimit: initialLimit,
               initialPage: initialPage,

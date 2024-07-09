@@ -27,17 +27,16 @@ import 'package:rtiapp/src/service/helper/endpoints.dart';
 import 'package:shimmer_animation/shimmer_animation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class RTIStaffViewPage extends StatefulWidget {
-  const RTIStaffViewPage(
-      {super.key, required this.rtiId, required this.onBackTab});
+class RTIdetails extends StatefulWidget {
+  const RTIdetails({super.key, required this.rtiId, required this.onBackTab});
   final String rtiId;
   final Function() onBackTab;
 
   @override
-  State<RTIStaffViewPage> createState() => _RTIStaffViewPageState();
+  State<RTIdetails> createState() => _RTIdetailsState();
 }
 
-class _RTIStaffViewPageState extends State<RTIStaffViewPage> {
+class _RTIdetailsState extends State<RTIdetails> {
   Map<String, dynamic> data = {"status": " "};
   // List<QueryStatusModel>? _queryStatus;
   QueryStatusModel? _selectedQueryStatus;

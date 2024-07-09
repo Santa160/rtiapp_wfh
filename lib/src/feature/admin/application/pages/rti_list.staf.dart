@@ -9,16 +9,16 @@ import 'package:rtiapp/src/feature/admin/application/services/rti_staff.service.
 import 'package:rtiapp/src/feature/user/home/widget/datatable/rti.datatable.dart';
 import 'package:rtiapp/src/feature/user/home/widget/search.widget.dart';
 
-class RTIListStaff extends StatefulWidget {
-  const RTIListStaff({super.key, required this.onViewTab});
+class RTITable extends StatefulWidget {
+  const RTITable({super.key, required this.onViewTab});
 
   final Function(dynamic) onViewTab;
 
   @override
-  State<RTIListStaff> createState() => _RTIListStaffState();
+  State<RTITable> createState() => _RTITableState();
 }
 
-class _RTIListStaffState extends State<RTIListStaff> {
+class _RTITableState extends State<RTITable> {
   List<Map<String, dynamic>> data = [];
   Map<String, dynamic> pagination = {};
   int initialPage = 1;
@@ -77,7 +77,7 @@ class _RTIListStaffState extends State<RTIListStaff> {
                   },
                 ),
                 FutureBuilder(
-                  future: SharedPrefHelper.getQueryStatus(),
+                  future: SharedPrefHelper.getStatus(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       var d = snapshot.data;
@@ -126,7 +126,8 @@ class _RTIListStaffState extends State<RTIListStaff> {
             ),
           ],
         ),
-        Expanded(
+        SizedBox(
+          width: double.maxFinite,
           child: RTIDataTableWidget(
             initialLimit: initialLimit,
             initialPage: initialPage,

@@ -19,6 +19,10 @@ class SharedPrefHelper {
     _prefs = await SharedPreferences.getInstance();
   }
 
+  static Future<bool> reset() {
+    return _prefs.clear();
+  }
+
   //------------------------------------
   // CRUD ✅ SAVE ->  SAVE token
   //------------------------------------

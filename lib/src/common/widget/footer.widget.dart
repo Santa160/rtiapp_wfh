@@ -13,7 +13,7 @@ class FooterWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Container(
-            color: KCOLOR.brand,
+            color: KCOLOR.brand.withOpacity(0.05),
             height: 80,
             width: double.infinity,
             child: const Column(
@@ -21,11 +21,11 @@ class FooterWidget extends StatelessWidget {
               children: [
                 AppText.smallText(
                   "© 2024 Manipur State Power Company Ltd. All rights reserved. All contents are provided by MSPCL",
-                  color: Colors.white,
+                  color: Colors.black,
                 ),
                 AppText.smallText(
                   "Powered by: Globizs Web Solutions Pvt Ltd",
-                  color: Colors.white,
+                  color: Colors.black,
                 )
               ],
             )),

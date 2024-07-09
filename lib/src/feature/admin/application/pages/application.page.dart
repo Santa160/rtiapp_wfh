@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
+import 'package:rtiapp/src/common/header_footer_wrapper.dart';
 import 'package:rtiapp/src/common/widget/footer.widget.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
 import 'package:rtiapp/src/feature/admin/application/pages/rti_list.staf.dart';
@@ -27,46 +28,74 @@ class _ApplicationPageState extends State<ApplicationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const HeaderWidget(),
-              if (tab == 'table') ...[
-                const Gap(10),
-                SizedBox(
-                  height: 600,
-                  child: RTIListStaff(
-                    onViewTab: (v) {
-                      setState(() {
-                        tab = "view";
-                        _rtiId = v["id"];
-                      });
-                    },
-                  ),
-                )
-              ],
-              Visibility(
-                visible: tab == "view",
-                child: RTIStaffViewPage(
-                  rtiId: _rtiId,
-                  onBackTab: () {
-                    setState(() {
-                      tab = "table";
-                      _rtiId = "0";
-                    });
-                  },
-                ),
-              ),
-            ],
-          ).addPadding(left: 50, right: 50),
-          const FooterWidget()
+    return HeaderFooterWrapper(
+        child: Column(
+      children: [
+        if (tab == 'table') ...[
+          const Gap(10),
+          RTITable(
+            onViewTab: (v) {
+              setState(() {
+                tab = "view";
+                _rtiId = v["id"];
+              });
+            },
+          )
         ],
-      ),
-    ));
+        Visibility(
+          visible: tab == "view",
+          child: RTIdetails(
+            rtiId: _rtiId,
+            onBackTab: () {
+              setState(() {
+                tab = "table";
+                _rtiId = "0";
+              });
+            },
+          ),
+        ),
+      ],
+    ).addPadding(left: 50, right: 50));
+    // return Scaffold(
+    //     body: SingleChildScrollView(
+    //   child: Column(
+    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //     children: [
+    //       Column(
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         children: [
+    //           const HeaderWidget(),
+    //           if (tab == 'table') ...[
+    //             const Gap(10),
+    //             SizedBox(
+    //               height: 600,
+    //               child: RTIListStaff(
+    //                 onViewTab: (v) {
+    //                   setState(() {
+    //                     tab = "view";
+    //                     _rtiId = v["id"];
+    //                   });
+    //                 },
+    //               ),
+    //             )
+    //           ],
+    //           Visibility(
+    //             visible: tab == "view",
+    //             child: RTIStaffViewPage(
+    //               rtiId: _rtiId,
+    //               onBackTab: () {
+    //                 setState(() {
+    //                   tab = "table";
+    //                   _rtiId = "0";
+    //                 });
+    //               },
+    //             ),
+    //           ),
+    //         ],
+    //       ).addPadding(left: 50, right: 50),
+    //       const FooterWidget()
+    //     ],
+    //   ),
+    // ));
   }
 }

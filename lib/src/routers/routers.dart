@@ -180,7 +180,7 @@ final GoRouter routerConfig = GoRouter(
       },
     ),
     GoRoute(
-      name: KRoutes.stafflogin,
+      name: KRoutes.citizenLogin,
       path: KRoutes.citizenloginPath,
       builder: (context, state) {
         return const LoginPage();

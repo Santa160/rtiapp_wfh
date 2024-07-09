@@ -46,12 +46,8 @@ class RTIDataTableWidget extends StatelessWidget {
     return Card(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(20),
-        child: DataTable2(
-          smRatio: 0.40,
-          // isVerticalScrollBarVisible: row.length >= 10 ? true : false,
-          // isHorizontalScrollBarVisible: row.length >= 10 ? true : false,
+        child: DataTable(
           headingRowColor: const WidgetStatePropertyAll(KCOLOR.shade1),
-          minWidth: 900,
           columns: column.map(
             (e) {
               initialCoun = row.length;
@@ -84,7 +80,7 @@ class RTIDataTableWidget extends StatelessWidget {
                             page: initialPage,
                             index: row.indexOf(e))
                         .toString())), // Adjust as per your data model
-                    DataCell(Text(
+                    DataCell(SelectableText(
                         "${e["rti_no"]}")), // Adjust as per your data model
                     DataCell(
                         Text(e["created_at"].toString().getFormattedDate())),

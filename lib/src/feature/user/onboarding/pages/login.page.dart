@@ -104,12 +104,12 @@ class _LoginPageState extends State<LoginPage> {
                           FilteringTextInputFormatter.digitsOnly
                         ],
                         onChanged: (value) {
-                          if (value.length == 6) {
-                            code = value;
-                            setState(() {});
-                          }
+                          // if (value.length == 6) {
+                          code = value;
+                          setState(() {});
+                          // }
                         },
-                        maxLength: 6,
+                        // maxLength: 6,
                         enabled: isOTPSent,
                         decoration: const InputDecoration(
                             counter: Text(""), hintText: "Enter OTP"))),

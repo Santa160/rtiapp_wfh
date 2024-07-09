@@ -208,7 +208,7 @@ class _RTIViewPageState extends State<RTIViewPage> {
           ],
         ),
       ],
-    ).addPadding(left: mw > 650 ? 150 : 50, right: mw > 650 ? 150 : 50);
+    );
   }
 
   Column _queries() {

@@ -1,7 +1,7 @@
 class KRoutes {
   static const String adminlogin = "Admin Login";
   static const String adminloginPath = "/admin-login";
-  static const String stafflogin = "Login";
+  static const String citizenLogin = "Login";
   static const String citizenloginPath = "/login";
   static const String registration = "Registration";
   static const String registrationPath = "/registration";

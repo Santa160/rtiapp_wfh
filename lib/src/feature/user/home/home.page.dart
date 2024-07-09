@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:razorpay_web/razorpay_web.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
+import 'package:rtiapp/src/common/header_footer_wrapper.dart';
 import 'package:rtiapp/src/common/utils/filepicker.helper.dart';
 import 'package:rtiapp/src/common/widget/footer.widget.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
@@ -111,6 +112,7 @@ class _HomePageState extends State<HomePage> {
       addField();
       isPaymentFailed = false;
       paymentOption.clear();
+      errorMsg = '';
       EasyLoading.dismiss();
     }
     showDialog(
@@ -201,6 +203,7 @@ class _HomePageState extends State<HomePage> {
       if (res["success"]) {
         if (res['data']['order'].toString() == 'null') {
           EasyLoading.dismiss();
+
           activeTab = 'Home';
           setState(() {});
           showDialog(
@@ -261,16 +264,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var mw = MediaQuery.of(context).size.width;
-
-    return Scaffold(
-      body: SingleChildScrollView(
+    return HeaderFooterWrapper(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _pageHeader(context, mw),
+        Column(
           children: [
-            const HeaderWidget().addPadding(
-                top: 10, left: mw > 650 ? 150 : 50, right: mw > 650 ? 150 : 50),
-            const Gap(10),
-            pageHeader(context, mw),
             Visibility(
                 visible: activeTab == "View",
                 child: RTIViewPage(
@@ -309,8 +308,7 @@ class _HomePageState extends State<HomePage> {
                       rtiId = data["id"];
                     });
                   },
-                ).addPadding(
-                    left: mw > 650 ? 150 : 20, right: mw > 650 ? 150 : 20)),
+                )),
             Visibility(
               visible: activeTab == "Apply RTI",
               child: Form(
@@ -374,23 +372,6 @@ class _HomePageState extends State<HomePage> {
                                   const Gap(10)
                                 ],
                               ).addPadding(bottom: 10),
-                              if (isPaymentFailed)
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: AppBtn.outline(
-                                        "Pay",
-                                        onPressed: () {
-                                          errorMsg = '';
-                                          setState(() {});
-                                          openCheckout();
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                )
                             ],
                           )),
                     Row(
@@ -410,108 +391,77 @@ class _HomePageState extends State<HomePage> {
                       ],
                     )
                   ],
-                ).addPadding(left: 150, right: 150),
+                ),
               ),
             ),
-            const Gap(10),
-            if (controllers.length < 3) Container(height: 130),
-            const FooterWidget()
           ],
-        ),
-      ),
-    );
+        ).addPadding(left: 50, right: 50),
+      ],
+    ));
   }
 
-  Container pageHeader(BuildContext context, double mw) {
+  _pageHeader(BuildContext context, double mw) {
     return Container(
       color: KCOLOR.brand,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              InkWell(
-                onTap: () {
-                  activeTab = "Home";
-                  paymentOption.clear();
+          InkWell(
+            onTap: () {
+              activeTab = "Home";
+              paymentOption.clear();
 
-                  errorMsg = '';
-                  setState(() {});
-                },
-                child: Container(
-                  color:
-                      Colors.white.withOpacity(activeTab == "Home" ? 0.2 : 0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("Home",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: Colors.white,
-                            )),
-                  ),
-                ),
+              errorMsg = '';
+              setState(() {});
+            },
+            child: Container(
+              color: Colors.white.withOpacity(activeTab == "Home" ? 0.2 : 0),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("Home",
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          color: Colors.white,
+                        )),
               ),
-              const Gap(20),
-              InkWell(
-                onTap: () {
-                  activeTab = "Apply RTI";
-                  // _formKey.currentState!.reset();
+            ),
+          ),
+          const Gap(20),
+          InkWell(
+            onTap: () {
+              activeTab = "Apply RTI";
+              // _formKey.currentState!.reset();
 
-                  showDialog(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return TermAndConditions(
-                        onCancel: () {
-                          setState(() {
-                            activeTab = "Home";
-                          });
-                        },
-                      );
+              showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (context) {
+                  return TermAndConditions(
+                    onCancel: () {
+                      setState(() {
+                        activeTab = "Home";
+                      });
                     },
                   );
-                  setState(() {});
                 },
-                child: Container(
-                  color: Colors.white
-                      .withOpacity(activeTab == "Apply RTI" ? 0.2 : 0),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Apply RTI",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: Colors.white),
-                    ),
-                  ),
+              );
+              setState(() {});
+            },
+            child: Container(
+              color:
+                  Colors.white.withOpacity(activeTab == "Apply RTI" ? 0.2 : 0),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Apply RTI",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium!
+                      .copyWith(color: Colors.white),
                 ),
               ),
-            ],
-          ).addPadding(
-              left: mw > 650 ? 150 : 50,
-              right: mw > 650 ? 150 : 50,
-              top: 8,
-              bottom: 8),
-          InkWell(
-            onTap: () async {
-              await SharedPrefHelper.removeToken("token");
-              await SharedPrefHelper.deleletUserInfo();
-              context.replaceNamed(KRoutes.stafflogin);
-            },
-            child: Text(
-              "Logout",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium!
-                  .copyWith(color: Colors.white),
-            ).addPadding(
-                left: mw > 650 ? 150 : 50,
-                right: mw > 650 ? 150 : 50,
-                top: 8,
-                bottom: 8),
+            ),
           ),
         ],
-      ),
+      ).addPadding(left: 50, right: 50, top: 8, bottom: 8),
     );
   }
 }
