@@ -1,25 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
 import 'package:razorpay_web/razorpay_web.dart';
 import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/header_footer_wrapper.dart';
 import 'package:rtiapp/src/common/utils/filepicker.helper.dart';
-import 'package:rtiapp/src/common/widget/footer.widget.dart';
-import 'package:rtiapp/src/common/widget/header.widget.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/core/logger.dart';
-import 'package:rtiapp/src/core/shared_pref.dart';
-import 'package:rtiapp/src/feature/user/home/pages/rti_apply.view.dart';
 import 'package:rtiapp/src/feature/user/home/pages/rti_view.view.dart';
 import 'package:rtiapp/src/feature/user/home/widget/popups/term_and_conditions.dart';
 import 'package:rtiapp/src/feature/user/home/service/rti.service.dart';
 import 'package:rtiapp/src/feature/user/home/pages/rti.table.view.dart';
 import 'package:rtiapp/src/feature/user/home/widget/dropdowns/pia.dropdown.dart';
 import 'package:rtiapp/src/initial-setup/initial_setup.dart';
-import 'package:rtiapp/src/routers/route_names.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

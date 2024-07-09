@@ -8,7 +8,6 @@ import 'package:rtiapp/src/core/shared_pref.dart';
 import 'package:rtiapp/src/feature/admin/rti-status/models/res_models/rti.model.dart';
 
 import 'package:rtiapp/src/feature/admin/rti-status/services/rti.service.dart';
-import 'package:rtiapp/src/initial-setup/initial_setup.dart';
 import 'package:rtiapp/src/initial-setup/models/status.model.dart';
 
 part 'rti_status_state.dart';

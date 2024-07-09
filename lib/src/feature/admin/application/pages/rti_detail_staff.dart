@@ -9,7 +9,6 @@ import 'package:rtiapp/src/common/widget/pagination.widget.dart';
 import 'package:rtiapp/src/common/widget/serial_number.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
-import 'package:rtiapp/src/core/logger.dart';
 import 'package:rtiapp/src/core/shared_pref.dart';
 import 'package:rtiapp/src/feature/admin/application/models/req-models/StringUnit8.model.dart';
 import 'package:rtiapp/src/feature/admin/application/services/fees.service.dart';

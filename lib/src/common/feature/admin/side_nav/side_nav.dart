@@ -9,7 +9,6 @@ import 'package:rtiapp/src/core/kcolors.dart';
 
 import 'package:rtiapp/src/routers/route_names.dart';
 
-import '../../../../core/kassets.dart';
 import '../logic/cubit/tab_cubit.dart';
 
 class SideNavPage extends StatelessWidget {
