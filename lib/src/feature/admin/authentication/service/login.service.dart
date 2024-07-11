@@ -18,4 +18,18 @@ class Auth extends StaffAuthentication {
       logger.e('Unexpected error: $e');
     }
   }
+
+  @override
+  Future changePassword(int userId, String newPassword) async {
+    try {
+      var res = await dio.put("${EndPoint.changePassword}/$userId",
+          data: {"password": newPassword});
+
+      return res.data;
+    } on DioException catch (e) {
+      handleDioException(e);
+    } catch (e) {
+      logger.e('Unexpected error: $e');
+    }
+  }
 }

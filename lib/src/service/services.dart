@@ -38,6 +38,7 @@ abstract class RTIInterface extends ServiceIterface {
 
 abstract class StaffAuthentication extends ServiceIterface {
   Future<dynamic> login(String username, String password);
+  Future<dynamic> changePassword(int userId, String newPassword);
 }
 
 abstract class StateInterface extends ServiceIterface {

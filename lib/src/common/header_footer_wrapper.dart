@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:rtiapp/src/common/widget/footer.widget.dart';
 import 'package:rtiapp/src/common/widget/header.widget.dart';
 
+
 class HeaderFooterWrapper extends StatelessWidget {
   const HeaderFooterWrapper({super.key, required this.child});
   final Widget child;
