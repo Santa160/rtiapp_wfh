@@ -638,7 +638,7 @@ class _RTIdetailsState extends State<RTIdetails> {
           children: [
             const TableCell(
                 child: AppText.subheading(
-              "Rural/Urban",
+              "Area Type",
             )),
             const TableCell(child: Text(":")),
             TableCell(child: Text(citizenDetails["rural_urban"].toString())),

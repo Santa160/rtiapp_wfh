@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rtiapp/src/core/app_config.dart';
@@ -74,10 +75,11 @@ class HeaderWidget extends StatelessWidget {
                       value: "Logout",
                       child: Text('Logout'),
                     ),
-                    const PopupMenuItem(
-                      value: "Change Password",
-                      child: Text('Change Password'),
-                    ),
+                    if (SharedPrefHelper.isStaff()!)
+                      const PopupMenuItem(
+                        value: "Change Password",
+                        child: Text('Change Password'),
+                      ),
                   ];
                 },
               ),
@@ -107,6 +109,7 @@ class ChangePasswordDialog extends StatefulWidget {
 
 class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
   final TextEditingController _newPasswordController = TextEditingController();
+  final TextEditingController _oldPasswordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -114,9 +117,10 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
 
   void _handleChangePassword() async {
     if (_formKey.currentState!.validate()) {
-      var user = SharedPrefHelper.getUserInfo();
-      var res =
-          await _auth.changePassword(user!.id, _newPasswordController.text);
+      var res = await _auth.changePassword(
+        _oldPasswordController.text,
+        _newPasswordController.text,
+      );
       if (res['success']) {
         showDialog(
           context: context,
@@ -143,6 +147,8 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
             );
           },
         );
+      } else {
+        EasyLoading.showInfo("${res['message']}");
       }
     }
   }
@@ -156,6 +162,21 @@ class _ChangePasswordDialogState extends State<ChangePasswordDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            TextFormField(
+              controller: _oldPasswordController,
+              decoration: const InputDecoration(
+                hintText: "Enter old password",
+                label: Text("Old Password"),
+              ),
+              // obscureText: true,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a old password';
+                }
+                return null;
+              },
+            ),
+            const Gap(10),
             TextFormField(
               controller: _newPasswordController,
               decoration: const InputDecoration(

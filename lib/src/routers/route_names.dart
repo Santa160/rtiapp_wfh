@@ -30,8 +30,8 @@ class KRoutes {
   static const String statePath = "/state";
   static const String district = "District";
   static const String districtPath = "/district";
-  static const String pia = "PIA";
-  static const String piaPath = "/pia";
+  static const String pia = "PIO";
+  static const String piaPath = "/pio";
   static const String fee = "Fee";
   static const String feePath = "/fee";
   static List<String> routeNames = [

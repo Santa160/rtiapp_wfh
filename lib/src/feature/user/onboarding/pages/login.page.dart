@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -30,6 +32,26 @@ class _LoginPageState extends State<LoginPage> {
 
   var auth = OnboardingServices();
 
+  bool isButtonEnabled = true;
+  int remainingSeconds = 60;
+  Timer? timer;
+
+  void startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      if (remainingSeconds == 0) {
+        setState(() {
+          isButtonEnabled = true;
+          isOTPSent = false;
+          timer.cancel();
+        });
+      } else {
+        setState(() {
+          remainingSeconds--;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       maxLength: 10,
                       onChanged: (value) {
+                        timer?.cancel();
                         if (value.length == 10) {
                           number = value;
 
@@ -71,31 +94,46 @@ class _LoginPageState extends State<LoginPage> {
                           isOTPSent = false;
                           setState(() {});
                         }
+                        setState(() {
+                          remainingSeconds = 0;
+                          isButtonEnabled = true;
+                          isOTPSent = false;
+                        });
                       },
                       decoration: InputDecoration(
                           counter: const Text(""),
                           suffix: InkWell(
-                            onTap: () async {
-                              //check if the mobile nummber has 10 digit
-                              if (number!.length == 10) {
-                                EasyLoading.show(status: "Please wait");
-                                //send to OTP
-                                var res = await auth.sendOtp(number!);
+                            onTap: isButtonEnabled
+                                ? () async {
+                                    if (number!.length == 10) {
+                                      EasyLoading.show(status: "Please wait");
+                                      //send to OTP
+                                      var res = await auth.sendOtp(number!);
 
-                                // save the otp status
-                                if (res["success"]) {
-                                  isOTPSent = res["success"];
-                                  EasyLoading.showSuccess(res["message"]);
-                                  setState(() {});
-                                }
-                              }
-                            },
+                                      // save the otp status
+                                      if (res["success"]) {
+                                        isOTPSent = res["success"];
+                                        EasyLoading.showSuccess(res["message"]);
+                                        isButtonEnabled = false;
+                                        // setState(() {});
+                                        setState(() {
+                                          isButtonEnabled = false;
+                                          remainingSeconds = 60;
+                                        });
+                                        startTimer();
+                                      }
+                                    }
+                                  }
+                                : null,
                             child: Text(
-                              isOTPSent ? 'OTP sent!' : "Send OTP",
+                              isOTPSent
+                                  ? 'OTP sent! (${remainingSeconds}sec)'
+                                  : "Send OTP",
                               style: const TextStyle(color: KCOLOR.brand),
                             ),
                           ),
                           hintText: "Enter Mobile Number"))),
+              // AppText.smallText(remainingSeconds.toString()),
               if (isOTPSent) ...[
                 SizedBox(
                     width: 350,
@@ -105,14 +143,22 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                         onChanged: (value) {
                           // if (value.length == 6) {
-                          code = value;
-                          setState(() {});
+
+                          setState(() {
+                            code = value;
+                          });
+
+                          // setState(() {
+
+                          //   remainingSeconds = 0;
+                          // });
                           // }
                         },
                         // maxLength: 6,
-                        enabled: isOTPSent,
+
                         decoration: const InputDecoration(
                             counter: Text(""), hintText: "Enter OTP"))),
+                // AppText.smallText("Resend OTP in $remainingSeconds sec"),
                 SizedBox(
                     height: 50,
                     width: 350,

@@ -104,7 +104,7 @@ class RTIService extends RTIInterface {
 
   Future fetchPia() async {
     try {
-      var res = await dio.get(EndPoint.pia);
+      var res = await dio.get(EndPoint.pio);
 
       return res.data;
     } on DioException catch (e) {

@@ -38,7 +38,7 @@ abstract class RTIInterface extends ServiceIterface {
 
 abstract class StaffAuthentication extends ServiceIterface {
   Future<dynamic> login(String username, String password);
-  Future<dynamic> changePassword(int userId, String newPassword);
+  Future<dynamic> changePassword(String oldpassword, String newPassword);
 }
 
 abstract class StateInterface extends ServiceIterface {
@@ -48,7 +48,7 @@ abstract class StateInterface extends ServiceIterface {
   Future<dynamic> updateState(int stateId, String newData);
 }
 
-abstract class PiaInterface extends ServiceIterface {
+abstract class PioInterface extends ServiceIterface {
   Future<dynamic> fetchPia();
   Future<dynamic> createPia(String data);
   Future<dynamic> deletePia(int piaId);

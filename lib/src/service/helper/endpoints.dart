@@ -27,9 +27,9 @@ class EndPoint {
   static const termAndCondition = "/api/term-and-conditions";
   static const citizen = "/api/citizens";
   static const rti = "/api/rtis"; //GET POST
-  static const pia = "/api/pia";
+  static const pio = "/api/pia";
   static const fee = "/api/fee";
-  static const changePassword = "/api/users";
+  static const changePassword = "/api/users/change-password";
 
   //common apis
 }

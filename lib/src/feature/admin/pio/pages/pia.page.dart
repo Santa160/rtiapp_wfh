@@ -6,7 +6,7 @@ import 'package:rtiapp/src/common/header_footer_wrapper.dart';
 import 'package:rtiapp/src/common/widget/generic_data_table.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kcolors.dart';
-import 'package:rtiapp/src/feature/admin/pia/logic/cubit/pia_cubit.dart';
+import 'package:rtiapp/src/feature/admin/pio/logic/cubit/pia_cubit.dart';
 
 import 'package:rtiapp/src/feature/admin/state/models/res_models/state.model.dart';
 
@@ -40,7 +40,7 @@ class _PiaPageState extends State<PiaPage> {
           const Gap(20),
           Row(
             children: [
-              const AppText.heading("PIA"),
+              const AppText.heading("PIO"),
               const Gap(10),
               ElevatedButton(
                   style: const ButtonStyle(
@@ -56,7 +56,7 @@ class _PiaPageState extends State<PiaPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             const Text(
-                              "Pia Name",
+                              "Pio Name",
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -68,7 +68,7 @@ class _PiaPageState extends State<PiaPage> {
                               child: TextFormField(
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please enter pia Name';
+                                    return 'Please enter pio Name';
                                   }
                                   return null;
                                 },

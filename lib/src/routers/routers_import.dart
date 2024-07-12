@@ -9,7 +9,7 @@ import 'package:rtiapp/src/feature/admin/district/pages/district.page.dart';
 import 'package:rtiapp/src/feature/admin/application/pages/application.page.dart';
 import 'package:rtiapp/src/feature/admin/authentication/pages/admin_login.dart';
 import 'package:rtiapp/src/feature/admin/fee/pages/fee.dart';
-import 'package:rtiapp/src/feature/admin/pia/pages/pia.page.dart';
+import 'package:rtiapp/src/feature/admin/pio/pages/pia.page.dart';
 import 'package:rtiapp/src/feature/admin/qualification/pages/qualification.page.dart';
 import 'package:rtiapp/src/feature/admin/query-status/pages/query.page.dart';
 import 'package:rtiapp/src/feature/admin/rti-status/pages/rti.page.dart';

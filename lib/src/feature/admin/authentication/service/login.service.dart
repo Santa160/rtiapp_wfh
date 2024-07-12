@@ -20,10 +20,13 @@ class Auth extends StaffAuthentication {
   }
 
   @override
-  Future changePassword(int userId, String newPassword) async {
+  Future changePassword(
+      String oldpassword, String newPassword) async {
     try {
-      var res = await dio.put("${EndPoint.changePassword}/$userId",
-          data: {"password": newPassword});
+      var res = await dio.put(EndPoint.changePassword, data: {
+        "new_password": newPassword,
+        "old_password": oldpassword,
+      });
 
       return res.data;
     } on DioException catch (e) {

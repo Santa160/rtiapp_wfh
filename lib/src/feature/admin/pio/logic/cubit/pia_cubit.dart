@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rtiapp/src/core/logger.dart';
-import 'package:rtiapp/src/feature/admin/pia/services/pia.service.dart';
+import 'package:rtiapp/src/feature/admin/pio/services/pio.service.dart';
 import 'package:rtiapp/src/feature/admin/state/models/res_models/state.model.dart';
 
 part 'pia_state.dart';
@@ -21,7 +21,7 @@ class PiaCubit extends Cubit<PiaState> {
     emit(PiaState(
         status: Status.loading, dataColumn: listColumn, page: 1, limit: 10));
     try {
-      var res = await PiaService().fetchPia();
+      var res = await PioService().fetchPia();
 
       var list = res["data"] as List;
 
@@ -47,7 +47,7 @@ class PiaCubit extends Cubit<PiaState> {
   //!! ====================== CUBIT CRUD ===========================
   Future addPia({required BuildContext context, required String name}) async {
     try {
-      var res = await PiaService().createPia(name);
+      var res = await PioService().createPia(name);
 
       EasyLoading.showSuccess(res["message"].toString());
       getPiaTableData(limit: state.limit ?? 10, page: state.page ?? 1);
@@ -57,7 +57,7 @@ class PiaCubit extends Cubit<PiaState> {
   }
 
   Future deletePia({required int id}) async {
-    var res = await PiaService().deletePia(id);
+    var res = await PioService().deletePia(id);
 
     getPiaTableData(limit: state.limit ?? 10, page: state.page ?? 1);
 
@@ -65,7 +65,7 @@ class PiaCubit extends Cubit<PiaState> {
   }
 
   Future updatedPia({required int id, required String newName}) async {
-    var res = await PiaService().updatePia(id, newName);
+    var res = await PioService().updatePia(id, newName);
 
     EasyLoading.showSuccess(res["message"]);
     getPiaTableData(limit: state.limit ?? 10, page: state.page ?? 1);
