@@ -6,7 +6,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:rtiapp/src/common/extentions/extention.dart';
 import 'package:rtiapp/src/common/widget/footer.widget.dart';
+import 'package:rtiapp/src/common/widget/header.widget.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 
 import 'package:rtiapp/src/core/kassets.dart';
@@ -54,18 +56,17 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    var mw = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Gap(10),
+          const HeaderWidget().addPadding(
+              top: 0, left: mw > 650 ? 88 : 0, right: mw > 650 ? 88 : 0),
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(KASSETS.logo),
-              const AppText.display(
-                "Manipur State Power Company Limited",
-              ),
               const Gap(20),
               const AppText.heading(
                 "RTI Online Application",

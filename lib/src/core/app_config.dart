@@ -28,6 +28,7 @@ class AppText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      textAlign: TextAlign.center,
       style: style.copyWith(color: color),
     );
   }

@@ -1,5 +1,6 @@
 class EndPoint {
-  static const baseUrl = "https://mspclrtiapi.globizsapp.com";
+  // static const baseUrl = "https://mspclrtiapi.globizsapp.com";
+  static const baseUrl = "https://api.mspcl.in";
 
   // staff apis
   static const staffLogin = "/api/auth/login";
@@ -18,7 +19,7 @@ class EndPoint {
   static const paymentConfirmation = "/api/payments/confirm"; //GET
   static const responsePaymentConfirmation =
       "/api/response-payments/confirm"; //GET
-  static const pay = "/api//rti-response-payments/pay"; //GET
+  static const pay = "/api/rti-response-payments/pay"; //GET
   static const rtistatus = "/api/status"; //GET
 
   //citizen apis

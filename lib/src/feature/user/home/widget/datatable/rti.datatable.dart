@@ -52,13 +52,13 @@ class RTIDataTableWidget extends StatelessWidget {
             (e) {
               initialCoun = row.length;
               initialcolumn = column;
-              return DataColumn2(
+              return DataColumn(
                 // numeric: e == "Action" || e == "Sl no",
-                size: e == "Application No"
-                    ? ColumnSize.L
-                    : e == 'Sl no'
-                        ? ColumnSize.S
-                        : ColumnSize.M,
+                // size: e == "Application No"
+                //     ? ColumnSize.L
+                //     : e == 'Sl no'
+                //         ? ColumnSize.S
+                //         : ColumnSize.M,
 
                 label: Text(
                   e,

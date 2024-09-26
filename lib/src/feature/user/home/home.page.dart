@@ -257,11 +257,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    var mw = MediaQuery.of(context).size.width;
+    var mqw = MediaQuery.of(context).size.width;
     return HeaderFooterWrapper(
         child: Column(
       children: [
-        _pageHeader(context, mw),
+        _pageHeader(context, mqw),
         Column(
           children: [
             Visibility(
@@ -276,33 +276,33 @@ class _HomePageState extends State<HomePage> {
                   rtiId: rtiId,
                 )),
             const Gap(10),
-            Visibility(
-                visible: activeTab == "Home",
-                child: RTITableView(
-                  onApplyTab: () {
-                    activeTab = "Apply RTI";
-                    showDialog(
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (context) {
-                        return TermAndConditions(
-                          onCancel: () {
-                            setState(() {
-                              activeTab = "Home";
-                            });
-                          },
-                        );
-                      },
-                    );
-                    setState(() {});
-                  },
-                  onViewTab: (data) {
-                    setState(() {
-                      activeTab = "View";
-                      rtiId = data["id"];
-                    });
-                  },
-                )),
+            if (mqw <= 425) const Text("Mobile"),
+            if (mqw > 425 && activeTab == 'Home')
+              RTITableView(
+                onApplyTab: () {
+                  activeTab = "Apply RTI";
+                  showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) {
+                      return TermAndConditions(
+                        onCancel: () {
+                          setState(() {
+                            activeTab = "Home";
+                          });
+                        },
+                      );
+                    },
+                  );
+                  setState(() {});
+                },
+                onViewTab: (data) {
+                  setState(() {
+                    activeTab = "View";
+                    rtiId = data["id"];
+                  });
+                },
+              ),
             Visibility(
               visible: activeTab == "Apply RTI",
               child: Form(
@@ -389,7 +389,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ],
-        ).addPadding(left: 50, right: 50),
+        ).addPadding(
+            top: 0, left: mqw > 650 ? 140 : 0, right: mqw > 650 ? 140 : 0),
       ],
     ));
   }
@@ -456,6 +457,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ).addPadding(left: 50, right: 50, top: 8, bottom: 8),
-    );
+    ).addPadding(top: 0, left: mw > 650 ? 88 : 0, right: mw > 650 ? 88 : 0);
   }
 }

@@ -4,10 +4,10 @@ import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rtiapp/src/core/app_config.dart';
 import 'package:rtiapp/src/core/kassets.dart';
-import 'package:rtiapp/src/core/kcolors.dart';
 import 'package:rtiapp/src/core/shared_pref.dart';
 import 'package:rtiapp/src/routers/route_names.dart';
 import 'package:rtiapp/src/feature/admin/authentication/service/login.service.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 var _auth = Auth();
 
@@ -20,10 +20,17 @@ class HeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var mqw = MediaQuery.of(context).size.width;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-      height: height ?? 100,
-      color: KCOLOR.brand.withOpacity(0.05),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      height: height ?? 120,
+      // color: KCOLOR.brand.withOpacity(0.05),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(KASSETS.headerBg),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,8 +39,8 @@ class HeaderWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
-                KASSETS.logoVertical,
-                scale: 1.5,
+                KASSETS.logoVerticalWhite,
+                scale: mqw < 600 ? 1.8 : 1,
               ),
               const Gap(10),
             ],
@@ -58,15 +65,31 @@ class HeaderWidget extends StatelessWidget {
                 tooltip: '',
                 child: Row(
                   children: [
-                    AppText.heading(
-                        "${SharedPrefHelper.getUserInfo()?.username}"),
-                    const Gap(10),
-                    const CircleAvatar(
-                      child: Icon(
-                        Icons.account_circle,
-                        color: Colors.grey,
+                    TextButton(
+                        onPressed: () {
+                          launchUrl(
+                            Uri.parse("https://mspcl.in/"),
+                          );
+                        },
+                        child: const Text(
+                          "| Back to main page |",
+                          style: TextStyle(color: Colors.white),
+                        )),
+                    if (SharedPrefHelper.getUserInfo()?.username != null) ...[
+                      SharedPrefHelper.getUserInfo()?.username == "null"
+                          ? const Text("")
+                          : AppText.heading(
+                              color: Colors.white,
+                              SharedPrefHelper.getUserInfo()?.username ?? ""),
+                      // "${SharedPrefHelper.getUserInfo()?.username}"),
+                      const Gap(10),
+                      const CircleAvatar(
+                        child: Icon(
+                          Icons.account_circle,
+                          color: Colors.grey,
+                        ),
                       ),
-                    ),
+                    ]
                   ],
                 ),
                 itemBuilder: (context) {

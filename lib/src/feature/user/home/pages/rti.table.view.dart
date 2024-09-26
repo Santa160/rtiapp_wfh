@@ -64,6 +64,7 @@ class _RTITableViewState extends State<RTITableView> {
 
   @override
   Widget build(BuildContext context) {
+    var mqw = MediaQuery.of(context).size.width;
     return Column(
       children: [
         Row(
@@ -73,12 +74,13 @@ class _RTITableViewState extends State<RTITableView> {
               children: [
                 const AppText.heading("RTI Application"),
                 const Gap(10),
-                AppBtn.outline(
-                  "Apply RTI",
-                  onPressed: () {
-                    widget.onApplyTab();
-                  },
-                )
+                if (mqw > 600)
+                  AppBtn.outline(
+                    "Apply RTI",
+                    onPressed: () {
+                      widget.onApplyTab();
+                    },
+                  )
               ],
             ),
             Row(

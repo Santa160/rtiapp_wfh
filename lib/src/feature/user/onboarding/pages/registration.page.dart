@@ -54,10 +54,17 @@ class _ResgistrationPageState extends State<ResgistrationPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const HeaderWidget().addPadding(
-              left: mw > 650 ? 150 : 50, right: mw > 650 ? 150 : 50),
-          const Gap(20),
+              top: 0, left: mw > 650 ? 88 : 0, right: mw > 650 ? 88 : 0),
+          // const Gap(20),
           Container(
-            color: KCOLOR.brand,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Color(0xff0c70b0), Color(0xff3f8fc1)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              // borderRadius: BorderRadius.circular(15),
+            ),
             child: Row(
               children: [
                 Text(
@@ -69,8 +76,9 @@ class _ResgistrationPageState extends State<ResgistrationPage> {
                 ),
                 const Gap(20),
               ],
-            ).addPadding(left: 150, right: 150, bottom: 20),
-          ),
+            ).addPadding(left: 60, right: 150, bottom: 20),
+          ).addPadding(
+              top: 0, left: mw > 650 ? 88 : 0, right: mw > 650 ? 88 : 0),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -124,7 +132,7 @@ class _ResgistrationPageState extends State<ResgistrationPage> {
                               var res = await service.createCitizen(
                                   citizenDto, _file);
                               if (res["success"]) {
-                                context.replaceNamed(KRoutes.home);
+                                context.replaceNamed(KRoutes.citizenLogin);
                               }
                             } else {
                               logger.e("check please");
